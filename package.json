@@ -2,7 +2,7 @@
   "name": "automated-timetable-generator",
   "productName": "automated-timetable-generator",
   "version": "1.0.0",
-  "description": "Automate the boring manual process of preparing time table in universities and colleges with large number of students.",
+  "description": "Automates the boring manual process of preparing time table in universities and colleges with large number of students.",
   "license": "MIT",
   "engines": {
     "node": ">=9.0.0",
