@@ -18,7 +18,8 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js --mode development",
     "build": "cross-env NODE_ENV=production webpack --config webpack.build.config.js --mode production",
     "package": "npm run build",
-    "postpackage": "electron-packager ./ --out=./release-builds"
+    "postpackage": "electron-packager ./ --out=./release-builds",
+    "dist":"electron-builder"
   },
   "dependencies": {
     "react": "^16.13.1",
@@ -33,6 +34,7 @@
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
     "electron": "^9.0.0",
+    "electron-builder": "^22.8.0",
     "electron-devtools-installer": "^3.0.0",
     "electron-packager": "^14.2.1",
     "file-loader": "^6.0.0",
@@ -42,5 +44,14 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
+  },
+  "build":{
+    "appId":"com.logixSliit.timetable-generator",
+    "target":"NSIS",
+    "directories": { "output": "release/" },
+    "nsis":{
+      "allowToChangeInstallationDirectory":true,
+      "oneClick":false
+    }
   }
 }
