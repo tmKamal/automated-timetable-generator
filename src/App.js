@@ -1,39 +1,32 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import MiniDrawer from "./shared/component/navigation";
+import AddBuilding from "./buildings/pages/AddBuilding";
+import AddRoom from "./rooms/pages/AddRoom";
+import UpdateRoom from "./rooms/pages/UpdateRoom";
+import HomePage from "./shared/pages/HomePage";
 
 export default function App() {
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-          </ul>
-        </nav>
-        <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <MiniDrawer>
+          <Switch>
+            <Route path="/" exact>
+              <HomePage></HomePage>
+            </Route>
+            <Route path="/add-building" exact>
+              <AddBuilding></AddBuilding>
+            </Route>
+            <Route path="/add-room" exact>
+              <AddRoom></AddRoom>
+            </Route>
+            <Route path="/update-room" exact>
+              <UpdateRoom></UpdateRoom>
+            </Route>
+            <Redirect to="/"></Redirect>
+          </Switch>
+        </MiniDrawer>
       </div>
     </Router>
   );
@@ -44,9 +37,13 @@ function Home() {
 }
 
 function About() {
-  return <h2>About</h2>;
+  return <h2>Aboutdfggfsdafsdsdsdsdsdsdsdsdsdsdsdsdsdsdddddd</h2>;
 }
 
 function Users() {
-  return <h2>Users</h2>;
+  return (
+    <h2>
+      Usersdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+    </h2>
+  );
 }
