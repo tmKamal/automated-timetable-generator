@@ -5,7 +5,7 @@ import AddBuilding from "./buildings/pages/AddBuilding";
 import AddRoom from "./rooms/pages/AddRoom";
 import UpdateRoom from "./rooms/pages/UpdateRoom";
 import HomePage from "./shared/pages/HomePage";
-
+import regeneratorRuntime from "regenerator-runtime";
 export default function App() {
   return (
     <Router>
@@ -32,18 +32,3 @@ export default function App() {
   );
 }
 
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>Aboutdfggfsdafsdsdsdsdsdsdsdsdsdsdsdsdsdsdddddd</h2>;
-}
-
-function Users() {
-  return (
-    <h2>
-      Usersdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-    </h2>
-  );
-}

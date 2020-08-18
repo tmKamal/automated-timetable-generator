@@ -26,6 +26,7 @@ function createMainWindow() {
 		icon: `${__dirname}/assets/icon.png`,
 		webPreferences: {
 			nodeIntegration: true,
+			
 		},
 	})
 
@@ -54,6 +55,7 @@ function createMainWindow() {
 
 		// Open devtools if dev
 		if (isDev) {
+			
 			const {
 				default: installExtension,
 				REACT_DEVELOPER_TOOLS,
@@ -70,6 +72,7 @@ function createMainWindow() {
 }
 
 app.on('ready', createMainWindow)
+
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
