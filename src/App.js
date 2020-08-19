@@ -14,6 +14,7 @@ import AddWorkDays from './workdays/pages/AddWorkDays';
 import UpdateWorkDays from './workdays/pages/UpdateWorkDays';
 import HomePage from './shared/pages/HomePage';
 import { Helmet } from 'react-helmet';
+import regeneratorRuntime from "regenerator-runtime";
 
 export default function App() {
     return (
@@ -55,18 +56,4 @@ export default function App() {
     );
 }
 
-function Home() {
-    return <h2>Home</h2>;
-}
 
-function About() {
-    return <h2>Aboutdfggfsdafsdsdsdsdsdsdsdsdsdsdsdsdsdsdddddd</h2>;
-}
-
-function Users() {
-    return (
-        <h2>
-            Usersdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-        </h2>
-    );
-}
