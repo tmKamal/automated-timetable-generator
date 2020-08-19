@@ -14,6 +14,8 @@ import AddWorkDays from './workdays/pages/AddWorkDays';
 import UpdateWorkDays from './workdays/pages/UpdateWorkDays';
 import AddWorkTime from './worktime/pages/AddWorkTime';
 import UpdateWorkTime from './worktime/pages/UpdateWorkTime';
+import TableGenerate from './tablegenerate/pages/TableGenerate';
+import SpecificTable from './specificTable/pages/SpecificTable';
 import HomePage from './shared/pages/HomePage';
 import { Helmet } from 'react-helmet';
 import regeneratorRuntime from 'regenerator-runtime';
@@ -54,6 +56,12 @@ export default function App() {
                             </Route>
                             <Route path='/update-worktime' exact>
                                 <UpdateWorkTime></UpdateWorkTime>
+                            </Route>
+                            <Route path='/table-generate' exact>
+                                <TableGenerate></TableGenerate>
+                            </Route>
+                            <Route path='/specific-table/:id' exact>
+                                <SpecificTable></SpecificTable>
                             </Route>
                             <Redirect to='/'></Redirect>
                         </Switch>

@@ -57,6 +57,14 @@ const useStyles = makeStyles((theme) => ({
     },
     alignRight: {
         textAlign: 'right'
+    },
+    errorTextShow: {
+        color: 'red',
+        display: 'block'
+    },
+    errorTextHide: {
+        color: 'black',
+        display: 'none'
     }
 }));
 
@@ -72,10 +80,18 @@ const AddWorkDays = () => {
         Saturday: false,
         Sunday: false
     });
-    const [countDays, setCountDays] = React.useState(0);
+    const [countDays, setCountDays] = React.useState(5);
 
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
+    };
+
+    const handleDate = (e) => {
+        if (e.target.value > 7) {
+            setCountDays(7);
+        } else {
+            setCountDays(e.target.value);
+        }
     };
 
     const {
@@ -104,7 +120,8 @@ const AddWorkDays = () => {
             Saturday,
             Sunday
         };
-        console.log(days);
+        const body = { days, countDays };
+        console.log(body);
     };
     return (
         <React.Fragment>
@@ -130,15 +147,17 @@ const AddWorkDays = () => {
                             <Grid item xs={12}>
                                 <TextField
                                     required
-                                    onChange={(e) =>
-                                        setCountDays(e.target.value)
-                                    }
+                                    onChange={(e) => handleDate(e)}
                                     value={countDays}
                                     id='countDays'
                                     name='countDays'
                                     variant='outlined'
                                     label='Working days per week'
                                     fullWidth
+                                    type='number'
+                                    InputProps={{
+                                        inputProps: { min: 1, max: 7 }
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -225,9 +244,15 @@ const AddWorkDays = () => {
                                     />
                                 </FormGroup>
 
-                                <FormHelperText>
+                                <div
+                                    className={
+                                        error
+                                            ? classes.errorTextShow
+                                            : classes.errorTextHide
+                                    }
+                                >
                                     Please choose only {countDays} days
-                                </FormHelperText>
+                                </div>
                             </Grid>
                         </Grid>
                         <div className={classes.buttons}>

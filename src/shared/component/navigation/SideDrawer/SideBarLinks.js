@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
@@ -24,6 +23,7 @@ const SideBarLinks = () => {
     const classes = useStyles();
     const [roomOpen, setRoomOpen] = React.useState(false);
     const [daysOpen, setDaysOpen] = React.useState(false);
+    const [timeOpen, setTimeOpen] = React.useState(false);
 
     const handleClickRoom = () => {
         setRoomOpen(!roomOpen);
@@ -122,7 +122,61 @@ const SideBarLinks = () => {
                     </NavLink>
                 </List>
             </Collapse>
-            {/* ============== Room End ===================== */}
+            {/* ============== Workingdays End ===================== */}
+
+            {/* ============== Working Time ===================== */}
+            <ListItem button onClick={() => setTimeOpen(!timeOpen)}>
+                <ListItemIcon>
+                    <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary='Working Time' />
+                {timeOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={timeOpen} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/add-worktime'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Add Time' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/update-worktime'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Update Time' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+            </Collapse>
+            {/* ============== Working Time End ===================== */}
+            {/*============== Generate table ===================== */}
+            <NavLink
+                style={{ textDecoration: 'none' }}
+                to='/table-generate'
+                className='MuiTypography-colorInherit '
+            >
+                <ListItem button>
+                    <ListItemIcon>
+                        <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='Table Generate' />
+                </ListItem>
+            </NavLink>
+            {/*============== Generate table End===================== */}
         </List>
     );
 };

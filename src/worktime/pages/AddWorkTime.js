@@ -63,10 +63,12 @@ const AddWorkTime = () => {
         minutes: 0
     });
 
+    const { hours, minutes } = time;
+
     const onChangeHandler = (inputFieldName) => (e) => {
         setTime({ ...time, [inputFieldName]: e.target.value });
     };
-    const [slot, setSlot] = React.useState(60);
+    const [slot, setSlot] = React.useState('60');
 
     const handleChange = (event) => {
         setSlot(event.target.value);
@@ -75,7 +77,7 @@ const AddWorkTime = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         const body = { time, slot };
-        console.log(slot);
+        console.log(body);
     };
     return (
         <React.Fragment>
@@ -101,14 +103,23 @@ const AddWorkTime = () => {
                             <Grid item xs={12}>
                                 <TextField
                                     required
-                                    onChange={(e) =>
-                                        setCountDays(e.target.value)
-                                    }
-                                    value={countDays}
-                                    id='countDays'
-                                    name='countDays'
+                                    onChange={onChangeHandler('hours')}
+                                    value={hours}
+                                    id='hours'
+                                    name='hours'
                                     variant='outlined'
-                                    label='Working days per week'
+                                    label='Working hours per day'
+                                    fullWidth
+                                    style={{ marginBottom: '30px' }}
+                                />
+                                <TextField
+                                    required
+                                    onChange={onChangeHandler('minutes')}
+                                    value={minutes}
+                                    id='minutes'
+                                    name='minutes'
+                                    variant='outlined'
+                                    label='Minutes'
                                     fullWidth
                                 />
                             </Grid>
@@ -127,16 +138,16 @@ const AddWorkTime = () => {
                                     <RadioGroup
                                         aria-label='slot'
                                         name='slot1'
-                                        value={value}
+                                        value={slot}
                                         onChange={handleChange}
                                     >
                                         <FormControlLabel
-                                            value={60}
+                                            value='60'
                                             control={<Radio />}
                                             label='1 Hour time slot'
                                         />
                                         <FormControlLabel
-                                            value={30}
+                                            value='30'
                                             control={<Radio />}
                                             label='30 Minute timeslot'
                                         />
