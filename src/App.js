@@ -12,9 +12,11 @@ import AddRoom from './rooms/pages/AddRoom';
 import UpdateRoom from './rooms/pages/UpdateRoom';
 import AddWorkDays from './workdays/pages/AddWorkDays';
 import UpdateWorkDays from './workdays/pages/UpdateWorkDays';
+import AddWorkTime from './worktime/pages/AddWorkTime';
+import UpdateWorkTime from './worktime/pages/UpdateWorkTime';
 import HomePage from './shared/pages/HomePage';
 import { Helmet } from 'react-helmet';
-import regeneratorRuntime from "regenerator-runtime";
+import regeneratorRuntime from 'regenerator-runtime';
 
 export default function App() {
     return (
@@ -47,6 +49,12 @@ export default function App() {
                             <Route path='/update-workdays' exact>
                                 <UpdateWorkDays></UpdateWorkDays>
                             </Route>
+                            <Route path='/add-worktime' exact>
+                                <AddWorkTime></AddWorkTime>
+                            </Route>
+                            <Route path='/update-worktime' exact>
+                                <UpdateWorkTime></UpdateWorkTime>
+                            </Route>
                             <Redirect to='/'></Redirect>
                         </Switch>
                     </MiniDrawer>
@@ -55,5 +63,3 @@ export default function App() {
         </React.Fragment>
     );
 }
-
-
