@@ -1,5 +1,20 @@
-import React from "react";
-import { CssBaseline, Paper, Typography, Grid, TextField, FormControl, InputLabel, Select, MenuItem, Button, makeStyles } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  CssBaseline,
+  Paper,
+  Typography,
+  Grid,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  makeStyles,
+} from "@material-ui/core";
+import { Alert, AlertTitle } from "@material-ui/lab";
+
+import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -36,6 +51,71 @@ const useStyles = makeStyles((theme) => ({
 
 const AddRoom = () => {
   const classes = useStyles();
+  const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+  const [msg, setMsg] = useState();
+  const [values, setValues] = useState({
+    buildingName: "",
+    lecHallCapacity: "",
+    labCapacity: "",
+    description: "",
+  });
+
+  const { buildingName, lecHallCapacity, labCapacity, description } = values;
+
+  /* to delete */
+  const [building, setBuilding] = React.useState("");
+
+  const handleChange = (event) => {
+    setBuilding(event.target.value);
+  };
+  const [type, setType] = React.useState("");
+
+  const handleChange2 = (event) => {
+    setType(event.target.value);
+  };
+  /* end delete */
+
+  const onChangeHandler = (inputFieldName) => (e) => {
+    setValues({ ...values, [inputFieldName]: e.target.value });
+    setMsg(null);
+    errorPopupCloser();
+  };
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    errorPopupCloser();
+    const location = {
+      buildingName,
+      lecHallCapacity,
+      labCapacity,
+      description,
+    };
+    console.log(location);
+    try {
+      const responseData = await sendRequest(
+        "http://localhost:8000/api/building/",
+        "POST",
+        JSON.stringify(location),
+        { "Content-Type": "application/json" }
+      );
+      if (error) {
+        console.log(error);
+      }
+      console.log(responseData);
+      if (responseData) {
+        setValues({
+          buildingName: "",
+          lecHallCapacity: "",
+          labCapacity: "",
+          description: "",
+        });
+        console.log(responseData);
+        setMsg(responseData.msg);
+      }
+    } catch (err) {
+      console.log(error);
+    }
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -48,7 +128,7 @@ const AddRoom = () => {
             variant="h4"
             align="center"
           >
-            Add Room
+            Add a Room
           </Typography>
 
           <form onSubmit={submitHandler} className={classes.form} noValidate>
@@ -56,59 +136,125 @@ const AddRoom = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  onChange={onChangeHandler("roomName")}
-                  value={roomName}
-                  id="roomName"
-                  name="roomName"
+                  onChange={onChangeHandler("buildingName")}
+                  value={buildingName}
+                  id="buildingName"
+                  name="buildingName"
                   variant="outlined"
-                  label="RoomName"
+                  label="Room Name"
+                  error={error.param === "buildingName" ? true : false}
+                  helperText={error.param === "buildingName" ? error.msg : ""}
                   fullWidth
                 />
               </Grid>
+              {/* <Grid item xs={12}>
+                <TextField
+                  required
+                  onChange={onChangeHandler("lecHallCapacity")}
+                  value={lecHallCapacity}
+                  id="lecHallCapacity"
+                  name="lecHallCapacity"
+                  variant="outlined"
+                  label="Lecture Hall Capacity"
+                  error={error.param==='lecHallCapacity'? true : false}
+                  helperText={error.param==='lecHallCapacity'? error.msg : ''}
+                  fullWidth
+                />
+              </Grid> */}
+              {/* <Grid item xs={12}>
+                <TextField
+                  required
+                  onChange={onChangeHandler("labCapacity")}
+                  value={labCapacity}
+                  id="labCapacity"
+                  name="labCapacity"
+                  variant="outlined"
+                  label="Labarotary Capacity"
+                  error={error.param==='labCapacity'? true : false}
+                  helperText={error.param==='labCapacity'? error.msg : ''}
+                  fullWidth
+                />
+              </Grid> */}
               <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  className={classes.formControl}
+                >
                   <InputLabel id="demo-simple-select-outlined-label">
-                    Age
+                    Building Name
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    value={age}
+                    value={building}
                     onChange={handleChange}
-                    label="Age"
+                    label="Select a Building"
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={10}>New Building</MenuItem>
+                    <MenuItem value={20}>Main Building</MenuItem>
+                    <MenuItem value={30}>Engineer Building</MenuItem>
+                    <MenuItem value={30}>Updated Building</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  className={classes.formControl}
+                >
                   <InputLabel id="demo-simple-select-outlined-label">
-                    Age
+                    Room Type
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    value={age}
-                    onChange={handleChange}
-                    label="Age"
+                    label="Select a Building"
+                    value={type}
+                    onChange={handleChange2}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={10}>Lecture Hall</MenuItem>
+                    <MenuItem value={20}>Laboratory</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
 
-              
+              <Grid item xs={12}>
+                <TextField
+                  onChange={onChangeHandler("description")}
+                  value={description}
+                  required
+                  id="description"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  variant="outlined"
+                  error={error.param === "description" ? true : false}
+                  helperText={error.param === "description" ? error.msg : ""}
+                  fullWidth
+                />
+              </Grid>
+              {error && (
+                <Grid item xs={12}>
+                  <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>
+                      {error.backendMsg
+                        ? error.backendMsg
+                        : "Please Resolve the above error & try again"}{" "}
+                    </strong>
+                  </Alert>
+                </Grid>
+              )}
+              {msg && (
+                <Grid item xs={12}>
+                  <Alert severity="success">
+                    <AlertTitle>Success !!</AlertTitle>
+                    {msg}
+                  </Alert>
+                </Grid>
+              )}
             </Grid>
 
             <div className={classes.buttons}>

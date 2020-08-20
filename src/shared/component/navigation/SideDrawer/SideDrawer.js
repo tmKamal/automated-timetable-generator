@@ -86,7 +86,7 @@ const SideDrawer = (props) => {
       <Divider />
       {props.children}
       <Divider />
-      <List>
+      {/* <List>
         {["All mail", "Trash", "Spam"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
@@ -95,7 +95,7 @@ const SideDrawer = (props) => {
             <ListItemText primary={text} />
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </Drawer>
   );
 };
