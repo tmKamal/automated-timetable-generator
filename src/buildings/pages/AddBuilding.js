@@ -12,7 +12,8 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
-import { set } from "mongoose";
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 const AddBuilding = () => {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+  const [msg, setMsg]=useState();
   const [values,setValues]=useState({
       buildingName:'',
       lecHallCapacity:'',
@@ -62,14 +64,20 @@ const AddBuilding = () => {
 
   const onChangeHandler=(inputFieldName)=>(e)=>{
       setValues({...values,[inputFieldName]:e.target.value});
+      setMsg(null);
   }
-  const submitHandler=(e)=>{
+  const submitHandler=async(e)=>{
       e.preventDefault();
       const location={buildingName,lecHallCapacity,labCapacity,description};
       console.log(location);
       try{
-          const responseData=sendRequest('http://localhost:8000/api/building/','POST',JSON.stringify(location),{'Content-Type':'application/json'})
+          const responseData=await sendRequest('http://localhost:8000/api/building/','POST',JSON.stringify(location),{'Content-Type':'application/json'})
           console.log(responseData);
+          if (responseData){
+            setValues({buildingName:'',lecHallCapacity:'',labCapacity:'',description:''})
+            console.log(responseData);
+            setMsg(responseData.msg);
+          }
       }catch(err){
           console.log(error);
       }
@@ -141,6 +149,12 @@ const AddBuilding = () => {
                   fullWidth
                 />
               </Grid>
+              {msg&&<Grid item xs={12}>
+                <Alert severity="success">
+                  <AlertTitle>Success !!</AlertTitle>
+                  {msg} 
+                </Alert>
+              </Grid>}
             </Grid>
 
             <div className={classes.buttons}>
