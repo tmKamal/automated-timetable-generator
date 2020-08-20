@@ -28,6 +28,9 @@ module.exports = {
 		],
 	},
 	target: 'electron-renderer',
+	devServer: {
+		historyApiFallback: true,
+	  },
 	plugins: [
 		new HtmlWebpackPlugin({ title: 'automated-timetable-generator' }),
 		new MiniCssExtractPlugin({
