@@ -80,7 +80,7 @@ const AddWorkDays = () => {
         Saturday: false,
         Sunday: false
     });
-    const [countDays, setCountDays] = React.useState(5);
+    const [countDays, setCountDays] = React.useState(1);
 
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
