@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Checkbox from "@material-ui/core/Checkbox";
 import {
   CssBaseline,
   Paper,
@@ -12,10 +17,11 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
-import { set } from "mongoose";
-import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
   layout: {
     width: "auto",
     marginLeft: theme.spacing(2),
@@ -46,22 +52,38 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
+  formControl: {
+    margin: theme.spacing(3),
+  },
+  alignRight: {
+    textAlign: "right",
+  },
+  errorTextShow: {
+    color: "red",
+    display: "block",
+  },
+  errorTextHide: {
+    color: "black",
+    display: "none",
+  },
 }));
 
 const AddStudent = () => {
   const classes = useStyles();
-  const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
-  const [values, setValues] = useState({
+  const [state, setState] = React.useState({
     academicYearSem: "",
     programme: "",
     groupNumber: "",
     subGroupNumber: "",
   });
 
-  const { academicYearSem, programme, groupNumber, subGroupNumber } = values;
+  const { academicYearSem, programme, groupNumber, subGroupNumber } = state;
 
   const onChangeHandler = (inputFieldName) => (e) => {
-    setValues({ ...values, [inputFieldName]: e.target.value });
+    setState({ ...state, [inputFieldName]: e.target.value });
+  };
+  const handleChange = (event) => {
+    setState(event.target.value);
   };
   const submitHandler = (e) => {
     e.preventDefault();
@@ -71,18 +93,8 @@ const AddStudent = () => {
       groupNumber,
       subGroupNumber,
     };
-    console.log(group);
-    try {
-      const responseData = sendRequest(
-        "http://localhost:8000/api/student/",
-        "POST",
-        JSON.stringify(group),
-        { "Content-Type": "application/json" }
-      );
-      console.log(responseData);
-    } catch (err) {
-      console.log(error);
-    }
+    const body = { group };
+    console.log(body);
   };
 
   return (
@@ -113,6 +125,7 @@ const AddStudent = () => {
                     value={academicYearSem}
                     onChange={handleChange}
                     label="Academic Year and Semester"
+                    style={{ width: "510px" }}
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -139,6 +152,7 @@ const AddStudent = () => {
                     value={programme}
                     onChange={handleChange}
                     label="Programme"
+                    style={{ width: "510px" }}
                   >
                     <MenuItem value="">
                       <em>None</em>
