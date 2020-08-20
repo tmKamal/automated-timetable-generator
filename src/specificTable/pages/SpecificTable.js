@@ -14,6 +14,8 @@ import {
     Button
 } from '@material-ui/core';
 
+import SearchBar from '../../shared/component/searchbar/SearchBar';
+
 const StyledTableCell = withStyles((theme) => ({
     head: {
         backgroundColor: theme.palette.common.black,
@@ -57,6 +59,18 @@ const useStyles = makeStyles({
 const SpecificTable = () => {
     const { id } = useParams();
     const classes = useStyles();
+    const [value, setValue] = React.useState();
+
+    React.useEffect(() => {
+        if (id == 'hall') {
+            setValue(hallData);
+        } else if (id == 'student-group') {
+            setValue(studentData);
+        } else {
+            setValue(lectureData);
+        }
+    }, [id]);
+
     return (
         <TableContainer component={Paper}>
             <Typography
@@ -67,6 +81,19 @@ const SpecificTable = () => {
             >
                 {id == 'full' ? 'Timetable' : `Timetable for specific ${id}`}
             </Typography>
+
+            {id === 'full' ? (
+                ''
+            ) : (
+                <Typography
+                    style={{ marginBottom: '30px', marginLeft: '30%' }}
+                    component='h1'
+                    variant='h4'
+                    align='center'
+                >
+                    <SearchBar opt={value} options={value}></SearchBar>
+                </Typography>
+            )}
 
             <Table className={classes.table} aria-label='customized table'>
                 <TableHead>
@@ -113,9 +140,38 @@ const SpecificTable = () => {
                 align='right'
                 style={{ margin: '20px', float: 'right' }}
             >
-                Print Time table1
+                Print Time table
             </Button>
         </TableContainer>
     );
 };
+const hallData = [
+    { title: 'A401', year: 1994 },
+    { title: 'A402r', year: 1972 },
+    { title: 'B401', year: 1974 },
+    { title: 'A611', year: 2008 },
+    { title: 'N3D', year: 1957 },
+    { title: 'N3C', year: 1993 },
+    { title: 'N3E', year: 1994 }
+];
+
+const lectureData = [
+    { title: 'Dr Nimal perera', year: 1994 },
+    { title: 'Mr Kamal bandara', year: 1972 },
+    { title: 'Mr aruna sirisena', year: 1974 },
+    { title: 'Mr saman ', year: 2008 },
+    { title: 'amal', year: 1957 },
+    { title: 'nihal', year: 1993 },
+    { title: 'sumith', year: 1994 }
+];
+
+const studentData = [
+    { title: 'Y01S01', year: 1994 },
+    { title: 'Y01S02', year: 1972 },
+    { title: 'Y02S01', year: 1974 },
+    { title: 'Y02S02', year: 2008 },
+    { title: 'Y03S01', year: 1957 },
+    { title: 'Y03S02', year: 1993 },
+    { title: 'Y014S01', year: 1994 }
+];
 export default SpecificTable;
