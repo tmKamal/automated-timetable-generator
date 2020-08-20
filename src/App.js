@@ -9,7 +9,7 @@ import {
 import MiniDrawer from './shared/component/navigation';
 import AddBuilding from './buildings/pages/AddBuilding';
 import AddRoom from './rooms/pages/AddRoom';
-import UpdateRoom from './rooms/pages/UpdateRoom';
+import ViewRoom from './rooms/pages/ViewRoom';
 import AddWorkDays from './workdays/pages/AddWorkDays';
 import UpdateWorkDays from './workdays/pages/UpdateWorkDays';
 import AddWorkTime from './worktime/pages/AddWorkTime';
@@ -19,6 +19,10 @@ import SpecificTable from './specificTable/pages/SpecificTable';
 import HomePage from './shared/pages/HomePage';
 import { Helmet } from 'react-helmet';
 import regeneratorRuntime from 'regenerator-runtime';
+import ViewBuildings from './buildings/pages/ViewBuildings';
+import UpdateBuilding from './buildings/pages/UpdateBuilding';
+import LecturerStats from './stats/pages/LecturerStats';
+import SubjectStats from './stats/pages/SubjectsStats';
 
 export default function App() {
     return (
@@ -39,12 +43,25 @@ export default function App() {
                             <Route path='/add-building' exact>
                                 <AddBuilding></AddBuilding>
                             </Route>
+                            <Route path='/view-buildings' exact>
+                                <ViewBuildings></ViewBuildings>
+                            </Route>
+                            <Route path='/update/building/:bid' exact>
+                                <UpdateBuilding></UpdateBuilding>
+                            </Route>
                             <Route path='/add-room' exact>
                                 <AddRoom></AddRoom>
                             </Route>
-                            <Route path='/update-room' exact>
-                                <UpdateRoom></UpdateRoom>
+                            <Route path='/view-room' exact>
+                                <ViewRoom></ViewRoom>
                             </Route>
+                            <Route path='/view-stats-lecturer' exact>
+                                <LecturerStats></LecturerStats>
+                            </Route>
+                            <Route path='/view-stats-subjects' exact>
+                                <SubjectStats></SubjectStats>
+                            </Route>
+                            
                             <Route path='/add-workdays' exact>
                                 <AddWorkDays></AddWorkDays>
                             </Route>
