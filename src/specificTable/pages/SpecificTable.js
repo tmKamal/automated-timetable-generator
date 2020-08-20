@@ -14,6 +14,10 @@ import {
     Button
 } from '@material-ui/core';
 
+import SearchBar from '../../shared/component/searchbar/SearchBar';
+const { dialog } = require('electron').remote;
+const { Notification } = require('electron').remote;
+
 const StyledTableCell = withStyles((theme) => ({
     head: {
         backgroundColor: theme.palette.common.black,
@@ -37,15 +41,15 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-    createData('8.30', 'DMS(Lecture)', 6.0, 24, 4.0),
-    createData('9.30 ', 237, 9.0, 37, 4.3),
-    createData('10.30', 262, 16.0, 24, 6.0),
-    createData('11.30', 305, 3.7, 67, 4.3),
-    createData('12.30', 356, 16.0, 49, 3.9),
-    createData('01.30', 356, 16.0, 49, 3.9),
-    createData('02.30', 356, 16.0, 49, 3.9),
-    createData('03.30', 356, 16.0, 49, 3.9),
-    createData('04.30', 356, 16.0, 49, 3.9)
+    createData('8.30', 'sample data', 'sample data', '-', 'sample data'),
+    createData('9.30 ', 'sample data', 'sample data', '-', 'sample data'),
+    createData('10.30', '-', 'sample data', 'sample data', '-'),
+    createData('11.30', '-', 'sample data', 'sample data', '-'),
+    createData('12.30', '-', '-', 'sample data', 'sample data'),
+    createData('01.30', '-', '-', 'sample data', 'sample data'),
+    createData('02.30', 'sample data', '-', 'sample data', 'sample data'),
+    createData('03.30', 'sample data', '-', 'sample data', 'sample data'),
+    createData('04.30', 'sample data', '-', 'sample data', 'sample data')
 ];
 
 const useStyles = makeStyles({
@@ -57,6 +61,55 @@ const useStyles = makeStyles({
 const SpecificTable = () => {
     const { id } = useParams();
     const classes = useStyles();
+    const [value, setValue] = React.useState();
+
+    React.useEffect(() => {
+        if (id == 'hall') {
+            setValue(hallData);
+        } else if (id == 'student-group') {
+            setValue(studentData);
+        } else {
+            setValue(lectureData);
+        }
+    }, [id]);
+
+    const printTable = (e) => {
+        dialog
+            .showMessageBox({
+                type: 'question',
+                buttons: ['Cancel', 'Yes, please', 'No, thanks'],
+                defaultId: 2,
+                title: 'Printing the timetable',
+                message: 'Do you want to print the timetable?',
+                detail:
+                    'This will start to print the time table with available printer',
+                checkboxLabel: 'Remember my answer',
+                checkboxChecked: false
+            })
+            .then((result) => {
+                if (result.response === 1) {
+                    const title = 'Start printing';
+                    const body = 'Time table printing in progress';
+                    const data = { title, body };
+                    notify(data);
+                } else {
+                    console.log('canceled');
+                }
+            });
+    };
+    const notify = (data) => {
+        console.log(Notification.isSupported());
+        let iconAd =
+            'F:/Electron/automated-timetable-generator/assets/icon.png';
+
+        const notifi = {
+            title: data.title,
+            body: data.body,
+            icon: iconAd
+        };
+
+        new Notification(notifi).show();
+    };
     return (
         <TableContainer component={Paper}>
             <Typography
@@ -67,6 +120,19 @@ const SpecificTable = () => {
             >
                 {id == 'full' ? 'Timetable' : `Timetable for specific ${id}`}
             </Typography>
+
+            {id === 'full' ? (
+                ''
+            ) : (
+                <Typography
+                    style={{ marginBottom: '30px', marginLeft: '30%' }}
+                    component='h1'
+                    variant='h4'
+                    align='center'
+                >
+                    <SearchBar opt={value} options={value}></SearchBar>
+                </Typography>
+            )}
 
             <Table className={classes.table} aria-label='customized table'>
                 <TableHead>
@@ -112,10 +178,40 @@ const SpecificTable = () => {
                 className={classes.button}
                 align='right'
                 style={{ margin: '20px', float: 'right' }}
+                onClick={printTable}
             >
-                Print Time table1
+                Print Time table
             </Button>
         </TableContainer>
     );
 };
+const hallData = [
+    { title: 'A401', year: 1994 },
+    { title: 'A402r', year: 1972 },
+    { title: 'B401', year: 1974 },
+    { title: 'A611', year: 2008 },
+    { title: 'N3D', year: 1957 },
+    { title: 'N3C', year: 1993 },
+    { title: 'N3E', year: 1994 }
+];
+
+const lectureData = [
+    { title: 'Dr Nimal perera', year: 1994 },
+    { title: 'Mr Kamal bandara', year: 1972 },
+    { title: 'Mr aruna sirisena', year: 1974 },
+    { title: 'Mr saman ', year: 2008 },
+    { title: 'amal', year: 1957 },
+    { title: 'nihal', year: 1993 },
+    { title: 'sumith', year: 1994 }
+];
+
+const studentData = [
+    { title: 'Y01S01', year: 1994 },
+    { title: 'Y01S02', year: 1972 },
+    { title: 'Y02S01', year: 1974 },
+    { title: 'Y02S02', year: 2008 },
+    { title: 'Y03S01', year: 1957 },
+    { title: 'Y03S02', year: 1993 },
+    { title: 'Y014S01', year: 1994 }
+];
 export default SpecificTable;
