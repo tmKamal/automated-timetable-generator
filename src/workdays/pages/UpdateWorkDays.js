@@ -262,7 +262,7 @@ const UpdateWorkDays = () => {
                                 color='primary'
                                 className={classes.button}
                             >
-                                Submit
+                                update
                             </Button>
                         </div>
                     </form>

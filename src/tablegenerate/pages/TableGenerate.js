@@ -51,9 +51,10 @@ const TableGenerate = () => {
                 type: 'question',
                 buttons: ['Cancel', 'Yes, please', 'No, thanks'],
                 defaultId: 2,
-                title: 'Question',
-                message: 'Do you want to do this?',
-                detail: 'This will start to print the time table',
+                title: 'Printing the timetable',
+                message: 'Do you want to print the timetable?',
+                detail:
+                    'This will start to print the time table with available printer',
                 checkboxLabel: 'Remember my answer',
                 checkboxChecked: false
             })
@@ -70,9 +71,13 @@ const TableGenerate = () => {
     };
     const notify = (data) => {
         console.log(Notification.isSupported());
+        let iconAd =
+            'F:/Electron/automated-timetable-generator/assets/icon.png';
+
         const notifi = {
             title: data.title,
-            body: data.body
+            body: data.body,
+            icon: iconAd
         };
 
         new Notification(notifi).show();
