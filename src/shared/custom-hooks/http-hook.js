@@ -2,7 +2,7 @@ import {useState,useCallback,useEffect,useRef} from 'react';
 
 export const useHttpClient=()=>{
     const [isLoading,setIsLoading]=useState(false);
-    const [error,setError]=useState();
+    const [error,setError]=useState('');
 
     const activeHttpRequest=useRef([]); //this is to store the current ongoing request.
 
@@ -26,20 +26,25 @@ export const useHttpClient=()=>{
             */
 
             if(!response.ok){
-                throw new Error(responseData.message);
+                if(responseData.error){
+                    console.log(responseData.error);
+                    setError(responseData.error)
+                }
+                throw new Error(responseData.error);
             }
             setIsLoading(false);
             return responseData;
 
         }catch(err){
-            setError(err.message);
+            console.log(err);
+            //setError(err.msg);
             setIsLoading(false);
             throw err;
         }
     },[]);
 
     const errorPopupCloser=()=>{
-        setError(null);
+        setError('');
     }
     /* 
     this will only render when component mount, and inside return method will execute when componenet dismount, its act like a cleaning function.
