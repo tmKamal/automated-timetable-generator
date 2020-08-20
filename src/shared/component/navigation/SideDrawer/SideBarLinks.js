@@ -163,6 +163,102 @@ const SideBarLinks = () => {
                 </List>
             </Collapse>
             {/* ============== Working Time End ===================== */}
+
+            {/* ============== Lecturers ===================== */}
+            <ListItem button onClick={handleClickRoom}>
+                <ListItemIcon>
+                    <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary='Lecturers' />
+                {roomOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={roomOpen} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/add-lecturer'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Add Lecturer' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/update-lecturer'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Update Lecturer' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+            </Collapse>
+            {/* ============== Lecturers End ===================== */}
+
+            {/* ============== Subjects ===================== */}
+            <ListItem button onClick={handleClickRoom}>
+                <ListItemIcon>
+                    <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary='Subjects' />
+                {roomOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={roomOpen} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/add-subject'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Add Subject' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/update-subject'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Update Subject' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+            </Collapse>
+            {/* ============== Subjects End ===================== */}
+
+            {/*============== Session ===================== */}
+            <NavLink
+                style={{ textDecoration: 'none' }}
+                to='/add-session'
+                className='MuiTypography-colorInherit '
+            >
+                <ListItem button>
+                    <ListItemIcon>
+                        <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='Session' />
+                </ListItem>
+            </NavLink>
+            {/*============== Session End===================== */}
+
             {/*============== Generate table ===================== */}
             <NavLink
                 style={{ textDecoration: 'none' }}

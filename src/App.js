@@ -19,6 +19,12 @@ import SpecificTable from './specificTable/pages/SpecificTable';
 import HomePage from './shared/pages/HomePage';
 import { Helmet } from 'react-helmet';
 import regeneratorRuntime from 'regenerator-runtime';
+import AddLecturer from './lecturers/pages/AddLecturer';
+import UpdateLecturer from './lecturers/pages/UpdateLecturer';
+import AddSubject from './subjects/pages/AddSubject';
+import UpdateSubject from './subjects/pages/UpdateSubject';
+import AddSession from './sessions/pages/AddSession';
+
 
 export default function App() {
     return (
@@ -57,8 +63,23 @@ export default function App() {
                             <Route path='/update-worktime' exact>
                                 <UpdateWorkTime></UpdateWorkTime>
                             </Route>
+                            <Route path='/add-lecturer' exact>
+                                <AddLecturer></AddLecturer>
+                            </Route>
+                            <Route path='/update-lecturer' exact>
+                                <UpdateLecturer></UpdateLecturer>
+                            </Route>
+                            <Route path='/add-subject' exact>
+                                <AddSubject></AddSubject>
+                            </Route>
+                            <Route path='/update-subject' exact>
+                                <UpdateSubject></UpdateSubject>
+                            </Route>
                             <Route path='/table-generate' exact>
                                 <TableGenerate></TableGenerate>
+                            </Route>
+                            <Route path='/add-session'>
+                                <AddSession></AddSession>
                             </Route>
                             <Route path='/specific-table/:id' exact>
                                 <SpecificTable></SpecificTable>
