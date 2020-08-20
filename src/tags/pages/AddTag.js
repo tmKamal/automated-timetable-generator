@@ -68,19 +68,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddStudent = () => {
+const AddTag = () => {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    academicYearSem: "",
-    programme: "",
-    groupNumber: "",
-    subGroupNumber: "",
+    tagType: "",
   });
 
-  const { academicYearSem, programme, groupNumber, subGroupNumber } = state;
+  const { tagType } = state;
 
   const onChangeHandler = (inputFieldName) => (e) => {
-    setState({ ...state, [inputFieldName]: e.target.value });
+    setState({ ...values, [inputFieldName]: e.target.value });
   };
   const handleChange = (event) => {
     setState(event.target.value);
@@ -88,10 +85,7 @@ const AddStudent = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     const group = {
-      academicYearSem,
-      programme,
-      groupNumber,
-      subGroupNumber,
+      tagType,
     };
     const body = { group };
     console.log(body);
@@ -109,84 +103,30 @@ const AddStudent = () => {
             variant="h4"
             align="center"
           >
-            Add Student Group
+            Add Tag
           </Typography>
 
           <form onSubmit={submitHandler} className={classes.form} noValidate>
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="academicYearSem">
-                    Academic Year and Semester
-                  </InputLabel>
+                  <InputLabel id="tagType">Tag Type</InputLabel>
                   <Select
-                    labelId="academicYearSem"
-                    id="academicYearSem"
-                    value={academicYearSem}
+                    labelId="tagType"
+                    id="tagType"
+                    value={tagType}
                     onChange={handleChange}
-                    label="Academic Year and Semester"
+                    label="Tag Type"
                     style={{ width: "510px" }}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={1}>Y1.S1</MenuItem>
-                    <MenuItem value={2}>Y1.S2</MenuItem>
-                    <MenuItem value={3}>Y2.S1</MenuItem>
-                    <MenuItem value={4}>Y2.S2</MenuItem>
-                    <MenuItem value={5}>Y3.S1</MenuItem>
-                    <MenuItem value={6}>Y3.S2</MenuItem>
-                    <MenuItem value={7}>Y4.S1</MenuItem>
-                    <MenuItem value={8}>Y4.S2</MenuItem>
+                    <MenuItem value={1}>Lecture</MenuItem>
+                    <MenuItem value={2}>Tutorial</MenuItem>
+                    <MenuItem value={3}>Practical</MenuItem>
                   </Select>
                 </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="programme">
-                    Academic Year and Semester
-                  </InputLabel>
-                  <Select
-                    labelId="programme"
-                    id="programme"
-                    value={programme}
-                    onChange={handleChange}
-                    label="Programme"
-                    style={{ width: "510px" }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={1}>IT</MenuItem>
-                    <MenuItem value={2}>CSSE</MenuItem>
-                    <MenuItem value={3}>CSE</MenuItem>
-                    <MenuItem value={4}>IM</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  onChange={onChangeHandler("groupNumber")}
-                  value={groupNumber}
-                  id="groupNumber"
-                  name="groupNumber"
-                  variant="outlined"
-                  label="Group Number"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  onChange={onChangeHandler("subGroupNumber")}
-                  value={subGroupNumber}
-                  id="subGroupNumber"
-                  name="subGroupNumber"
-                  variant="outlined"
-                  label="Sub Group Number"
-                  fullWidth
-                />
               </Grid>
             </Grid>
 
@@ -206,4 +146,4 @@ const AddStudent = () => {
     </React.Fragment>
   );
 };
-export default AddStudent;
+export default AddTag;
