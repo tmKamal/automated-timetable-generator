@@ -217,6 +217,20 @@ const SideBarLinks = () => {
         </List>
       </Collapse>
       {/* ============== Student End ===================== */}
+      {/*============== Tag ===================== */}
+      <NavLink
+        style={{ textDecoration: "none" }}
+        to="/add-tag"
+        className="MuiTypography-colorInherit "
+      >
+        <ListItem button>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Tag" />
+        </ListItem>
+      </NavLink>
+      {/*============== Tag End===================== */}
     </List>
   );
 };

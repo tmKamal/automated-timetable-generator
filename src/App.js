@@ -18,6 +18,8 @@ import TableGenerate from "./tablegenerate/pages/TableGenerate";
 import SpecificTable from "./specificTable/pages/SpecificTable";
 import AddStudent from "./students/pages/AddStudent";
 import UpdateStudent from "./students/pages/UpdateStudent";
+import AddTag from "./tags/pages/AddTag";
+import UpdateTag from "./tags/pages/UpdateTag";
 import HomePage from "./shared/pages/HomePage";
 import { Helmet } from "react-helmet";
 import regeneratorRuntime from "regenerator-runtime";
@@ -70,6 +72,12 @@ export default function App() {
               </Route>
               <Route path="/update-student" exact>
                 <UpdateStudent></UpdateStudent>
+              </Route>
+              <Route path="/add-tag" exact>
+                <AddTag></AddTag>
+              </Route>
+              <Route path="/update-tag" exact>
+                <UpdateTag></UpdateTag>
               </Route>
               <Redirect to="/"></Redirect>
             </Switch>
