@@ -2,6 +2,7 @@ import React from 'react';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { useHistory } from 'react-router-dom';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import {
@@ -69,7 +70,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddWorkDays = () => {
-    const [saved, setSaved] = React.useState(true);
+    const [saved, setSaved] = React.useState(false);
+    const history = useHistory();
     const classes = useStyles();
     const [state, setState] = React.useState({
         Monday: true,
@@ -80,7 +82,7 @@ const AddWorkDays = () => {
         Saturday: false,
         Sunday: false
     });
-    const [countDays, setCountDays] = React.useState(5);
+    const [countDays, setCountDays] = React.useState(1);
 
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
@@ -261,8 +263,20 @@ const AddWorkDays = () => {
                                 variant='contained'
                                 color='primary'
                                 className={classes.button}
+                                onClick={() => setSaved(!saved)}
                             >
-                                Submit
+                                save
+                            </Button>
+
+                            <Button
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                                className={classes.button}
+                                disabled={saved ? false : true}
+                                onClick={() => history.push('/add-worktime')}
+                            >
+                                continue
                             </Button>
                         </div>
                     </form>

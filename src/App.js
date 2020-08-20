@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -23,6 +23,10 @@ import ViewBuildings from './buildings/pages/ViewBuildings';
 import UpdateBuilding from './buildings/pages/UpdateBuilding';
 import LecturerStats from './stats/pages/LecturerStats';
 import SubjectStats from './stats/pages/SubjectsStats';
+import AddStudent from "./students/pages/AddStudent";
+import UpdateStudent from "./students/pages/UpdateStudent";
+import AddTag from "./tags/pages/AddTag";
+import UpdateTag from "./tags/pages/UpdateTag";
 
 export default function App() {
     return (
@@ -80,6 +84,18 @@ export default function App() {
                             <Route path='/specific-table/:id' exact>
                                 <SpecificTable></SpecificTable>
                             </Route>
+                            <Route path="/add-student" exact>
+                <AddStudent></AddStudent>
+              </Route>
+              <Route path="/update-student" exact>
+                <UpdateStudent></UpdateStudent>
+              </Route>
+              <Route path="/add-tag" exact>
+                <AddTag></AddTag>
+              </Route>
+              <Route path="/update-tag" exact>
+                <UpdateTag></UpdateTag>
+              </Route>
                             <Redirect to='/'></Redirect>
                         </Switch>
                     </MiniDrawer>
@@ -87,4 +103,5 @@ export default function App() {
             </Router>
         </React.Fragment>
     );
+
 }
