@@ -65,19 +65,25 @@ const AddBuilding = () => {
   const onChangeHandler=(inputFieldName)=>(e)=>{
       setValues({...values,[inputFieldName]:e.target.value});
       setMsg(null);
+      errorPopupCloser();
   }
   const submitHandler=async(e)=>{
       e.preventDefault();
+      errorPopupCloser();
       const location={buildingName,lecHallCapacity,labCapacity,description};
       console.log(location);
       try{
           const responseData=await sendRequest('http://localhost:8000/api/building/','POST',JSON.stringify(location),{'Content-Type':'application/json'})
+          if(error){
+            console.log(error);
+          }
           console.log(responseData);
           if (responseData){
             setValues({buildingName:'',lecHallCapacity:'',labCapacity:'',description:''})
             console.log(responseData);
             setMsg(responseData.msg);
           }
+          
       }catch(err){
           console.log(error);
       }
@@ -109,6 +115,8 @@ const AddBuilding = () => {
                   name="buildingName"
                   variant="outlined"
                   label="Building Name"
+                  error={error.param==='buildingName'? true : false}
+                  helperText={error.param==='buildingName'? error.msg : ''}
                   fullWidth
                 />
               </Grid>
@@ -121,6 +129,8 @@ const AddBuilding = () => {
                   name="lecHallCapacity"
                   variant="outlined"
                   label="Lecture Hall Capacity"
+                  error={error.param==='lecHallCapacity'? true : false}
+                  helperText={error.param==='lecHallCapacity'? error.msg : ''}
                   fullWidth
                 />
               </Grid>
@@ -133,6 +143,8 @@ const AddBuilding = () => {
                   name="labCapacity"
                   variant="outlined"
                   label="Labarotary Capacity"
+                  error={error.param==='labCapacity'? true : false}
+                  helperText={error.param==='labCapacity'? error.msg : ''}
                   fullWidth
                 />
               </Grid>
@@ -146,9 +158,17 @@ const AddBuilding = () => {
                   multiline
                   rows={4}
                   variant="outlined"
+                  error={error.param==='description'? true : false}
+                  helperText={error.param==='description'? error.msg : ''}
                   fullWidth
                 />
               </Grid>
+              {error&&<Grid item xs={12}>
+                <Alert severity="error">
+                  <AlertTitle>Error</AlertTitle>
+                  <strong>{error.backendMsg?error.backendMsg:'Please Resolve the above error & try again'} </strong>
+                </Alert>
+              </Grid>}
               {msg&&<Grid item xs={12}>
                 <Alert severity="success">
                   <AlertTitle>Success !!</AlertTitle>
