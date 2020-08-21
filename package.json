@@ -2,6 +2,7 @@
     "name": "automated-timetable-generator",
     "productName": "automated-timetable-generator",
     "version": "1.0.0",
+    "author": "logix",
     "description": "Automates the boring manual process of preparing time table in universities and colleges with large number of students.",
     "license": "MIT",
     "engines": {
@@ -18,7 +19,7 @@
         "start": "cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js --mode development",
         "build": "cross-env NODE_ENV=production webpack --config webpack.build.config.js --mode production",
         "package": "npm run build",
-        "postpackage": "electron-packager ./ --out=./release-builds",
+        "postpackage": "electron-packager ./ --platform win32 --out=./release-builds",
         "dist": "electron-builder"
     },
     "dependencies": {
@@ -58,7 +59,7 @@
         "webpack-dev-server": "^3.10.3"
     },
     "build": {
-        "appId": "com.logixSliit.timetable-generator",
+        "appId": "com.logixSliit.app",
         "target": "NSIS",
         "directories": {
             "output": "release/"
