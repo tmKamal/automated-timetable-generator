@@ -28,6 +28,8 @@ const SideBarLinks = () => {
     const [buildingOpen, setBuildingOpen]=React.useState(false);
     const [statsOpen, setStatsOpen]=React.useState(false);
     const [studentOpen, setStudentOpen] = React.useState(false);
+    const [lecturerOpen, setLecturerOpen] = React.useState(false);
+    const [subjectOpen, setSubjectOpen] = React.useState(false);
    
     return (
         <List>
@@ -152,14 +154,14 @@ const SideBarLinks = () => {
             {/* ============== Working Time End ===================== */}
 
             {/* ============== Lecturers ===================== */}
-            <ListItem button onClick={handleClickRoom}>
+            <ListItem button onClick={()=>setLecturerOpen(!lecturerOpen)}>
                 <ListItemIcon>
                     <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary='Lecturers' />
-                {roomOpen ? <ExpandLess /> : <ExpandMore />}
+                {lecturerOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={roomOpen} timeout='auto' unmountOnExit>
+            <Collapse in={lecturerOpen} timeout='auto' unmountOnExit>
                 <List component='div' disablePadding>
                     <NavLink
                         style={{ textDecoration: 'none' }}
@@ -192,14 +194,14 @@ const SideBarLinks = () => {
             {/* ============== Lecturers End ===================== */}
 
             {/* ============== Subjects ===================== */}
-            <ListItem button onClick={handleClickRoom}>
+            <ListItem button onClick={()=>setSubjectOpen(!subjectOpen)}>
                 <ListItemIcon>
                     <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary='Subjects' />
-                {roomOpen ? <ExpandLess /> : <ExpandMore />}
+                {subjectOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={roomOpen} timeout='auto' unmountOnExit>
+            <Collapse in={subjectOpen} timeout='auto' unmountOnExit>
                 <List component='div' disablePadding>
                     <NavLink
                         style={{ textDecoration: 'none' }}
