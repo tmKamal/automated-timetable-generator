@@ -34,6 +34,7 @@ import AddStudent from "./students/pages/AddStudent";
 import UpdateStudent from "./students/pages/UpdateStudent";
 import AddTag from "./tags/pages/AddTag";
 import UpdateTag from "./tags/pages/UpdateTag";
+import UpdateRoom from "./rooms/pages/UpdateRoom";
 
 export default function App() {
   return (
@@ -65,6 +66,9 @@ export default function App() {
               </Route>
               <Route path="/view-room" exact>
                 <ViewRoom></ViewRoom>
+              </Route>
+              <Route path="/update/room/:rid" exact>
+                <UpdateRoom></UpdateRoom>
               </Route>
               <Route path="/view-stats-lecturer" exact>
                 <LecturerStats></LecturerStats>

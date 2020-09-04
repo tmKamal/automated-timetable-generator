@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   CssBaseline,
   Paper,
@@ -54,25 +54,40 @@ const AddRoom = () => {
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [msg, setMsg] = useState();
   const [values, setValues] = useState({
+    roomName: "",
+    roomCapacity: "",
+    roomType: "",
     buildingName: "",
-    lecHallCapacity: "",
-    labCapacity: "",
-    description: "",
   });
-
-  const { buildingName, lecHallCapacity, labCapacity, description } = values;
+  const [buildingData,setBuildingData]=useState();
+  useEffect(() => {
+    const fetchBuilding = async () => {
+    try {
+        const response = await sendRequest(
+          "http://localhost:8000/api/building/"
+        );
+        if (error) {
+          console.log(error);
+        }
+        if(response){
+          setBuildingData(response);
+        }
+        console.log(response);
+      
+    } catch (err) {
+      console.log(error);
+    }}
+    fetchBuilding();
+  }, []);
+  const { roomName, roomCapacity, roomType, buildingName } = values;
 
   /* to delete */
-  const [building, setBuilding] = React.useState("");
+  const [room, setRoom] = React.useState("");
 
   const handleChange = (event) => {
-    setBuilding(event.target.value);
+    setRoom(event.target.value);
   };
-  const [type, setType] = React.useState("");
 
-  const handleChange2 = (event) => {
-    setType(event.target.value);
-  };
   /* end delete */
 
   const onChangeHandler = (inputFieldName) => (e) => {
@@ -83,18 +98,31 @@ const AddRoom = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     errorPopupCloser();
-    const location = {
-      buildingName,
-      lecHallCapacity,
-      labCapacity,
-      description,
+    let selectedBuilding;
+    let rCapacity;
+    if(roomType=='lab'){
+      selectedBuilding=buildingData.buildings.filter((b)=>b.id===buildingName);
+      setValues({...values,roomCapacity:selectedBuilding[0].labCapacity});
+      rCapacity=selectedBuilding[0].labCapacity;
+    }else{
+      console.log('im inside of hte main data!!'+buildingData.buildings)
+      selectedBuilding=buildingData.buildings.filter((b)=>b.id===buildingName);
+      setValues({...values,roomCapacity:selectedBuilding[0].lecHallCapacity});
+
+      rCapacity=selectedBuilding[0].lecHallCapacity;
+    }
+    const room = {
+      roomName,
+      roomCapacity:rCapacity,
+      roomType,
+      buildingId:buildingName
     };
-    console.log(location);
+    console.log(room);
     try {
       const responseData = await sendRequest(
-        "http://localhost:8000/api/building/",
+        "http://localhost:8000/api/room/",
         "POST",
-        JSON.stringify(location),
+        JSON.stringify(room),
         { "Content-Type": "application/json" }
       );
       if (error) {
@@ -103,10 +131,7 @@ const AddRoom = () => {
       console.log(responseData);
       if (responseData) {
         setValues({
-          buildingName: "",
-          lecHallCapacity: "",
-          labCapacity: "",
-          description: "",
+          roomName: "",
         });
         console.log(responseData);
         setMsg(responseData.msg);
@@ -136,28 +161,28 @@ const AddRoom = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  onChange={onChangeHandler("buildingName")}
-                  value={buildingName}
-                  id="buildingName"
-                  name="buildingName"
+                  onChange={onChangeHandler("roomName")}
+                  value={roomName}
+                  id="roomName"
+                  name="roomName"
                   variant="outlined"
                   label="Room Name"
-                  error={error.param === "buildingName" ? true : false}
-                  helperText={error.param === "buildingName" ? error.msg : ""}
+                  error={error.param === "roomName" ? true : false}
+                  helperText={error.param === "roomName" ? error.msg : ""}
                   fullWidth
                 />
               </Grid>
               {/* <Grid item xs={12}>
                 <TextField
                   required
-                  onChange={onChangeHandler("lecHallCapacity")}
-                  value={lecHallCapacity}
-                  id="lecHallCapacity"
-                  name="lecHallCapacity"
+                  onChange={onChangeHandler("roomCapacity")}
+                  value={roomCapacity}
+                  id="roomCapacity"
+                  name="roomCapacity"
                   variant="outlined"
                   label="Lecture Hall Capacity"
-                  error={error.param==='lecHallCapacity'? true : false}
-                  helperText={error.param==='lecHallCapacity'? error.msg : ''}
+                  error={error.param==='roomCapacity'? true : false}
+                  helperText={error.param==='roomCapacity'? error.msg : ''}
                   fullWidth
                 />
               </Grid> */}
@@ -187,14 +212,19 @@ const AddRoom = () => {
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    value={building}
-                    onChange={handleChange}
-                    label="Select a Building"
+                    value={buildingName}
+                    onChange={onChangeHandler('buildingName')}
+                    label="Select a room"
                   >
-                    <MenuItem value={10}>New Building</MenuItem>
-                    <MenuItem value={20}>Main Building</MenuItem>
-                    <MenuItem value={30}>Engineer Building</MenuItem>
-                    <MenuItem value={30}>Updated Building</MenuItem>
+                    {!isLoading &&
+                      buildingData &&
+                      buildingData.buildings.map((b) => {
+                        return (
+                          <MenuItem key={b.id} value={b.id}>
+                            {b.buildingName}
+                          </MenuItem>
+                        );
+                      })}
                   </Select>
                 </FormControl>
               </Grid>
@@ -210,31 +240,16 @@ const AddRoom = () => {
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    label="Select a Building"
-                    value={type}
-                    onChange={handleChange2}
+                    label="Select a room"
+                    value={roomType}
+                    onChange={onChangeHandler('roomType')}
                   >
-                    <MenuItem value={10}>Lecture Hall</MenuItem>
-                    <MenuItem value={20}>Laboratory</MenuItem>
+                    <MenuItem value={'lecHall'}>Lecture Hall</MenuItem>
+                    <MenuItem value={'lab'}>Laboratory</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  onChange={onChangeHandler("description")}
-                  value={description}
-                  required
-                  id="description"
-                  label="Description"
-                  multiline
-                  rows={4}
-                  variant="outlined"
-                  error={error.param === "description" ? true : false}
-                  helperText={error.param === "description" ? error.msg : ""}
-                  fullWidth
-                />
-              </Grid>
               {error && (
                 <Grid item xs={12}>
                   <Alert severity="error">
