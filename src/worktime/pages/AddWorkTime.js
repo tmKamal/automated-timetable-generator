@@ -13,6 +13,8 @@ import {
     Button,
     makeStyles
 } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import { useHttpClient } from '../../shared/custom-hooks/http-hook';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,6 +60,8 @@ const useStyles = makeStyles((theme) => ({
 
 const AddWorkTime = () => {
     const classes = useStyles();
+    const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+    const [msg, setMsg] = React.useState();
     const [time, setTime] = React.useState({
         hours: 0,
         minutes: 0
@@ -67,17 +71,40 @@ const AddWorkTime = () => {
 
     const onChangeHandler = (inputFieldName) => (e) => {
         setTime({ ...time, [inputFieldName]: e.target.value });
+        setMsg(null);
+        errorPopupCloser();
     };
     const [slot, setSlot] = React.useState('60');
 
     const handleChange = (event) => {
         setSlot(event.target.value);
+        setMsg(null);
+        errorPopupCloser();
     };
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
         const body = { time, slot };
-        console.log(body);
+        try {
+            const responseData = await sendRequest(
+                'http://localhost:8000/api/worktime/',
+                'POST',
+                JSON.stringify(body),
+                { 'Content-Type': 'application/json' }
+            );
+            if (error) {
+                console.log(error);
+            }
+            console.log(responseData);
+            if (responseData) {
+                setTime({ hours: '', minutes: '' });
+                setSlot('');
+                console.log('ji' + responseData.msg);
+                setMsg(responseData.msg);
+            }
+        } catch (err) {
+            console.log(error);
+        }
     };
     return (
         <React.Fragment>
@@ -154,6 +181,26 @@ const AddWorkTime = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
+                            {error && (
+                                <Grid item xs={12}>
+                                    <Alert severity='error'>
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>
+                                            {error.backendMsg
+                                                ? error.backendMsg
+                                                : 'Please Resolve the above error & try again'}{' '}
+                                        </strong>
+                                    </Alert>
+                                </Grid>
+                            )}
+                            {msg && (
+                                <Grid item xs={12}>
+                                    <Alert severity='success'>
+                                        <AlertTitle>Success !!</AlertTitle>
+                                        {msg}
+                                    </Alert>
+                                </Grid>
+                            )}
                         </Grid>
                         <div className={classes.buttons}>
                             <Button
