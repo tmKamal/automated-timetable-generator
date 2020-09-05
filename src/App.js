@@ -27,6 +27,7 @@ import UpdateSubject from "./subjects/pages/UpdateSubject";
 import AddSession from "./sessions/pages/AddSession";
 
 import ViewBuildings from "./buildings/pages/ViewBuildings";
+import ViewSubjects from "./subjects/pages/ViewSubjects";
 import UpdateBuilding from "./buildings/pages/UpdateBuilding";
 import LecturerStats from "./stats/pages/LecturerStats";
 import SubjectStats from "./stats/pages/SubjectsStats";
@@ -34,6 +35,7 @@ import AddStudent from "./students/pages/AddStudent";
 import UpdateStudent from "./students/pages/UpdateStudent";
 import AddTag from "./tags/pages/AddTag";
 import UpdateTag from "./tags/pages/UpdateTag";
+import ViewLecturers from "./lecturers/pages/ViewLecturers";
 
 export default function App() {
   return (
@@ -88,13 +90,19 @@ export default function App() {
               <Route path="/add-lecturer" exact>
                 <AddLecturer></AddLecturer>
               </Route>
-              <Route path="/update-lecturer" exact>
+              <Route path="/view-lecturers" exact>
+                <ViewLecturers></ViewLecturers>
+              </Route>
+              <Route path="/update-lecturer/:lid" exact>
                 <UpdateLecturer></UpdateLecturer>
               </Route>
               <Route path="/add-subject" exact>
                 <AddSubject></AddSubject>
               </Route>
-              <Route path="/update-subject" exact>
+              <Route path="/view-subjects" exact>
+                <ViewSubjects></ViewSubjects>
+              </Route>
+              <Route path="/update-subject/:sid" exact>
                 <UpdateSubject></UpdateSubject>
               </Route>
               <Route path="/table-generate" exact>

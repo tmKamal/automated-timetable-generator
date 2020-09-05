@@ -179,14 +179,14 @@ const SideBarLinks = () => {
                 <List component='div' disablePadding>
                     <NavLink
                         style={{ textDecoration: 'none' }}
-                        to='/update-lecturer'
+                        to='/view-lecturers'
                         className='MuiTypography-colorInherit '
                     >
                         <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 <StarBorder />
                             </ListItemIcon>
-                            <ListItemText primary='Update Lecturer' />
+                            <ListItemText primary='View Lecturers' />
                         </ListItem>
                     </NavLink>
                 </List>
@@ -219,14 +219,14 @@ const SideBarLinks = () => {
                 <List component='div' disablePadding>
                     <NavLink
                         style={{ textDecoration: 'none' }}
-                        to='/update-subject'
+                        to='/view-subjects'
                         className='MuiTypography-colorInherit '
                     >
                         <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 <StarBorder />
                             </ListItemIcon>
-                            <ListItemText primary='Update Subject' />
+                            <ListItemText primary='View Subjects' />
                         </ListItem>
                     </NavLink>
                 </List>
