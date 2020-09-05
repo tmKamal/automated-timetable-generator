@@ -45,23 +45,23 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewRooms = () => {
   const classes = useStyles();
-  const [loadedBuildings, setLoadedBuildings] = useState();
+  const [loadedRooms, setLoadedRooms] = useState();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [deleteId,setDeleteId]=useState();
   const [openDialog,setOpenDialog]=useState(false);
   const [deleteSuccMsg,setDeleteSuccMsg]=useState();
-  const [reload, setReload] = useState(); //use to fetch buildings again, after deleting a building.
+  const [reload, setReload] = useState(); //use to fetch rooms again, after deleting a room.
 
 
   useEffect(() => {
-    const fetchingBuildings = async () => {
+    const fetchingRooms = async () => {
       try {
-        setLoadedBuildings(
-          await sendRequest("http://localhost:8000/api/building")
+        setLoadedRooms(
+          await sendRequest("http://localhost:8000/api/room")
         );
       } catch (err) {}
     };
-    fetchingBuildings();
+    fetchingRooms();
   }, [sendRequest, reload]);
 
   const deleteDialogOpener=(id)=>{
@@ -72,11 +72,11 @@ const ViewRooms = () => {
     setOpenDialog(false);
     setDeleteId(null);
   };
-  const buildingDeleteHandler=()=>{
-    const deleteBuilding = async () => {
+  const roomDeleteHandler=()=>{
+    const deleteRoom = async () => {
         try {
           const delMsg = await sendRequest(
-            `http://localhost:8000/api/building/${deleteId}`,
+            `http://localhost:8000/api/room/${deleteId}`,
             "DELETE",
             null,
             {  }
@@ -91,7 +91,7 @@ const ViewRooms = () => {
             deleteDialogCloser();
         }
       };
-      deleteBuilding();
+      deleteRoom();
   }
 
   return (
@@ -104,7 +104,7 @@ const ViewRooms = () => {
                 paragraph
                 className={classes.marginT}
               >
-                Buildings
+                Rooms
               </Typography>
         </Grid>
       <Grid item xs={12}>
@@ -114,7 +114,7 @@ const ViewRooms = () => {
               setDeleteSuccMsg(false);
             }}
           >
-            Building has been successfully deleted.
+            Room has been successfully deleted.
           </Alert>
         )}
 
@@ -122,33 +122,35 @@ const ViewRooms = () => {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
+                <TableCell>Room Name</TableCell>
 
-                <TableCell align="center">Lec Capacity</TableCell>
-                <TableCell align="center">Lab Capacity</TableCell>
+                <TableCell align="center">Type</TableCell>
+                <TableCell align="center">Capacity</TableCell>
+                <TableCell align="center">Building</TableCell>
                 <TableCell align="center">Edit</TableCell>
                 <TableCell align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {!isLoading &&
-                loadedBuildings &&
-                loadedBuildings.buildings.map((building) => (
-                  <TableRow key={building.id}>
+                loadedRooms &&
+                loadedRooms.rooms.map((room) => (
+                  <TableRow key={room.id}>
                     <TableCell component="th" scope="row">
-                      {building.buildingName}
+                      {room.roomName}
                     </TableCell>
 
                     <TableCell align="center">
-                      {building.lecHallCapacity}
+                      {room.roomType}
                     </TableCell>
-                    <TableCell align="center">{building.labCapacity}</TableCell>
+                    <TableCell align="center">{room.roomCapacity}</TableCell>
+                    <TableCell align="center">{room.buildingId.buildingName}</TableCell>
                     <TableCell align="center">
-                      <Link to={`/update/building/${building.id}`}>
+                      <Link to={`/update/room/${room.id}`}>
                         <IconButton
                           
                           color="secondary"
-                          aria-label="edit the building"
+                          aria-label="edit the room"
                         >
                           <CreateIcon style={{ color: green[500] }}/>
                         </IconButton>
@@ -156,7 +158,7 @@ const ViewRooms = () => {
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
-                        onClick={() => deleteDialogOpener(building.id)}
+                        onClick={() => deleteDialogOpener(room.id)}
                         color="secondary"   
                         aria-label="add an alarm"
                       >
@@ -169,8 +171,8 @@ const ViewRooms = () => {
           </Table>
         </TableContainer>
         {!isLoading &&
-          loadedBuildings &&
-          loadedBuildings.buildings.length === 0 && (
+          loadedRooms &&
+          loadedRooms.rooms.length === 0 && (
             <React.Fragment>
               <Typography
                 variant="h5"
@@ -179,13 +181,13 @@ const ViewRooms = () => {
                 paragraph
                 className={classes.marginT}
               >
-                You haven’t created any buildings yet
+                You haven’t created any rooms yet
               </Typography>
               <div>
                 <Grid container spacing={2} justify="center">
                   <Grid item>
                     <Button
-                      href="/admin/crud/building-create"
+                      href="/admin/crud/room-create"
                       variant="outlined"
                       color="primary"
                     >
@@ -209,11 +211,11 @@ const ViewRooms = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you realy wanted to delete this Building?
+            Are you realy wanted to delete this room?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={buildingDeleteHandler} color="primary">
+          <Button onClick={roomDeleteHandler} color="primary">
             Yes
           </Button>
           <Button onClick={deleteDialogCloser} color="primary" autoFocus>

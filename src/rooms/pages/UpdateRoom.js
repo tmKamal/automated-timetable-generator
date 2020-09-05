@@ -51,44 +51,54 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateBuilding = () => {
+const UpdateRoom = () => {
   const classes = useStyles();
-  const buildingId = useParams().bid;
+  const roomId = useParams().rid;
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
-  const [loadedBuilding, setLoadedBuilding] = useState();
+  const [loadedRoom, setLoadedRoom] = useState();
+  const [loadedBuildings, setLoadedBuildings] = useState();
   const [msg, setMsg] = useState();
   const [reload, setReload] = useState();
   const history = useHistory();
   const [values, setValues] = useState({
+    roomName: "",
+    roomCapacity: "",
+    roomType: "",
     buildingName: "",
-    lecHallCapacity: "",
-    labCapacity: "",
-    description: "",
   });
 
-  const { buildingName, lecHallCapacity, labCapacity, description } = values;
+  const { roomName, roomCapacity, roomType, buildingName } = values;
   /* fetching building details */
   useEffect(() => {
-    const loadedBuilding = async () => {
-      const fetchedBuilding = await sendRequest(
-        `http://localhost:8000/api/building/${buildingId}`
+    const loadedRoom = async () => {
+      const fetchedRooms = await sendRequest(
+        `http://localhost:8000/api/room/${roomId}`
       );
-      setLoadedBuilding(fetchedBuilding.building);
+      setLoadedRoom(fetchedRooms.room);
+      console.log(fetchedRooms)
     };
-    loadedBuilding();
+    const loadedBuildingsFunc = async () => {
+      const fetchedBuilding = await sendRequest(
+        `http://localhost:8000/api/building`
+      );
+      setLoadedBuildings(fetchedBuilding);
+    };
+    loadedRoom();
+    loadedBuildingsFunc();
   }, [sendRequest, reload]);
 
   useEffect(() => {
-    if (loadedBuilding) {
+    if (loadedRoom) {
+        console.log('rooms'+loadedRoom)
       setValues({
         ...values,
-        buildingName: loadedBuilding.buildingName,
-        lecHallCapacity: loadedBuilding.lecHallCapacity,
-        labCapacity: loadedBuilding.labCapacity,
-        description: loadedBuilding.description,
+        roomName: loadedRoom.roomName,
+        roomCapacity: loadedRoom.roomCapacity,
+        roomType: loadedRoom.roomType,
+        buildingName: loadedRoom.buildingId.id,
       });
     }
-  }, [loadedBuilding]);
+  }, [loadedRoom]);
 
   const onChangeHandler = (inputFieldName) => (e) => {
     setValues({ ...values, [inputFieldName]: e.target.value });
@@ -98,18 +108,18 @@ const UpdateBuilding = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     errorPopupCloser();
-    const location = {
-      buildingName,
-      lecHallCapacity,
-      labCapacity,
-      description,
+    const room = {
+      roomName,
+      roomCapacity,
+      roomType,
+      buildingId:buildingName,
     };
-    console.log(location);
+    console.log(room);
     try {
       const responseData = await sendRequest(
-        `http://localhost:8000/api/building/${buildingId}`,
+        `http://localhost:8000/api/room/${roomId}`,
         "PATCH",
-        JSON.stringify(location),
+        JSON.stringify(room),
         { "Content-Type": "application/json" }
       );
       if (error) {
@@ -126,7 +136,7 @@ const UpdateBuilding = () => {
     }
   };
   const backToView = () => {
-    history.push("/view-buildings");
+    history.push("/view-room");
   };
 
   return (
@@ -143,7 +153,7 @@ const UpdateBuilding = () => {
                 variant="h4"
                 align="center"
               >
-                Update Building
+                Update Room
               </Typography>
 
               <form
@@ -155,68 +165,83 @@ const UpdateBuilding = () => {
                   <Grid item xs={12}>
                     <TextField
                       required
-                      onChange={onChangeHandler("buildingName")}
-                      value={buildingName}
-                      id="buildingName"
-                      name="buildingName"
+                      onChange={onChangeHandler("roomName")}
+                      value={roomName}
+                      id="roomName"
+                      name="roomName"
                       variant="outlined"
-                      label="Building Name"
-                      error={error.param === "buildingName" ? true : false}
-                      helperText={
-                        error.param === "buildingName" ? error.msg : ""
-                      }
+                      label="Room Name"
+                      error={error.param === "roomName" ? true : false}
+                      helperText={error.param === "roomName" ? error.msg : ""}
                       fullWidth
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
                       required
-                      onChange={onChangeHandler("lecHallCapacity")}
-                      value={lecHallCapacity}
-                      id="lecHallCapacity"
-                      name="lecHallCapacity"
+                      onChange={onChangeHandler("roomCapacity")}
+                      value={roomCapacity}
+                      id="roomCapacity"
+                      name="roomCapacity"
                       variant="outlined"
-                      label="Lecture Hall Capacity"
-                      error={error.param === "lecHallCapacity" ? true : false}
+                      label="Room Capacity"
+                      error={error.param === "roomCapacity" ? true : false}
                       helperText={
-                        error.param === "lecHallCapacity" ? error.msg : ""
+                        error.param === "roomCapacity" ? error.msg : ""
                       }
                       fullWidth
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
-                      required
-                      onChange={onChangeHandler("labCapacity")}
-                      value={labCapacity}
-                      id="labCapacity"
-                      name="labCapacity"
-                      variant="outlined"
-                      label="Labarotary Capacity"
-                      error={error.param === "labCapacity" ? true : false}
-                      helperText={
-                        error.param === "labCapacity" ? error.msg : ""
-                      }
+                    <FormControl
                       fullWidth
-                    />
+                      variant="outlined"
+                      className={classes.formControl}
+                    >
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Building Name
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={buildingName}
+                        onChange={onChangeHandler("buildingName")}
+                        label="Building"
+                      >
+                        {!isLoading &&
+                          loadedBuildings &&
+                          loadedBuildings.buildings.map((b) => {
+                            return (
+                              <MenuItem key={b.id} value={b.id}>
+                                {b.buildingName}
+                              </MenuItem>
+                            );
+                          })}
+                      </Select>
+                    </FormControl>
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
-                      onChange={onChangeHandler("description")}
-                      value={description}
-                      required
-                      id="description"
-                      label="Description"
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      error={error.param === "description" ? true : false}
-                      helperText={
-                        error.param === "description" ? error.msg : ""
-                      }
+                    <FormControl
                       fullWidth
-                    />
+                      variant="outlined"
+                      className={classes.formControl}
+                    >
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Room Type
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        label="Select a room"
+                        value={roomType}
+                        onChange={onChangeHandler("roomType")}
+                      >
+                        <MenuItem value={"lecHall"}>Lecture Hall</MenuItem>
+                        <MenuItem value={"lab"}>Laboratory</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
+
                   {error && (
                     <Grid item xs={12}>
                       <Alert severity="error">
@@ -278,4 +303,4 @@ const UpdateBuilding = () => {
     </React.Fragment>
   );
 };
-export default UpdateBuilding;
+export default UpdateRoom;

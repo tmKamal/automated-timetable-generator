@@ -6,7 +6,6 @@ Automates the boring manual process of preparing time table in universities and 
 
 > Clone this repo
 
-
 #### Install dependencies
 
 ```
