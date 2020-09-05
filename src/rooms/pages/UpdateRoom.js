@@ -51,44 +51,54 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateStudent = () => {
+const UpdateRoom = () => {
   const classes = useStyles();
-  const studentId = useParams().sid;
+  const roomId = useParams().rid;
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
-  const [loadedStudent, setLoadedStudent] = useState();
+  const [loadedRoom, setLoadedRoom] = useState();
+  const [loadedBuildings, setLoadedBuildings] = useState();
   const [msg, setMsg] = useState();
   const [reload, setReload] = useState();
   const history = useHistory();
   const [values, setValues] = useState({
-    academicYearSem: "",
-    programme: "",
-    groupNumber: "",
-    subGroupNumber: "",
+    roomName: "",
+    roomCapacity: "",
+    roomType: "",
+    buildingName: "",
   });
 
-  const { academicYearSem, programme, groupNumber, subGroupNumber } = values;
-  /* fetching students details */
+  const { roomName, roomCapacity, roomType, buildingName } = values;
+  /* fetching building details */
   useEffect(() => {
-    const loadedStudent = async () => {
-      const fetchedStudent = await sendRequest(
-        `http://localhost:8000/api/student/${studentId}`
+    const loadedRoom = async () => {
+      const fetchedRooms = await sendRequest(
+        `http://localhost:8000/api/room/${roomId}`
       );
-      setLoadedStudent(fetchedStudent.student);
+      setLoadedRoom(fetchedRooms.room);
+      console.log(fetchedRooms)
     };
-    loadedStudent();
+    const loadedBuildingsFunc = async () => {
+      const fetchedBuilding = await sendRequest(
+        `http://localhost:8000/api/building`
+      );
+      setLoadedBuildings(fetchedBuilding);
+    };
+    loadedRoom();
+    loadedBuildingsFunc();
   }, [sendRequest, reload]);
 
   useEffect(() => {
-    if (loadedStudent) {
+    if (loadedRoom) {
+        console.log('rooms'+loadedRoom)
       setValues({
         ...values,
-        academicYearSem: loadedStudent.academicYearSem,
-        programme: loadedStudent.programme,
-        groupNumber: loadedStudent.groupNumber,
-        subGroupNumber: loadedStudent.subGroupNumber,
+        roomName: loadedRoom.roomName,
+        roomCapacity: loadedRoom.roomCapacity,
+        roomType: loadedRoom.roomType,
+        buildingName: loadedRoom.buildingId.id,
       });
     }
-  }, [loadedStudent]);
+  }, [loadedRoom]);
 
   const onChangeHandler = (inputFieldName) => (e) => {
     setValues({ ...values, [inputFieldName]: e.target.value });
@@ -98,18 +108,18 @@ const UpdateStudent = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     errorPopupCloser();
-    const group = {
-      academicYearSem,
-      programme,
-      groupNumber,
-      subGroupNumber,
+    const room = {
+      roomName,
+      roomCapacity,
+      roomType,
+      buildingId:buildingName,
     };
-    console.log(group);
+    console.log(room);
     try {
       const responseData = await sendRequest(
-        `http://localhost:8000/api/student/${studentId}`,
+        `http://localhost:8000/api/room/${roomId}`,
         "PATCH",
-        JSON.stringify(group),
+        JSON.stringify(room),
         { "Content-Type": "application/json" }
       );
       if (error) {
@@ -126,7 +136,7 @@ const UpdateStudent = () => {
     }
   };
   const backToView = () => {
-    history.push("/view-student");
+    history.push("/view-room");
   };
 
   return (
@@ -143,7 +153,7 @@ const UpdateStudent = () => {
                 variant="h4"
                 align="center"
               >
-                Add a Student
+                Update Room
               </Typography>
 
               <form
@@ -153,93 +163,85 @@ const UpdateStudent = () => {
               >
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
+                    <TextField
+                      required
+                      onChange={onChangeHandler("roomName")}
+                      value={roomName}
+                      id="roomName"
+                      name="roomName"
+                      variant="outlined"
+                      label="Room Name"
+                      error={error.param === "roomName" ? true : false}
+                      helperText={error.param === "roomName" ? error.msg : ""}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      onChange={onChangeHandler("roomCapacity")}
+                      value={roomCapacity}
+                      id="roomCapacity"
+                      name="roomCapacity"
+                      variant="outlined"
+                      label="Room Capacity"
+                      error={error.param === "roomCapacity" ? true : false}
+                      helperText={
+                        error.param === "roomCapacity" ? error.msg : ""
+                      }
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
                     <FormControl
-                      style={{ width: "552px" }}
+                      fullWidth
                       variant="outlined"
                       className={classes.formControl}
                     >
-                      <InputLabel id="academicYearSem">
-                        Academic Year and Semester
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Building Name
                       </InputLabel>
                       <Select
-                        labelId="academicYearSem"
-                        id="academicYearSem"
-                        value={academicYearSem}
-                        onChange={onChangeHandler("academicYearSem")}
-                        label="Academic Year and Semester"
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={buildingName}
+                        onChange={onChangeHandler("buildingName")}
+                        label="Building"
                       >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={"Y1.S1"}>Y1.S1</MenuItem>
-                        <MenuItem value={"Y1.S2"}>Y1.S2</MenuItem>
-                        <MenuItem value={"Y2.S1"}>Y2.S1</MenuItem>
-                        <MenuItem value={"Y2.S2"}>Y2.S2</MenuItem>
-                        <MenuItem value={"Y3.S1"}>Y3.S1</MenuItem>
-                        <MenuItem value={"Y3.S2"}>Y3.S2</MenuItem>
-                        <MenuItem value={"Y4.S1"}>Y4.S1</MenuItem>
-                        <MenuItem value={"Y4.S2"}>Y4.S2</MenuItem>
+                        {!isLoading &&
+                          loadedBuildings &&
+                          loadedBuildings.buildings.map((b) => {
+                            return (
+                              <MenuItem key={b.id} value={b.id}>
+                                {b.buildingName}
+                              </MenuItem>
+                            );
+                          })}
                       </Select>
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl
-                      style={{ width: "552px" }}
+                      fullWidth
                       variant="outlined"
                       className={classes.formControl}
                     >
-                      <InputLabel id="programme">Programme</InputLabel>
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Room Type
+                      </InputLabel>
                       <Select
-                        labelId="programme"
-                        id="programme"
-                        value={programme}
-                        onChange={onChangeHandler("programme")}
-                        label="Programme"
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        label="Select a room"
+                        value={roomType}
+                        onChange={onChangeHandler("roomType")}
                       >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={"IT"}>IT</MenuItem>
-                        <MenuItem value={"CSSE"}>CSSE</MenuItem>
-                        <MenuItem value={"CSE"}>CSE</MenuItem>
-                        <MenuItem value={"IM"}>IM</MenuItem>
+                        <MenuItem value={"lecHall"}>Lecture Hall</MenuItem>
+                        <MenuItem value={"lab"}>Laboratory</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      type="Number"
-                      onChange={onChangeHandler("groupNumber")}
-                      value={groupNumber}
-                      id="groupNumber"
-                      name="groupNumber"
-                      variant="outlined"
-                      label="Group Number"
-                      error={error.param === "groupNumber" ? true : false}
-                      helperText={
-                        error.param === "groupNumber" ? error.msg : ""
-                      }
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      type="Number"
-                      onChange={onChangeHandler("subGroupNumber")}
-                      value={subGroupNumber}
-                      id="subGroupNumber"
-                      name="subGroupNumber"
-                      variant="outlined"
-                      label="Sub Group Number"
-                      error={error.param === "subGroupNumber" ? true : false}
-                      helperText={
-                        error.param === "subGroupNumber" ? error.msg : ""
-                      }
-                      fullWidth
-                    />
-                  </Grid>
+
                   {error && (
                     <Grid item xs={12}>
                       <Alert severity="error">
@@ -301,4 +303,4 @@ const UpdateStudent = () => {
     </React.Fragment>
   );
 };
-export default UpdateStudent;
+export default UpdateRoom;

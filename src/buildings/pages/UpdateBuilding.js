@@ -143,7 +143,7 @@ const UpdateBuilding = () => {
                 variant="h4"
                 align="center"
               >
-                Add a Building
+                Update Building
               </Typography>
 
               <form

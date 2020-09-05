@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     CssBaseline,
     Paper,
@@ -13,6 +13,10 @@ import {
     Button,
     makeStyles
 } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
+
+import { useHttpClient } from '../../shared/custom-hooks/http-hook';
+import { useParams, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,27 +62,67 @@ const useStyles = makeStyles((theme) => ({
 
 const UpdateWorkTime = () => {
     const classes = useStyles();
-    const [time, setTime] = React.useState({
-        hours: '8',
-        minutes: '30'
+    const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+    const [loadedData, setLoadedData] = useState();
+    const [slot, setSlot] = useState('');
+    const [time, setTime] = useState({
+        hours: '',
+        minutes: ''
     });
-
     const { hours, minutes } = time;
-
+    const [msg, setMsg] = useState();
+    const [reload, setReload] = useState();
+    const history = useHistory();
     const onChangeHandler = (inputFieldName) => (e) => {
         setTime({ ...time, [inputFieldName]: e.target.value });
     };
-    const [slot, setSlot] = React.useState('60');
 
     const handleChange = (event) => {
         setSlot(event.target.value);
     };
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        const body = { time, slot };
+        const id = loadedData._id;
+        const body = { id, time, slot };
         console.log(body);
+        try {
+            const responseData = await sendRequest(
+                `http://localhost:8000/api/worktime/time`,
+                'PATCH',
+                JSON.stringify(body),
+                { 'Content-Type': 'application/json' }
+            );
+            if (error) {
+                console.log(error);
+            }
+            console.log(responseData);
+            if (responseData) {
+                setReload(true);
+                console.log(responseData);
+                setMsg(responseData.msg);
+            }
+        } catch (err) {
+            console.log(error);
+        }
     };
+    useEffect(() => {
+        const lTime = async () => {
+            const fetchedTime = await sendRequest(
+                `http://localhost:8000/api/worktime/`
+            );
+            setLoadedData(fetchedTime);
+        };
+        lTime();
+    }, [sendRequest, reload]);
+
+    useEffect(() => {
+        if (loadedData) {
+            setTime(loadedData.time);
+            setSlot(loadedData.slot);
+            console.log(loadedData);
+        }
+    }, [loadedData]);
     return (
         <React.Fragment>
             <CssBaseline />
@@ -91,7 +135,7 @@ const UpdateWorkTime = () => {
                         variant='h4'
                         align='center'
                     >
-                        Add Working Time
+                        Update Working Time
                     </Typography>
 
                     <form
@@ -138,7 +182,7 @@ const UpdateWorkTime = () => {
                                     <RadioGroup
                                         aria-label='slot'
                                         name='slot1'
-                                        value={slot}
+                                        value={slot.toString()}
                                         onChange={handleChange}
                                     >
                                         <FormControlLabel
@@ -154,6 +198,26 @@ const UpdateWorkTime = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
+                            {error && (
+                                <Grid item xs={12}>
+                                    <Alert severity='error'>
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>
+                                            {error.backendMsg
+                                                ? error.backendMsg
+                                                : 'Please Resolve the above error & try again'}{' '}
+                                        </strong>
+                                    </Alert>
+                                </Grid>
+                            )}
+                            {msg && (
+                                <Grid item xs={12}>
+                                    <Alert severity='success'>
+                                        <AlertTitle>Success !!</AlertTitle>
+                                        {msg}
+                                    </Alert>
+                                </Grid>
+                            )}
                         </Grid>
                         <div className={classes.buttons}>
                             <Button
