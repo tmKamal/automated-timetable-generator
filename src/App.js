@@ -32,9 +32,14 @@ import LecturerStats from "./stats/pages/LecturerStats";
 import SubjectStats from "./stats/pages/SubjectsStats";
 import AddStudent from "./students/pages/AddStudent";
 import UpdateStudent from "./students/pages/UpdateStudent";
+import ViewStudent from "./students/pages/ViewStudent";
 import AddTag from "./tags/pages/AddTag";
 import UpdateTag from "./tags/pages/UpdateTag";
+
+import ViewTag from "./tags/pages/ViewTag";
+
 import UpdateRoom from "./rooms/pages/UpdateRoom";
+
 
 export default function App() {
   return (
@@ -113,14 +118,20 @@ export default function App() {
               <Route path="/add-student" exact>
                 <AddStudent></AddStudent>
               </Route>
-              <Route path="/update-student" exact>
+              <Route path="/update/student/:sid" exact>
                 <UpdateStudent></UpdateStudent>
+              </Route>
+              <Route path="/view-student" exact>
+                <ViewStudent></ViewStudent>
               </Route>
               <Route path="/add-tag" exact>
                 <AddTag></AddTag>
               </Route>
-              <Route path="/update-tag" exact>
+              <Route path="/update/tag/:tagid" exact>
                 <UpdateTag></UpdateTag>
+              </Route>
+              <Route path="/view-tag" exact>
+                <ViewTag></ViewTag>
               </Route>
               <Redirect to="/"></Redirect>
             </Switch>

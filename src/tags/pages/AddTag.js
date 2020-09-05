@@ -1,9 +1,4 @@
-import React from "react";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Checkbox from "@material-ui/core/Checkbox";
+import React, { useState } from "react";
 import {
   CssBaseline,
   Paper,
@@ -17,11 +12,11 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
+import { Alert, AlertTitle } from "@material-ui/lab";
+
+import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
   layout: {
     width: "auto",
     marginLeft: theme.spacing(2),
@@ -52,43 +47,51 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
-  formControl: {
-    margin: theme.spacing(3),
-  },
-  alignRight: {
-    textAlign: "right",
-  },
-  errorTextShow: {
-    color: "red",
-    display: "block",
-  },
-  errorTextHide: {
-    color: "black",
-    display: "none",
-  },
 }));
 
 const AddTag = () => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+  const [msg, setMsg] = useState();
+  const [values, setValues] = useState({
     tagType: "",
   });
 
-  const { tagType } = state;
+  const { tagType } = values;
 
   const onChangeHandler = (inputFieldName) => (e) => {
-    setState({ ...values, [inputFieldName]: e.target.value });
+    setValues({ ...values, [inputFieldName]: e.target.value });
+    setMsg(null);
+    errorPopupCloser();
   };
-  const handleChange = (event) => {
-    setState(event.target.value);
-  };
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const group = {
+    errorPopupCloser();
+    const location = {
       tagType,
     };
-    const body = { group };
-    console.log(body);
+    console.log(location);
+    try {
+      const responseData = await sendRequest(
+        "http://localhost:8000/api/tag/",
+        "POST",
+        JSON.stringify(location),
+        { "Content-Type": "application/json" }
+      );
+      if (error) {
+        console.log(error);
+      }
+      console.log(responseData);
+      if (responseData) {
+        setValues({
+          tagType: "",
+        });
+        console.log(responseData);
+        setMsg(responseData.msg);
+      }
+    } catch (err) {
+      console.log(error);
+    }
   };
 
   return (
@@ -109,25 +112,39 @@ const AddTag = () => {
           <form onSubmit={submitHandler} className={classes.form} noValidate>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="tagType">Tag Type</InputLabel>
-                  <Select
-                    labelId="tagType"
-                    id="tagType"
-                    value={tagType}
-                    onChange={handleChange}
-                    label="Tag Type"
-                    style={{ width: "510px" }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={1}>Lecture</MenuItem>
-                    <MenuItem value={2}>Tutorial</MenuItem>
-                    <MenuItem value={3}>Practical</MenuItem>
-                  </Select>
-                </FormControl>
+                <TextField
+                  required
+                  onChange={onChangeHandler("tagType")}
+                  value={tagType}
+                  id="tagType"
+                  name="tagType"
+                  variant="outlined"
+                  label="Tag Type"
+                  error={error.param === "tagType" ? true : false}
+                  helperText={error.param === "tagType" ? error.msg : ""}
+                  fullWidth
+                />
               </Grid>
+              {error && (
+                <Grid item xs={12}>
+                  <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>
+                      {error.backendMsg
+                        ? error.backendMsg
+                        : "Please Resolve the above error & try again"}{" "}
+                    </strong>
+                  </Alert>
+                </Grid>
+              )}
+              {msg && (
+                <Grid item xs={12}>
+                  <Alert severity="success">
+                    <AlertTitle>Success !!</AlertTitle>
+                    {msg}
+                  </Alert>
+                </Grid>
+              )}
             </Grid>
 
             <div className={classes.buttons}>
