@@ -73,7 +73,7 @@ const AddSubject = () => {
       const location={subjectName,subjectCode,offeredYear,offeredSemester,lectureHours,tutorialHours,labHours,evaluationHours};
       console.log(location);
       try{
-          const responseData=sendRequest('http://localhost:8000/api/building/','POST',JSON.stringify(location),{'Content-Type':'application/json'});
+          const responseData=sendRequest('http://localhost:8000/api/subject/','POST',JSON.stringify(location),{'Content-Type':'application/json'});
           console.log(responseData);
       }catch(err){
           console.log(error);
@@ -178,6 +178,7 @@ const AddSubject = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
+                  <MenuItem value={0}>0</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
                   <MenuItem value={3}>3</MenuItem>
                   
@@ -199,6 +200,7 @@ const AddSubject = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
+                  <MenuItem value={0}>0</MenuItem>
                   <MenuItem value={1}>1</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
                   
@@ -220,8 +222,9 @@ const AddSubject = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
+                  <MenuItem value={0}>0</MenuItem>
+                  <MenuItem value={1}>1</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
                   
                 </Select>
               </FormControl>
@@ -240,6 +243,7 @@ const AddSubject = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
+                  <MenuItem value={0}>0</MenuItem>
                   <MenuItem value={1}>1</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
                   <MenuItem value={3}>3</MenuItem>

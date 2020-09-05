@@ -173,24 +173,94 @@ const SideBarLinks = () => {
               </ListItemIcon>
               <ListItemText primary="Add Lecturer" />
             </ListItem>
-          </NavLink>
-        </List>
-        <List component="div" disablePadding>
-          <NavLink
-            style={{ textDecoration: "none" }}
-            to="/update-lecturer"
-            className="MuiTypography-colorInherit "
-          >
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Update Lecturer" />
+
+            <Collapse in={lecturerOpen} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/add-lecturer'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Add Lecturer' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/view-lecturers'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='View Lecturers' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+            </Collapse>
+            {/* ============== Lecturers End ===================== */}
+
+            {/* ============== Subjects ===================== */}
+            <ListItem button onClick={()=>setSubjectOpen(!subjectOpen)}>
+                <ListItemIcon>
+                    <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary='Subjects' />
+                {subjectOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-          </NavLink>
-        </List>
-      </Collapse>
-      {/* ============== Lecturers End ===================== */}
+            <Collapse in={subjectOpen} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/add-subject'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='Add Subject' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+                <List component='div' disablePadding>
+                    <NavLink
+                        style={{ textDecoration: 'none' }}
+                        to='/view-subjects'
+                        className='MuiTypography-colorInherit '
+                    >
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary='View Subjects' />
+                        </ListItem>
+                    </NavLink>
+                </List>
+            </Collapse>
+            {/* ============== Subjects End ===================== */}
+
+            {/*============== Session ===================== */}
+            <NavLink
+                style={{ textDecoration: 'none' }}
+                to='/add-session'
+                className='MuiTypography-colorInherit '
+            >
+                <ListItem button>
+                    <ListItemIcon>
+                        <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='Session' />
+                </ListItem>
+            </NavLink>
+            {/*============== Session End===================== */}
+
 
       {/* ============== Subjects ===================== */}
       <ListItem button onClick={() => setSubjectOpen(!subjectOpen)}>

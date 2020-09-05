@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import {
   CssBaseline,
   Paper,
@@ -13,6 +13,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { set } from "mongoose";
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +52,8 @@ const useStyles = makeStyles((theme) => ({
 const AddLecturer = () => {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+  const [msg, setMsg]=useState();
+  const [buildingData,setBuildingData]=useState();
   const [values,setValues]=useState({
       lecturerName:'',
       empId:'',
@@ -65,14 +68,48 @@ const AddLecturer = () => {
 
   const onChangeHandler=(inputFieldName)=>(e)=>{
       setValues({...values,[inputFieldName]:e.target.value});
+      setMsg(null);
+      errorPopupCloser();
   }
-  const submitHandler=(e)=>{
+  useEffect(() => {
+    const fetchBuilding = async () => {
+    try {
+        const response = await sendRequest(
+          "http://localhost:8000/api/building/"
+        );
+        if (error) {
+          console.log(error);
+        }
+        if(response){
+          setBuildingData(response);
+        }
+        console.log(response);
+      
+    } catch (err) {
+      console.log(error);
+    }}
+    fetchBuilding();
+  }, []);
+  const submitHandler=async(e)=>{
       e.preventDefault();
-      const location={lecturerName,empId,faculty,department,center,building,level};
-      console.log(location);
+      errorPopupCloser();
+      const location={
+        lecturerName,empId,faculty,department,center,building,level
+      }
+      const lecturer={lecturerName,empId,faculty,department,center,building,level};
+      console.log(lecturer);
       try{
-          const responseData=sendRequest('http://localhost:8000/api/building/','POST',JSON.stringify(location),{'Content-Type':'application/json'});
+          const responseData=sendRequest('http://localhost:8000/api/lecturer/','POST',JSON.stringify(location),{'Content-Type':'application/json'});
+          if(error){
+            console.log(error);
+          }
           console.log(responseData);
+          if(responseData){
+            setValues({lecturerName:'',empId:'',faculty:'',department:'',center:'',building:'',level:''});
+            console.log(responseData);
+            setMsg(responseData.msg);
+          }
+
       }catch(err){
           console.log(error);
       }
@@ -104,6 +141,8 @@ const AddLecturer = () => {
                   name="lecturerName"
                   variant="outlined"
                   label="Lecturer Name"
+                  error={error.param==='lecturerName'? true: false}
+                  helperText={error.param==='lecturerName'? error.msg : ''}
                   fullWidth
                 />
               </Grid>
@@ -134,9 +173,9 @@ const AddLecturer = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={1}>Computing</MenuItem>
-                  <MenuItem value={2}>Business</MenuItem>
-                  <MenuItem value={3}>Engineering</MenuItem>
+                  <MenuItem value={'Computing'}>Computing</MenuItem>
+                  <MenuItem value={'Business'}>Business</MenuItem>
+                  <MenuItem value={'Engineering'}>Engineering</MenuItem>
                   
                 </Select>
               </FormControl>
@@ -150,15 +189,15 @@ const AddLecturer = () => {
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
                   value={department}
-                  onChange={onChangeHandler("offeredSemester")}
-                  label="Offered Semester"
+                  onChange={onChangeHandler("department")}
+                  label="department"
                 >
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={1}>Software Engineering</MenuItem>
-                  <MenuItem value={2}>Data Science</MenuItem>
-                  <MenuItem value={3}>Networking</MenuItem>
+                  <MenuItem value={'Software Engineering'}>Software Engineering</MenuItem>
+                  <MenuItem value={'Data Science'}>Data Science</MenuItem>
+                  <MenuItem value={'Networking'}>Networking</MenuItem>
                 </Select>
               </FormControl>
               </Grid>
@@ -177,10 +216,10 @@ const AddLecturer = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={1}>Malabe</MenuItem>
-                  <MenuItem value={2}>Kandy</MenuItem>
-                  <MenuItem value={3}>Kurunegala</MenuItem>
-                  <MenuItem value={4}>Matara</MenuItem>
+                  <MenuItem value={'Malabe'}>Malabe</MenuItem>
+                  <MenuItem value={'Kandy'}>Kandy</MenuItem>
+                  <MenuItem value={'Kurunegala'}>Kurunegala</MenuItem>
+                  <MenuItem value={'Matara'}>Matara</MenuItem>
                   
                 </Select>
               </FormControl>
@@ -197,13 +236,9 @@ const AddLecturer = () => {
                   onChange={onChangeHandler("building")}
                   label="Building"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={1}>A</MenuItem>
-                  <MenuItem value={2}>B</MenuItem>
-                  <MenuItem value={3}>N</MenuItem>
-                  <MenuItem value={4}>E</MenuItem>
+                  
+                 {!isLoading && buildingData && buildingData.buildings.map((b)=>{return(<MenuItem key={b.id} value={b.id}>{b.buildingName}</MenuItem>)}) }
+                  
                   
                 </Select>
               </FormControl>
