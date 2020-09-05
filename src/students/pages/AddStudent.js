@@ -1,9 +1,4 @@
-import React from "react";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Checkbox from "@material-ui/core/Checkbox";
+import React, { useState } from "react";
 import {
   CssBaseline,
   Paper,
@@ -17,11 +12,11 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
+import { Alert, AlertTitle } from "@material-ui/lab";
+
+import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
   layout: {
     width: "auto",
     marginLeft: theme.spacing(2),
@@ -52,49 +47,61 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
-  formControl: {
-    margin: theme.spacing(3),
-  },
-  alignRight: {
-    textAlign: "right",
-  },
-  errorTextShow: {
-    color: "red",
-    display: "block",
-  },
-  errorTextHide: {
-    color: "black",
-    display: "none",
-  },
 }));
 
 const AddStudent = () => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+  const [msg, setMsg] = useState();
+  const [values, setValues] = useState({
     academicYearSem: "",
     programme: "",
     groupNumber: "",
     subGroupNumber: "",
   });
 
-  const { academicYearSem, programme, groupNumber, subGroupNumber } = state;
+  const { academicYearSem, programme, groupNumber, subGroupNumber } = values;
 
   const onChangeHandler = (inputFieldName) => (e) => {
-    setState({ ...state, [inputFieldName]: e.target.value });
+    setValues({ ...values, [inputFieldName]: e.target.value });
+    setMsg(null);
+    errorPopupCloser();
   };
-  const handleChange = (event) => {
-    setState(event.target.value);
-  };
-  const submitHandler = (e) => {
+
+  const submitHandler = async (e) => {
     e.preventDefault();
+    errorPopupCloser();
     const group = {
       academicYearSem,
       programme,
       groupNumber,
       subGroupNumber,
     };
-    const body = { group };
-    console.log(body);
+    console.log(group);
+    try {
+      const responseData = await sendRequest(
+        "http://localhost:8000/api/student/",
+        "POST",
+        JSON.stringify(group),
+        { "Content-Type": "application/json" }
+      );
+      if (error) {
+        console.log(error);
+      }
+      console.log(responseData);
+      if (responseData) {
+        setValues({
+          academicYearSem: "",
+          programme: "",
+          groupNumber: "",
+          subGroupNumber: "",
+        });
+        console.log(responseData);
+        setMsg(responseData.msg);
+      }
+    } catch (err) {
+      console.log(error);
+    }
   };
 
   return (
@@ -115,7 +122,11 @@ const AddStudent = () => {
           <form onSubmit={submitHandler} className={classes.form} noValidate>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl
+                  style={{ width: "552px" }}
+                  variant="outlined"
+                  className={classes.formControl}
+                >
                   <InputLabel id="academicYearSem">
                     Academic Year and Semester
                   </InputLabel>
@@ -123,71 +134,97 @@ const AddStudent = () => {
                     labelId="academicYearSem"
                     id="academicYearSem"
                     value={academicYearSem}
-                    onChange={handleChange}
+                    onChange={onChangeHandler("academicYearSem")}
                     label="Academic Year and Semester"
-                    style={{ width: "510px" }}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={1}>Y1.S1</MenuItem>
-                    <MenuItem value={2}>Y1.S2</MenuItem>
-                    <MenuItem value={3}>Y2.S1</MenuItem>
-                    <MenuItem value={4}>Y2.S2</MenuItem>
-                    <MenuItem value={5}>Y3.S1</MenuItem>
-                    <MenuItem value={6}>Y3.S2</MenuItem>
-                    <MenuItem value={7}>Y4.S1</MenuItem>
-                    <MenuItem value={8}>Y4.S2</MenuItem>
+                    <MenuItem value={"Y1.S1"}>Y1.S1</MenuItem>
+                    <MenuItem value={"Y1.S2"}>Y1.S2</MenuItem>
+                    <MenuItem value={"Y2.S1"}>Y2.S1</MenuItem>
+                    <MenuItem value={"Y2.S2"}>Y2.S2</MenuItem>
+                    <MenuItem value={"Y3.S1"}>Y3.S1</MenuItem>
+                    <MenuItem value={"Y3.S2"}>Y3.S2</MenuItem>
+                    <MenuItem value={"Y4.S1"}>Y4.S1</MenuItem>
+                    <MenuItem value={"Y4.S2"}>Y4.S2</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="programme">
-                    Academic Year and Semester
-                  </InputLabel>
+                <FormControl
+                  style={{ width: "552px" }}
+                  variant="outlined"
+                  className={classes.formControl}
+                >
+                  <InputLabel id="programme">Programme</InputLabel>
                   <Select
                     labelId="programme"
                     id="programme"
                     value={programme}
-                    onChange={handleChange}
+                    onChange={onChangeHandler("programme")}
                     label="Programme"
-                    style={{ width: "510px" }}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={1}>IT</MenuItem>
-                    <MenuItem value={2}>CSSE</MenuItem>
-                    <MenuItem value={3}>CSE</MenuItem>
-                    <MenuItem value={4}>IM</MenuItem>
+                    <MenuItem value={"IT"}>IT</MenuItem>
+                    <MenuItem value={"CSSE"}>CSSE</MenuItem>
+                    <MenuItem value={"CSE"}>CSE</MenuItem>
+                    <MenuItem value={"IM"}>IM</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
+                  type="Number"
                   onChange={onChangeHandler("groupNumber")}
                   value={groupNumber}
                   id="groupNumber"
                   name="groupNumber"
                   variant="outlined"
                   label="Group Number"
+                  error={error.param === "groupNumber" ? true : false}
+                  helperText={error.param === "groupNumber" ? error.msg : ""}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
+                  type="Number"
                   onChange={onChangeHandler("subGroupNumber")}
                   value={subGroupNumber}
                   id="subGroupNumber"
                   name="subGroupNumber"
                   variant="outlined"
                   label="Sub Group Number"
+                  error={error.param === "subGroupNumber" ? true : false}
+                  helperText={error.param === "subGroupNumber" ? error.msg : ""}
                   fullWidth
                 />
               </Grid>
+              {error && (
+                <Grid item xs={12}>
+                  <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>
+                      {error.backendMsg
+                        ? error.backendMsg
+                        : "Please Resolve the above error & try again"}{" "}
+                    </strong>
+                  </Alert>
+                </Grid>
+              )}
+              {msg && (
+                <Grid item xs={12}>
+                  <Alert severity="success">
+                    <AlertTitle>Success !!</AlertTitle>
+                    {msg}
+                  </Alert>
+                </Grid>
+              )}
             </Grid>
 
             <div className={classes.buttons}>
