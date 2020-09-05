@@ -173,22 +173,9 @@ const SideBarLinks = () => {
               </ListItemIcon>
               <ListItemText primary="Add Lecturer" />
             </ListItem>
-
-            <Collapse in={lecturerOpen} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding>
-                    <NavLink
-                        style={{ textDecoration: 'none' }}
-                        to='/add-lecturer'
-                        className='MuiTypography-colorInherit '
-                    >
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <StarBorder />
-                            </ListItemIcon>
-                            <ListItemText primary='Add Lecturer' />
-                        </ListItem>
-                    </NavLink>
-                </List>
+          </NavLink>
+          </List>
+              
                 <List component='div' disablePadding>
                     <NavLink
                         style={{ textDecoration: 'none' }}
@@ -246,77 +233,12 @@ const SideBarLinks = () => {
             </Collapse>
             {/* ============== Subjects End ===================== */}
 
-            {/*============== Session ===================== */}
-            <NavLink
-                style={{ textDecoration: 'none' }}
-                to='/add-session'
-                className='MuiTypography-colorInherit '
-            >
-                <ListItem button>
-                    <ListItemIcon>
-                        <InboxIcon />
-                    </ListItemIcon>
-                    <ListItemText primary='Session' />
-                </ListItem>
-            </NavLink>
-            {/*============== Session End===================== */}
+            
 
 
-      {/* ============== Subjects ===================== */}
-      <ListItem button onClick={() => setSubjectOpen(!subjectOpen)}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Subjects" />
-        {subjectOpen ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={subjectOpen} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <NavLink
-            style={{ textDecoration: "none" }}
-            to="/add-subject"
-            className="MuiTypography-colorInherit "
-          >
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Add Subject" />
-            </ListItem>
-          </NavLink>
-        </List>
-        <List component="div" disablePadding>
-          <NavLink
-            style={{ textDecoration: "none" }}
-            to="/update-subject"
-            className="MuiTypography-colorInherit "
-          >
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Update Subject" />
-            </ListItem>
-          </NavLink>
-        </List>
-      </Collapse>
-      {/* ============== Subjects End ===================== */}
+      
 
-      {/*============== Session ===================== */}
-      <NavLink
-        style={{ textDecoration: "none" }}
-        to="/add-session"
-        className="MuiTypography-colorInherit "
-      >
-        <ListItem button>
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Session" />
-        </ListItem>
-      </NavLink>
-      {/*============== Session End===================== */}
-
+      
       {/* ============== Room End ===================== */}
 
       {/* ============== Workingdays ===================== */}
