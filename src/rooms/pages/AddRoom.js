@@ -10,7 +10,7 @@ import {
   Select,
   MenuItem,
   Button,
-  makeStyles,
+  makeStyles,FormGroup, FormControlLabel, Checkbox
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
@@ -53,9 +53,10 @@ const AddRoom = () => {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [msg, setMsg] = useState();
+  const [loadedTags, setLoadedTags] = useState();
+  const [checkedTags, setCheckedTags] = useState([]); // To store the selected tags.
   const [values, setValues] = useState({
     roomName: "",
-    roomCapacity: "",
     roomType: "",
     buildingName: "",
   });
@@ -77,24 +78,43 @@ const AddRoom = () => {
     } catch (err) {
       console.log(error);
     }}
+    //fetch tags
+    const fetchTags = async () => {
+      try {
+        
+        const responseTags=await sendRequest(`http://localhost:8000/api/tag/`);
+        console.log(responseTags);
+        setLoadedTags(responseTags);
+      } catch (error) {}
+    };
+
+    fetchTags();
     fetchBuilding();
   }, []);
-  const { roomName, roomCapacity, roomType, buildingName } = values;
-
-  /* to delete */
-  const [room, setRoom] = React.useState("");
-
-  const handleChange = (event) => {
-    setRoom(event.target.value);
-  };
-
-  /* end delete */
+  const { roomName, roomType, buildingName } = values;
 
   const onChangeHandler = (inputFieldName) => (e) => {
     setValues({ ...values, [inputFieldName]: e.target.value });
     setMsg(null);
     errorPopupCloser();
   };
+
+  const toggleTags = (id) => {
+    errorPopupCloser(); // clearing errors, if any is present
+    // if tags not available in the checkedTags array. it will return -1
+    const clickedTag = checkedTags.indexOf(id);
+    const allSelectedTags = [...checkedTags];
+
+    if (clickedTag === -1) {
+      allSelectedTags.push(id);
+    } else {
+      allSelectedTags.splice(clickedTag, 1);
+    }
+    setCheckedTags(allSelectedTags);
+    console.log(allSelectedTags);
+    
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     errorPopupCloser();
@@ -105,16 +125,16 @@ const AddRoom = () => {
       setValues({...values,roomCapacity:selectedBuilding[0].labCapacity});
       rCapacity=selectedBuilding[0].labCapacity;
     }else{
-      console.log('im inside of hte main data!!'+buildingData.buildings)
+      
       selectedBuilding=buildingData.buildings.filter((b)=>b.id===buildingName);
       setValues({...values,roomCapacity:selectedBuilding[0].lecHallCapacity});
-
       rCapacity=selectedBuilding[0].lecHallCapacity;
     }
     const room = {
       roomName,
       roomCapacity:rCapacity,
       roomType,
+      roomTags:checkedTags,
       buildingId:buildingName
     };
     console.log(room);
@@ -133,6 +153,8 @@ const AddRoom = () => {
         setValues({
           roomName: "",
         });
+        setCheckedTags([]);
+      
         console.log(responseData);
         setMsg(responseData.msg);
       }
@@ -144,7 +166,6 @@ const AddRoom = () => {
   return (
     <React.Fragment>
       <CssBaseline />
-
       <main style={{ marginTop: "100px" }} className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography
@@ -248,6 +269,25 @@ const AddRoom = () => {
                     <MenuItem value={'lab'}>Laboratory</MenuItem>
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+              <p>Tags</p>
+              <FormGroup row>
+                {loadedTags &&
+                  loadedTags.tags.map((tag, i) => (
+                    <FormControlLabel
+                      key={i}
+                      control={
+                        <Checkbox
+                          name={tag.tagType}
+                          onChange={() => toggleTags(tag._id)}
+                          checked={checkedTags.indexOf(tag._id)==-1?false:true}
+                        />
+                      }
+                      label={tag.tagType}
+                    />
+                  ))}
+              </FormGroup>
               </Grid>
 
               {error && (
