@@ -1,6 +1,7 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Typography, Paper, makeStyles } from "@material-ui/core";
-import { Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
+import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,29 +36,102 @@ const useStyles = makeStyles((theme) => ({
 
 const LecturerStats = () => {
   const classes = useStyles();
-    const [chartData,setChartData]=useState({});
+  const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+  const [lecturers, setLecturers] = useState();
+  let chartData;
+  let lecLevel = {
+    prof: 0,
+    assProf: 0,
+    senLecHG: 0,
+    senLec: 0,
+    lec: 0,
+    assLec: 0,
+    instructor: 0,
+  };
 
-    const chart=()=>{
-        setChartData({
-            labels:['monday','tuesday','wednesday','thursday','friday'],
-            datasets:[
-                {
-            
-                    label:'Working hours per day',
-                    data:[3.5,5.0,4.0,5.5,3.5],
-                    backgroundColor:[
-                        'rgba(75,192,192,0.6)'
-                    ],
-                    borderWidth:4
-                }
-            ]
-        })
+  useEffect(() => {
+    const fetchLecturers = async () => {
+      try {
+        const response = await sendRequest(
+          "http://localhost:8000/api/lecturer/"
+        );
+        console.log(response.lecturers);
+        if (response) {
+          setLecturers(response.lecturers);
+        } else {
+          console.log(error);
+        }
+      } catch (e) {}
+    };
+    fetchLecturers();
+  }, []);
+
+  const lecLevelGraph=()=>{
+    if (!isLoading && lecturers) {
+      for (let i = 0; i < lecturers.length; i++) {
+        switch (lecturers[i].level) {
+          case 1:
+            lecLevel.prof++;
+            break;
+          case 2:
+            lecLevel.assProf++;
+            break;
+          case 3:
+            lecLevel.senLecHG++;
+            break;
+          case 4:
+            lecLevel.senLec++;
+            break;
+          case 5:
+            lecLevel.lec++;
+            break;
+          case 6:
+            lecLevel.assLec++;
+            break;
+          case 7:
+            lecLevel.instructor++;
+            break;
+        }
+      }
+      console.log('this is it: '+lecLevel.senLecHG);
+      
+  
+      chartData = {
+        labels: [
+          "Professor",
+          "Assistant Professor",
+          "Senior Lecturer(HG)",
+          "Senior Lecturer",
+          "Lecturer",
+          "Assistant Lecturer",
+          "Instructors",
+        ],
+        datasets: [
+          {
+            label: "My First dataset",
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            borderWidth: 1,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [
+              lecLevel.prof,
+              lecLevel.assProf,
+              lecLevel.senLecHG,
+              lecLevel.senLec,
+              lecLevel.lec,
+              lecLevel.assLec,
+              lecLevel.instructor,
+            ],
+          },
+        ],
+      };
     }
-    useEffect(() => {
-        chart();
-    }, []);
+  }
 
-    
+  lecLevelGraph();
+
+  
 
   return (
     <Grid container spacing={3}>
@@ -74,16 +148,26 @@ const LecturerStats = () => {
       </Grid>
       <Grid item xs={12}>
         <Paper className={classes.paper}>
-        <Typography
-          variant="h6"
-          align="center"
-          color="textSecondary"
-          paragraph
-          className={classes.marginY}
-        >
-          Working hours per day
-        </Typography>
-            <Line data={chartData}></Line>
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            paragraph
+            className={classes.marginY}
+          >
+            Working hours per day
+          </Typography>
+
+          {!isLoading && lecturers && (
+            <Bar
+              data={chartData}
+              width={100}
+              height={50}
+              options={{
+                maintainAspectRatio: false,
+              }}
+            />
+          )}
         </Paper>
       </Grid>
     </Grid>
