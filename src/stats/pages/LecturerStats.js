@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Paper, makeStyles } from "@material-ui/core";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2rem",
   },
   marginY: {
-    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
   },
   paper: {
     marginTop: theme.spacing(10),
@@ -39,6 +39,7 @@ const LecturerStats = () => {
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [lecturers, setLecturers] = useState();
   let chartData;
+  let doughnutData;
   let lecLevel = {
     prof: 0,
     assProf: 0,
@@ -47,6 +48,14 @@ const LecturerStats = () => {
     lec: 0,
     assLec: 0,
     instructor: 0,
+  };
+  let lecFaculty = {
+    computing: 10,
+    engineering: 20,
+    business: 40,
+    humanities: 60,
+    curtin: 80,
+    angliss: 90,
   };
 
   useEffect(() => {
@@ -66,7 +75,7 @@ const LecturerStats = () => {
     fetchLecturers();
   }, []);
 
-  const lecLevelGraph=()=>{
+  const lecLevelGraph = () => {
     if (!isLoading && lecturers) {
       for (let i = 0; i < lecturers.length; i++) {
         switch (lecturers[i].level) {
@@ -93,9 +102,8 @@ const LecturerStats = () => {
             break;
         }
       }
-      console.log('this is it: '+lecLevel.senLecHG);
-      
-  
+      console.log("this is it: " + lecLevel.senLecHG);
+
       chartData = {
         labels: [
           "Professor",
@@ -108,7 +116,7 @@ const LecturerStats = () => {
         ],
         datasets: [
           {
-            label: "My First dataset",
+            label: "Lecturers count",
             backgroundColor: "rgba(255,99,132,0.2)",
             borderColor: "rgba(255,99,132,1)",
             borderWidth: 1,
@@ -127,17 +135,80 @@ const LecturerStats = () => {
         ],
       };
     }
-  }
+  };
 
+  const lecFacultyGraph = () => {
+    if (!isLoading && lecturers) {
+      for (let i = 0; i < lecturers.length; i++) {
+        switch (lecturers[i].faculty) {
+          case "computing":
+            lecFaculty.computing++;
+            break;
+          case "engineering":
+            lecLevel.engineering++;
+            break;
+          case "business":
+            lecLevel.business++;
+            break;
+          case "humanities":
+            lecLevel.humanities++;
+            break;
+          case "curtin":
+            lecLevel.curtin++;
+            break;
+          case "angliss":
+            lecLevel.angliss++;
+            break;
+        }
+      }
+      doughnutData = {
+        labels: [
+          "Computing",
+          "Engineering",
+          "Business",
+          "Humanities & Sciences",
+          "Curtin",
+          "Angliss",
+        ],
+        datasets: [
+          {
+            data: [
+              lecFaculty.computing,
+              lecFaculty.engineering,
+              lecFaculty.business,
+              lecFaculty.humanities,
+              lecFaculty.curtin,
+              lecFaculty.angliss,
+            ],
+            backgroundColor: [
+              "#FF6384",
+              "#36A2EB",
+              "#FFCE56",
+              "#00FF7F",
+              "#800080",
+              "#CCCCCC",
+            ],
+            hoverBackgroundColor: [
+              "#FF6384",
+              "#36A2EB",
+              "#FFCE56",
+              "#00FF7F",
+              "#800080",
+              "#CCCCCC",
+            ],
+          },
+        ],
+      };
+    }
+  };
   lecLevelGraph();
-
-  
+  lecFacultyGraph();
 
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <Typography
-          variant="h5"
+          variant="h4"
           align="center"
           color="textSecondary"
           paragraph
@@ -149,13 +220,13 @@ const LecturerStats = () => {
       <Grid item xs={12}>
         <Paper className={classes.paper}>
           <Typography
-            variant="h6"
+            variant="h5"
             align="center"
             color="textSecondary"
             paragraph
             className={classes.marginY}
           >
-            Working hours per day
+            Lecturer Level
           </Typography>
 
           {!isLoading && lecturers && (
@@ -169,6 +240,26 @@ const LecturerStats = () => {
             />
           )}
         </Paper>
+        {/* lec bar chart end */}
+        <Paper className={classes.paper}>
+          <Typography
+            variant="h5"
+            align="center"
+            color="textSecondary"
+            paragraph
+            className={classes.marginY}
+          >
+            Faculties
+          </Typography>
+
+          {!isLoading && lecturers && (
+            <Doughnut
+              className={classes.marginT}
+              data={doughnutData}
+            ></Doughnut>
+          )}
+        </Paper>
+        {/* lec dougnut chart end */}
       </Grid>
     </Grid>
   );
