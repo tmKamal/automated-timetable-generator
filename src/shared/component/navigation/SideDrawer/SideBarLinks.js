@@ -30,6 +30,7 @@ const SideBarLinks = () => {
   const [tagOpen, setTagOpen] = React.useState(false);
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [subjectOpen, setSubjectOpen] = React.useState(false);
+  const [sessionOpen, setSessionOpen] = React.useState(false);
 
   return (
     <List>
@@ -373,6 +374,51 @@ const SideBarLinks = () => {
         </List>
       </Collapse>
       {/* ============== Student End ===================== */}
+
+
+      {/* ============== Session ===================== */}
+      <ListItem button onClick={() => setSessionOpen(!sessionOpen)}>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Sessions" />
+        {sessionOpen ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={sessionOpen} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/add-session"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Add Session" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/view-session"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="View Session" />
+            </ListItem>
+          </NavLink>
+        </List>
+      </Collapse>
+      {/* ============== session End ===================== */}
+
+
+
+
       {/*============== Tag ===================== */}
       <ListItem button onClick={() => setTagOpen(!tagOpen)}>
         <ListItemIcon>

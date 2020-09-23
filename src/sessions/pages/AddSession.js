@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import {
   CssBaseline,
   Paper,
@@ -13,6 +13,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { set } from "mongoose";
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,30 +52,129 @@ const useStyles = makeStyles((theme) => ({
 const AddSession = () => {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+  const [msg, setMsg]=useState();
+  
   const [values,setValues]=useState({
-      lecturer:'',
+      lecturers:[],
       tag:'',
       studentGroup:'',
-      subGroup:'',
+      //subGroup:'',
       subject:'',
-      StudentCount:'',
-      duration:''
+      //subjectCode:'',
+      studentCount:'',
+      duration:'',
   });
+  const [subjectData,setSubjectData]=useState();
+  useEffect(() => {
+    const fetchSubject = async() => {
+    try{
+      const response = await sendRequest(
+        "http://localhost:8000/api/subject/"
+      );
+      if(error){
+        console.log(error);
+      }
+      if(response){
+        setSubjectData(response);
+      }
+      console.log(response);
 
+    } catch(err){
+      console.log(error);
+    }}
+    fetchSubject();
+  }, []);
+
+  const [tagData,setTagData]=useState();
+  useEffect(() => {
+    const fetchTag = async() => {
+    try{
+      const response = await sendRequest(
+        "http://localhost:8000/api/tag/"
+      );
+      if(error){
+        console.log(error);
+      }
+      if(response){
+        setTagData(response);
+      }
+      console.log(response);
+
+    } catch(err){
+      console.log(error);
+    }}
+    fetchTag();
+  }, []);
+
+  const [studentData,setStudentData]=useState();
+  useEffect(() => {
+    const fetchStudent = async() => {
+    try{
+      const response = await sendRequest(
+        "http://localhost:8000/api/student/"
+      );
+      if(error){
+        console.log(error);
+      }
+      if(response){
+        setStudentData(response);
+      }
+      console.log(response);
+
+    } catch(err){
+      console.log(error);
+    }}
+    fetchStudent();
+  }, []);
+
+  const [lecturerData,setLecturerData]=useState();
+  useEffect(() => {
+    const fetchLecturer = async() => {
+    try{
+      const response = await sendRequest(
+        "http://localhost:8000/api/lecturer/"
+      );
+      if(error){
+        console.log(error);
+      }
+      if(response){
+        setLecturerData(response);
+      }
+      console.log(response);
+
+    } catch(err){
+      console.log(error);
+    }}
+    fetchLecturer();
+  }, []);
   
 
-  const {lecturer,tag,studentGroup,subGroup,subject,studentCount,duration}=values;
-
+  const {lecturers,tag,studentGroup,subject,studentCount,duration}=values;
+  //subGroup,subjectCode
   const onChangeHandler=(inputFieldName)=>(e)=>{
       setValues({...values,[inputFieldName]:e.target.value});
-  }
+      setMsg(null),
+      errorPopupCloser();
+  };
+
+
   const submitHandler=(e)=>{
       e.preventDefault();
-      const location={lecturer,tag,studentGroup,subGroup,subject,studentCount,duration};
+      errorPopupCloser();
+      const location={lecId:lecturers,tagId:tag,stdId:studentGroup,subjectId:subject,studentCount,duration};
+      //subGroup,subjectCode
       console.log(location);
       try{
-          const responseData=sendRequest('http://localhost:8000/api/building/','POST',JSON.stringify(location),{'Content-Type':'application/json'})
+          const responseData=sendRequest("http://localhost:8000/api/session/",'POST',JSON.stringify(location),{'Content-Type':'application/json'});
+          if(error){
+            console.log(error);
+          }
           console.log(responseData);
+          if(responseData){
+            setValues({ lecturers:[],tag:'',studentGroup:'',subject:'',studentCount:'',duration:''});
+            console.log(responseData);
+            setMsg(responseData.msg);
+          }
       }catch(err){
           console.log(error);
       }
@@ -92,7 +192,7 @@ const AddSession = () => {
             variant="h4"
             align="center"
           >
-            Add a Building
+            Add a Session
           </Typography>
 
           <form onSubmit={submitHandler} className={classes.form} noValidate>
@@ -105,17 +205,15 @@ const AddSession = () => {
                   
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  value={lecturer}
-                  onChange={onChangeHandler("lecturer")}
+                  value={lecturers}
+                  onChange={onChangeHandler("lecturers")}
                   label="lecturer"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={1}>Lecturer A</MenuItem>
-                  <MenuItem value={2}>Lecturer B</MenuItem>
-                  <MenuItem value={3}>Lecturer N</MenuItem>
-                  <MenuItem value={4}>Lecturer E</MenuItem>
+                {!isLoading && lecturerData && lecturerData.lecturers.map((l) => {
+                  return(
+                    <MenuItem key = {l.id} value={l.id}>{l.lecturerName}</MenuItem>
+                  )
+                })}
                   
                 </Select>
               </FormControl>
@@ -132,12 +230,11 @@ const AddSession = () => {
                   onChange={onChangeHandler("tag")}
                   label="Tag"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={1}>IT</MenuItem>
-                  <MenuItem value={2}>BM</MenuItem>
-                  <MenuItem value={3}>ENG</MenuItem>
+                {!isLoading && tagData && tagData.tags.map((t) => {
+                  return(
+                    <MenuItem key = {t.id} value={t.id}>{t.tagType}</MenuItem>
+                  )
+                })}
                   
                 </Select>
               </FormControl>
@@ -154,40 +251,16 @@ const AddSession = () => {
                   onChange={onChangeHandler("studentGroup")}
                   label="studentGroup"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={1}>8</MenuItem>
-                  <MenuItem value={2}>9</MenuItem>
-                  <MenuItem value={3}>10</MenuItem>
-                  <MenuItem value={4}>11</MenuItem>
+                {!isLoading && studentData && studentData.students.map((s) => {
+                  return(
+                    <MenuItem key = {s.id} value={s.id}>{s.groupNumber}</MenuItem>
+                  )
+                })}
                   
                 </Select>
               </FormControl>
               </Grid>
-
-              <Grid item xs={12}>
-              <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">sub-Group</InputLabel>
-                <Select
-                  
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  value={subGroup}
-                  onChange={onChangeHandler("subGroup")}
-                  label="subGroup"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  
-                </Select>
-              </FormControl>
-              </Grid>
-
+              
               <Grid item xs={12}>
               <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Subject</InputLabel>
@@ -199,17 +272,18 @@ const AddSession = () => {
                   onChange={onChangeHandler("subject")}
                   label="subject"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={1}>SPM</MenuItem>
-                  <MenuItem value={2}>CSSE</MenuItem>
-                  <MenuItem value={3}>UEE</MenuItem>
-                  <MenuItem value={4}>DMS</MenuItem>
+                  
+                {!isLoading && subjectData && subjectData.subjects.map((s) => {
+                  return(
+                    <MenuItem key = {s.id} value={s.id}>{s.subjectName}</MenuItem>
+                  )
+                })}
                   
                 </Select>
               </FormControl>
               </Grid>
+
+              
 
               <Grid item xs={12}>
               <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
@@ -225,11 +299,8 @@ const AddSession = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={1}>30</MenuItem>
-                  <MenuItem value={2}>60</MenuItem>
-                  <MenuItem value={3}>90</MenuItem>
-                  <MenuItem value={4}>120</MenuItem>
-                  
+                  <MenuItem value={60}>60</MenuItem>
+                  <MenuItem value={120}>120</MenuItem>
                 </Select>
               </FormControl>
               </Grid>
@@ -249,10 +320,7 @@ const AddSession = () => {
                     <em>None</em>
                   </MenuItem>
                   <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  
-                  
+                  <MenuItem value={2}>2</MenuItem> 
                 </Select>
               </FormControl>
               </Grid>

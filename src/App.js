@@ -24,6 +24,7 @@ import AddLecturer from "./lecturers/pages/AddLecturer";
 import UpdateLecturer from "./lecturers/pages/UpdateLecturer";
 import AddSubject from "./subjects/pages/AddSubject";
 import UpdateSubject from "./subjects/pages/UpdateSubject";
+
 import AddSession from "./sessions/pages/AddSession";
 
 import ViewBuildings from "./buildings/pages/ViewBuildings";
@@ -117,9 +118,6 @@ export default function App() {
               <Route path="/table-generate" exact>
                 <TableGenerate></TableGenerate>
               </Route>
-              <Route path="/add-session">
-                <AddSession></AddSession>
-              </Route>
               <Route path="/specific-table/:id" exact>
                 <SpecificTable></SpecificTable>
               </Route>
@@ -141,6 +139,10 @@ export default function App() {
               <Route path="/view-tag" exact>
                 <ViewTag></ViewTag>
               </Route>
+              <Route path="/add-session/" exact>
+                <AddSession></AddSession>
+              </Route>
+
               <Redirect to="/"></Redirect>
             </Switch>
           </MiniDrawer>
@@ -149,3 +151,4 @@ export default function App() {
     </React.Fragment>
   );
 }
+
