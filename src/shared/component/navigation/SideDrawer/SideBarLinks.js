@@ -12,14 +12,14 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import StarBorder from "@material-ui/icons/StarBorder";
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import SchoolIcon from '@material-ui/icons/School';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
-import ApartmentIcon from '@material-ui/icons/Apartment';
-import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import StorageIcon from '@material-ui/icons/Storage';
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import SchoolIcon from "@material-ui/icons/School";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import EqualizerIcon from "@material-ui/icons/Equalizer";
+import ApartmentIcon from "@material-ui/icons/Apartment";
+import StoreMallDirectoryIcon from "@material-ui/icons/StoreMallDirectory";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import StorageIcon from "@material-ui/icons/Storage";
 const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
@@ -58,7 +58,7 @@ const SideBarLinks = () => {
           >
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <MenuBookIcon/>
+                <MenuBookIcon />
               </ListItemIcon>
               <ListItemText primary="Subjects Stats" />
             </ListItem>
@@ -97,7 +97,7 @@ const SideBarLinks = () => {
       {/* ============== Building new ===================== */}
       <ListItem button onClick={() => setBuildingOpen(!buildingOpen)}>
         <ListItemIcon>
-          <ApartmentIcon/>
+          <ApartmentIcon />
         </ListItemIcon>
         <ListItemText primary="Buildings" />
         {buildingOpen ? <ExpandLess /> : <ExpandMore />}
@@ -136,7 +136,7 @@ const SideBarLinks = () => {
       {/* ============== Room ===================== */}
       <ListItem button onClick={() => setRoomOpen(!roomOpen)}>
         <ListItemIcon>
-          <StoreMallDirectoryIcon/>
+          <StoreMallDirectoryIcon />
         </ListItemIcon>
         <ListItemText primary="Rooms" />
         {roomOpen ? <ExpandLess /> : <ExpandMore />}
@@ -404,6 +404,34 @@ const SideBarLinks = () => {
         <List component="div" disablePadding>
           <NavLink
             style={{ textDecoration: "none" }}
+            to="/add-studentGroup"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Add Group" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/view-studentGroup"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="View Group" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
             to="/add-student"
             className="MuiTypography-colorInherit "
           >
@@ -411,7 +439,7 @@ const SideBarLinks = () => {
               <ListItemIcon>
                 <StarBorder />
               </ListItemIcon>
-              <ListItemText primary="Add Student" />
+              <ListItemText primary="Add Subgroup" />
             </ListItem>
           </NavLink>
         </List>
@@ -425,7 +453,7 @@ const SideBarLinks = () => {
               <ListItemIcon>
                 <StarBorder />
               </ListItemIcon>
-              <ListItemText primary="View Student" />
+              <ListItemText primary="View SubGroup" />
             </ListItem>
           </NavLink>
         </List>

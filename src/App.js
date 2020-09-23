@@ -38,6 +38,10 @@ import AddTag from "./tags/pages/AddTag";
 import UpdateTag from "./tags/pages/UpdateTag";
 import ViewLecturers from "./lecturers/pages/ViewLecturers";
 
+import AddStudentGroup from "./students/pages/AddStudentGroup";
+import UpdateStudentGroup from "./students/pages/UpdateStudentGroup";
+import ViewStudentGroup from "./students/pages/ViewStudentGroup";
+
 import Group from "./setAvailability/pages/Group";
 import Lecturer from "./setAvailability/pages/Lecturer";
 import Session from "./setAvailability/pages/Session";
@@ -136,11 +140,20 @@ export default function App() {
               <Route path="/add-student" exact>
                 <AddStudent></AddStudent>
               </Route>
+              <Route path="/add-studentGroup" exact>
+                <AddStudentGroup></AddStudentGroup>
+              </Route>
               <Route path="/update/student/:sid" exact>
                 <UpdateStudent></UpdateStudent>
               </Route>
+              <Route path="/update/studentGroup/:sid" exact>
+                <UpdateStudentGroup></UpdateStudentGroup>
+              </Route>
               <Route path="/view-student" exact>
                 <ViewStudent></ViewStudent>
+              </Route>
+              <Route path="/view-studentGroup" exact>
+                <ViewStudentGroup></ViewStudentGroup>
               </Route>
               <Route path="/add-tag" exact>
                 <AddTag></AddTag>
@@ -174,7 +187,6 @@ export default function App() {
               <Route path="/unavailable-time-for-room" exact>
                 <RoomNotAvailable></RoomNotAvailable>
               </Route>
-
 
               <Redirect to="/"></Redirect>
             </Switch>
