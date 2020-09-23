@@ -237,11 +237,7 @@ const AddLecturer = () => {
                   label="Building"
                 >
                   
-                 {!isLoading && buildingData && buildingData.buildings.map((b)=>{
-                   return(
-                     <MenuItem key={b.id} value={b.id}>{b.buildingName}</MenuItem>
-                    )})
-                  }
+                 {!isLoading && buildingData && buildingData.buildings.map((b)=>{return(<MenuItem key={b.id} value={b.id}>{b.buildingName}</MenuItem>)}) }
                   
                   
                 </Select>
