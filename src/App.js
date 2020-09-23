@@ -46,6 +46,10 @@ import Subgroup from "./setAvailability/pages/Subgroup";
 import ViewTag from "./tags/pages/ViewTag";
 
 import UpdateRoom from "./rooms/pages/UpdateRoom";
+import StudentStats from "./stats/pages/StudentStats";
+import RoomForLecturer from "./rooms/pages/RoomForLecturer";
+import RoomForSubject from "./rooms/pages/RoomForSubject";
+import RoomNotAvailable from "./rooms/pages/RoomNotAvailable";
 
 export default function App() {
   return (
@@ -87,7 +91,9 @@ export default function App() {
               <Route path="/view-stats-subjects" exact>
                 <SubjectStats></SubjectStats>
               </Route>
-
+              <Route path="/view-stats-students" exact>
+                <StudentStats></StudentStats>
+              </Route>
               <Route path="/add-workdays" exact>
                 <AddWorkDays></AddWorkDays>
               </Route>
@@ -145,6 +151,7 @@ export default function App() {
               <Route path="/view-tag" exact>
                 <ViewTag></ViewTag>
               </Route>
+
               <Route path="/setGroup" exact>
                 <Group></Group>
               </Route>
@@ -157,6 +164,18 @@ export default function App() {
               <Route path="/setSubgroup" exact>
                 <Subgroup></Subgroup>
               </Route>
+
+              <Route path="/room-for-lecturer" exact>
+                <RoomForLecturer></RoomForLecturer>
+              </Route>
+              <Route path="/room-for-subject" exact>
+                <RoomForSubject></RoomForSubject>
+              </Route>
+              <Route path="/unavailable-time-for-room" exact>
+                <RoomNotAvailable></RoomNotAvailable>
+              </Route>
+
+
               <Redirect to="/"></Redirect>
             </Switch>
           </MiniDrawer>

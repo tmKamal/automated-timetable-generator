@@ -165,93 +165,58 @@ const AddSubject = () => {
               </Grid>
 
               <Grid item xs={12}>
-              <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Lecture Hours</InputLabel>
-                <Select
-                  
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  value={lectureHours}
+              <TextField
+                  type="number"
+                  required
                   onChange={onChangeHandler("lectureHours")}
+                  value={lectureHours}
+                  id="lectureHours"
+                  name="lectureHours"
+                  variant="outlined"
                   label="Lecture Hours"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={0}>0</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  
-                </Select>
-              </FormControl>
+                  fullWidth
+                />
               </Grid>
 
               <Grid item xs={12}>
-              <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Tutorial Hours</InputLabel>
-                <Select
-                  
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  value={tutorialHours}
+              <TextField
+                  type="number"
+                  required
                   onChange={onChangeHandler("tutorialHours")}
+                  value={tutorialHours}
+                  id="tutorialHours"
+                  name="tutorialHours"
+                  variant="outlined"
                   label="Tutorial Hours"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={0}>0</MenuItem>
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  
-                </Select>
-              </FormControl>
+                  fullWidth
+                />
               </Grid>
 
               <Grid item xs={12}>
-              <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Lab Hours</InputLabel>
-                <Select
-                  
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  value={labHours}
+              <TextField
+                  type="number"
+                  required
                   onChange={onChangeHandler("labHours")}
+                  value={labHours}
+                  id="labHours"
+                  name="labHours"
+                  variant="outlined"
                   label="Lab Hours"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={0}>0</MenuItem>
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  
-                </Select>
-              </FormControl>
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12}>
-              <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Evaluation Hours</InputLabel>
-                <Select
-                  
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  value={evaluationHours}
+              <TextField
+                  type="number"
+                  required
                   onChange={onChangeHandler("evaluationHours")}
+                  value={evaluationHours}
+                  id="evaluationHours"
+                  name="evaluationHours"
+                  variant="outlined"
                   label="Evaluation Hours"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={0}>0</MenuItem>
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={4}>4</MenuItem>
-
-                  
-                </Select>
-              </FormControl>
+                  fullWidth
+                />
               </Grid>
 
               
