@@ -12,7 +12,14 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import StarBorder from "@material-ui/icons/StarBorder";
-
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import SchoolIcon from '@material-ui/icons/School';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import ApartmentIcon from '@material-ui/icons/Apartment';
+import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import StorageIcon from '@material-ui/icons/Storage';
 const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
@@ -36,7 +43,7 @@ const SideBarLinks = () => {
       {/* ============== Statistics new ===================== */}
       <ListItem button onClick={() => setStatsOpen(!statsOpen)}>
         <ListItemIcon>
-          <InboxIcon />
+          <EqualizerIcon />
         </ListItemIcon>
         <ListItemText primary="Statistics" />
         {statsOpen ? <ExpandLess /> : <ExpandMore />}
@@ -50,7 +57,7 @@ const SideBarLinks = () => {
           >
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+                <MenuBookIcon/>
               </ListItemIcon>
               <ListItemText primary="Subjects Stats" />
             </ListItem>
@@ -64,9 +71,23 @@ const SideBarLinks = () => {
           >
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+                <SchoolIcon />
               </ListItemIcon>
               <ListItemText primary="Lecturer Stats" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/view-stats-students"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <AssignmentIndIcon />
+              </ListItemIcon>
+              <ListItemText primary="Student Stats" />
             </ListItem>
           </NavLink>
         </List>
@@ -75,7 +96,7 @@ const SideBarLinks = () => {
       {/* ============== Building new ===================== */}
       <ListItem button onClick={() => setBuildingOpen(!buildingOpen)}>
         <ListItemIcon>
-          <InboxIcon />
+          <ApartmentIcon/>
         </ListItemIcon>
         <ListItemText primary="Buildings" />
         {buildingOpen ? <ExpandLess /> : <ExpandMore />}
@@ -89,7 +110,7 @@ const SideBarLinks = () => {
           >
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+                <AddCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Add Building" />
             </ListItem>
@@ -103,7 +124,7 @@ const SideBarLinks = () => {
           >
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+                <StorageIcon />
               </ListItemIcon>
               <ListItemText primary="View Buildings" />
             </ListItem>
@@ -114,7 +135,7 @@ const SideBarLinks = () => {
       {/* ============== Room ===================== */}
       <ListItem button onClick={() => setRoomOpen(!roomOpen)}>
         <ListItemIcon>
-          <InboxIcon />
+          <StoreMallDirectoryIcon/>
         </ListItemIcon>
         <ListItemText primary="Rooms" />
         {roomOpen ? <ExpandLess /> : <ExpandMore />}
@@ -128,7 +149,7 @@ const SideBarLinks = () => {
           >
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+                <AddCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Add Room" />
             </ListItem>
@@ -142,9 +163,51 @@ const SideBarLinks = () => {
           >
             <ListItem button className={classes.nested}>
               <ListItemIcon>
-                <StarBorder />
+                <StorageIcon />
               </ListItemIcon>
               <ListItemText primary="View Room" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/room-for-lecturer"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StorageIcon />
+              </ListItemIcon>
+              <ListItemText primary="For Lecturers" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/room-for-subject"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StorageIcon />
+              </ListItemIcon>
+              <ListItemText primary="For Subjects" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/unavailable-time-for-room"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StorageIcon />
+              </ListItemIcon>
+              <ListItemText primary="N/A Time" />
             </ListItem>
           </NavLink>
         </List>
