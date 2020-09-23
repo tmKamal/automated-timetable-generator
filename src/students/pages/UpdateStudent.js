@@ -143,7 +143,7 @@ const UpdateStudent = () => {
                 variant="h4"
                 align="center"
               >
-                Add a Student
+                Update Student
               </Typography>
 
               <form

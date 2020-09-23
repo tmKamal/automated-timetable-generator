@@ -30,6 +30,7 @@ const SideBarLinks = () => {
   const [tagOpen, setTagOpen] = React.useState(false);
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [subjectOpen, setSubjectOpen] = React.useState(false);
+  const [availabilityOpen, setAvailabilityOpen] = React.useState(false);
 
   return (
     <List>
@@ -174,71 +175,65 @@ const SideBarLinks = () => {
               <ListItemText primary="Add Lecturer" />
             </ListItem>
           </NavLink>
-          </List>
-              
-                <List component='div' disablePadding>
-                    <NavLink
-                        style={{ textDecoration: 'none' }}
-                        to='/view-lecturers'
-                        className='MuiTypography-colorInherit '
-                    >
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <StarBorder />
-                            </ListItemIcon>
-                            <ListItemText primary='View Lecturers' />
-                        </ListItem>
-                    </NavLink>
-                </List>
-            </Collapse>
-            {/* ============== Lecturers End ===================== */}
+        </List>
 
-            {/* ============== Subjects ===================== */}
-            <ListItem button onClick={()=>setSubjectOpen(!subjectOpen)}>
-                <ListItemIcon>
-                    <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary='Subjects' />
-                {subjectOpen ? <ExpandLess /> : <ExpandMore />}
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/view-lecturers"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="View Lecturers" />
             </ListItem>
-            <Collapse in={subjectOpen} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding>
-                    <NavLink
-                        style={{ textDecoration: 'none' }}
-                        to='/add-subject'
-                        className='MuiTypography-colorInherit '
-                    >
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <StarBorder />
-                            </ListItemIcon>
-                            <ListItemText primary='Add Subject' />
-                        </ListItem>
-                    </NavLink>
-                </List>
-                <List component='div' disablePadding>
-                    <NavLink
-                        style={{ textDecoration: 'none' }}
-                        to='/view-subjects'
-                        className='MuiTypography-colorInherit '
-                    >
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <StarBorder />
-                            </ListItemIcon>
-                            <ListItemText primary='View Subjects' />
-                        </ListItem>
-                    </NavLink>
-                </List>
-            </Collapse>
-            {/* ============== Subjects End ===================== */}
+          </NavLink>
+        </List>
+      </Collapse>
+      {/* ============== Lecturers End ===================== */}
 
-            
+      {/* ============== Subjects ===================== */}
+      <ListItem button onClick={() => setSubjectOpen(!subjectOpen)}>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Subjects" />
+        {subjectOpen ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={subjectOpen} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/add-subject"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Add Subject" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/view-subjects"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="View Subjects" />
+            </ListItem>
+          </NavLink>
+        </List>
+      </Collapse>
+      {/* ============== Subjects End ===================== */}
 
-
-      
-
-      
       {/* ============== Room End ===================== */}
 
       {/* ============== Workingdays ===================== */}
@@ -412,6 +407,74 @@ const SideBarLinks = () => {
         </List>
       </Collapse>
       {/*============== Tag End===================== */}
+
+      {/* ============== Availability ===================== */}
+      <ListItem button onClick={() => setAvailabilityOpen(!availabilityOpen)}>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Set Availability" />
+        {availabilityOpen ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={availabilityOpen} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/setGroup"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Group" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/setSubgroup"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Subgroup" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/setLecturer"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Lecturer" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/setSession"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Session" />
+            </ListItem>
+          </NavLink>
+        </List>
+      </Collapse>
+      {/* ============== Availability End ===================== */}
     </List>
   );
 };

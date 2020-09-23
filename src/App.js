@@ -38,10 +38,14 @@ import AddTag from "./tags/pages/AddTag";
 import UpdateTag from "./tags/pages/UpdateTag";
 import ViewLecturers from "./lecturers/pages/ViewLecturers";
 
+import Group from "./setAvailability/pages/Group";
+import Lecturer from "./setAvailability/pages/Lecturer";
+import Session from "./setAvailability/pages/Session";
+import Subgroup from "./setAvailability/pages/Subgroup";
+
 import ViewTag from "./tags/pages/ViewTag";
 
 import UpdateRoom from "./rooms/pages/UpdateRoom";
-
 
 export default function App() {
   return (
@@ -140,6 +144,18 @@ export default function App() {
               </Route>
               <Route path="/view-tag" exact>
                 <ViewTag></ViewTag>
+              </Route>
+              <Route path="/setGroup" exact>
+                <Group></Group>
+              </Route>
+              <Route path="/setLecturer" exact>
+                <Lecturer></Lecturer>
+              </Route>
+              <Route path="/setSession" exact>
+                <Session></Session>
+              </Route>
+              <Route path="/setSubgroup" exact>
+                <Subgroup></Subgroup>
               </Route>
               <Redirect to="/"></Redirect>
             </Switch>
