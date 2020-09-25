@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CssBaseline,
   Paper,
@@ -11,10 +11,20 @@ import {
   MenuItem,
   Button,
   makeStyles,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 import { useHttpClient } from "../../shared/custom-hooks/http-hook";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -49,42 +59,84 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SetLecturer = () => {
+const LecturerNotAvailable = () => {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [msg, setMsg] = useState();
+  const [reload, setReload] = useState();
   const [values, setValues] = useState({
-    lecturerName: "",
+    lecturerId: "",
     day: "",
     hours: "",
     minutes: "",
     duration: "",
   });
 
-  const { lecturerName, day, hours, minutes, duration } = values;
+  const [lecturerData, setLecturerData] = useState();
+  const [selectedDate, setSelectedDate] = React.useState(
+    new Date("2020-09-23T08:00:00")
+  );
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    /* Extracting hour and minutes from the data obj using moment.js */
+    console.log(moment(date).format("H"));
+    console.log(moment(date).format("mm"));
+    const h = Number(moment(date).format("H"));
+    const m = Number(moment(date).format("mm"));
+    setValues({ ...values, hours: h, minutes: m });
+  };
+
+  const [disableSubmitBtn, setDisableSubmitBtn] = useState(false);
+
+  const { lecturerId, day, hours, minutes, duration } = values;
+
+  useEffect(() => {
+    const fetchLecturers = async () => {
+      try {
+        const response = await sendRequest(
+          "http://localhost:8000/api/lecturer/"
+        );
+        if (error) {
+          console.log(error);
+        }
+        if (response) {
+          setLecturerData(response.lecturers);
+        }
+        console.log(response);
+      } catch (err) {
+        console.log(error);
+      }
+    };
+
+    fetchLecturers();
+
+    setReload(false);
+  }, [reload]);
 
   const onChangeHandler = (inputFieldName) => (e) => {
     setValues({ ...values, [inputFieldName]: e.target.value });
     setMsg(null);
     errorPopupCloser();
+    setDisableSubmitBtn(false);
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
     errorPopupCloser();
-    const group = {
-      lecturerName,
+    setDisableSubmitBtn(true);
+    const notAvailableTime = {
       day,
       hours,
       minutes,
       duration,
     };
-    console.log(group);
+    console.log(notAvailableTime);
     try {
       const responseData = await sendRequest(
-        "http://localhost:8000/api/availability/",
-        "POST",
-        JSON.stringify(group),
+        `http://localhost:8000/api/lecturer/not-available/${lecturerId}`,
+        "PATCH",
+        JSON.stringify(notAvailableTime),
         { "Content-Type": "application/json" }
       );
       if (error) {
@@ -92,13 +144,8 @@ const SetLecturer = () => {
       }
       console.log(responseData);
       if (responseData) {
-        setValues({
-          lecturerName: "",
-          day: "",
-          hours: "",
-          minutes: "",
-          duration: "",
-        });
+        setReload(true);
+
         console.log(responseData);
         setMsg(responseData.msg);
       }
@@ -130,18 +177,23 @@ const SetLecturer = () => {
                   variant="outlined"
                   className={classes.formControl}
                 >
-                  <InputLabel id="lecturerName">Lecturer Name</InputLabel>
+                  <InputLabel id="lecturerId">Lecturer Name</InputLabel>
                   <Select
-                    labelId="lecturerName"
-                    id="lecturerName"
-                    value={lecturerName}
-                    onChange={onChangeHandler("lecturerName")}
+                    labelId="lecturerId"
+                    id="lecturerId"
+                    value={lecturerId}
+                    onChange={onChangeHandler("lecturerId")}
                     label="Lecturer Name"
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={"Y1.S1"}>Y1.S1</MenuItem>
+                    {!isLoading &&
+                      lecturerData &&
+                      lecturerData.map((b) => {
+                        return (
+                          <MenuItem key={b.id} value={b.id}>
+                            {b.lecturerName}
+                          </MenuItem>
+                        );
+                      })}
                   </Select>
                 </FormControl>
               </Grid>
@@ -173,39 +225,31 @@ const SetLecturer = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardTimePicker
+                    margin="normal"
+                    inputVariant="outlined"
+                    id="time-picker"
+                    label="Time picker"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                    fullWidth
+                  ></KeyboardTimePicker>
+                </MuiPickersUtilsProvider>
+              </Grid>
+              <Grid item xs={12}>
                 <TextField
+                  type="number"
                   required
-                  type="Number"
-                  onChange={onChangeHandler("hours")}
-                  value={hours}
-                  id="hours"
-                  name="hours"
-                  variant="outlined"
-                  label="Hours"
-                  fullWidth
-                  style={{ marginBottom: "30px" }}
-                />
-                <TextField
-                  required
-                  type="Number"
-                  onChange={onChangeHandler("minutes")}
-                  value={minutes}
-                  id="minutes"
-                  name="minutes"
-                  variant="outlined"
-                  label="Minutes"
-                  fullWidth
-                  style={{ marginBottom: "30px" }}
-                />
-                <TextField
-                  required
-                  type="Number"
                   onChange={onChangeHandler("duration")}
                   value={duration}
                   id="duration"
                   name="duration"
                   variant="outlined"
-                  label="Duration"
+                  label="Duration (Hrs)"
                   fullWidth
                 />
               </Grid>
@@ -237,6 +281,7 @@ const SetLecturer = () => {
                 variant="contained"
                 color="primary"
                 className={classes.button}
+                disabled={disableSubmitBtn}
               >
                 Submit
               </Button>
@@ -247,4 +292,4 @@ const SetLecturer = () => {
     </React.Fragment>
   );
 };
-export default SetLecturer;
+export default LecturerNotAvailable;

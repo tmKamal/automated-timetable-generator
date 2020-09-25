@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CssBaseline,
   Paper,
@@ -11,10 +11,20 @@ import {
   MenuItem,
   Button,
   makeStyles,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 import { useHttpClient } from "../../shared/custom-hooks/http-hook";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -49,40 +59,84 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddStudent = () => {
+const GroupNotAvailable = () => {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [msg, setMsg] = useState();
+  const [reload, setReload] = useState();
   const [values, setValues] = useState({
-    academicYearSem: "",
-    programme: "",
-    groupNumber: "",
-    subGroupNumber: "",
+    studentId: "",
+    day: "",
+    hours: "",
+    minutes: "",
+    duration: "",
   });
 
-  const { academicYearSem, programme, groupNumber, subGroupNumber } = values;
+  const [groupData, setGroupData] = useState();
+  const [selectedDate, setSelectedDate] = React.useState(
+    new Date("2020-09-23T08:00:00")
+  );
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    /* Extracting hour and minutes from the data obj using moment.js */
+    console.log(moment(date).format("H"));
+    console.log(moment(date).format("mm"));
+    const h = Number(moment(date).format("H"));
+    const m = Number(moment(date).format("mm"));
+    setValues({ ...values, hours: h, minutes: m });
+  };
+
+  const [disableSubmitBtn, setDisableSubmitBtn] = useState(false);
+
+  const { studentId, day, hours, minutes, duration } = values;
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await sendRequest(
+          "http://localhost:8000/api/studentGroup/"
+        );
+        if (error) {
+          console.log(error);
+        }
+        if (response) {
+          setGroupData(response.students);
+        }
+        console.log(response);
+      } catch (err) {
+        console.log(error);
+      }
+    };
+
+    fetchGroups();
+
+    setReload(false);
+  }, [reload]);
 
   const onChangeHandler = (inputFieldName) => (e) => {
     setValues({ ...values, [inputFieldName]: e.target.value });
     setMsg(null);
     errorPopupCloser();
+    setDisableSubmitBtn(false);
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
     errorPopupCloser();
-    const group = {
-      academicYearSem,
-      programme,
-      groupNumber,
-      subGroupNumber,
+    setDisableSubmitBtn(true);
+    const notAvailableTime = {
+      day,
+      hours,
+      minutes,
+      duration,
     };
-    console.log(group);
+    console.log(notAvailableTime);
     try {
       const responseData = await sendRequest(
-        "http://localhost:8000/api/student/",
-        "POST",
-        JSON.stringify(group),
+        `http://localhost:8000/api/studentGroup/not-available/${studentId}`,
+        "PATCH",
+        JSON.stringify(notAvailableTime),
         { "Content-Type": "application/json" }
       );
       if (error) {
@@ -90,12 +144,8 @@ const AddStudent = () => {
       }
       console.log(responseData);
       if (responseData) {
-        setValues({
-          academicYearSem: "",
-          programme: "",
-          groupNumber: "",
-          subGroupNumber: "",
-        });
+        setReload(true);
+
         console.log(responseData);
         setMsg(responseData.msg);
       }
@@ -116,7 +166,7 @@ const AddStudent = () => {
             variant="h4"
             align="center"
           >
-            Group
+            Set Not Avaialbility for Students(Groups)
           </Typography>
 
           <form onSubmit={submitHandler} className={classes.form} noValidate>
@@ -127,27 +177,27 @@ const AddStudent = () => {
                   variant="outlined"
                   className={classes.formControl}
                 >
-                  <InputLabel id="academicYearSem">
-                    Academic Year and Semester
-                  </InputLabel>
+                  <InputLabel id="studentId">Student Group</InputLabel>
                   <Select
-                    labelId="academicYearSem"
-                    id="academicYearSem"
-                    value={academicYearSem}
-                    onChange={onChangeHandler("academicYearSem")}
-                    label="Academic Year and Semester"
+                    labelId="studentId"
+                    id="studentId"
+                    value={studentId}
+                    onChange={onChangeHandler("studentId")}
+                    label="Student Group"
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={"Y1.S1"}>Y1.S1</MenuItem>
-                    <MenuItem value={"Y1.S2"}>Y1.S2</MenuItem>
-                    <MenuItem value={"Y2.S1"}>Y2.S1</MenuItem>
-                    <MenuItem value={"Y2.S2"}>Y2.S2</MenuItem>
-                    <MenuItem value={"Y3.S1"}>Y3.S1</MenuItem>
-                    <MenuItem value={"Y3.S2"}>Y3.S2</MenuItem>
-                    <MenuItem value={"Y4.S1"}>Y4.S1</MenuItem>
-                    <MenuItem value={"Y4.S2"}>Y4.S2</MenuItem>
+                    {!isLoading &&
+                      groupData &&
+                      groupData.map((b) => {
+                        return (
+                          <MenuItem key={b.id} value={b.id}>
+                            {b.academicYearSem +
+                              "." +
+                              b.programme +
+                              "." +
+                              b.groupNumber}
+                          </MenuItem>
+                        );
+                      })}
                   </Select>
                 </FormControl>
               </Grid>
@@ -157,51 +207,53 @@ const AddStudent = () => {
                   variant="outlined"
                   className={classes.formControl}
                 >
-                  <InputLabel id="programme">Programme</InputLabel>
+                  <InputLabel id="day">Day</InputLabel>
                   <Select
-                    labelId="programme"
-                    id="programme"
-                    value={programme}
-                    onChange={onChangeHandler("programme")}
-                    label="Programme"
+                    labelId="day"
+                    id="day"
+                    value={day}
+                    onChange={onChangeHandler("day")}
+                    label="Day"
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={"IT"}>IT</MenuItem>
-                    <MenuItem value={"CSSE"}>CSSE</MenuItem>
-                    <MenuItem value={"CSE"}>CSE</MenuItem>
-                    <MenuItem value={"IM"}>IM</MenuItem>
+                    <MenuItem value={"Monday"}>Monday</MenuItem>
+                    <MenuItem value={"Tuesday"}>Tuesday</MenuItem>
+                    <MenuItem value={"Wednesday"}>Wednesday</MenuItem>
+                    <MenuItem value={"Thursday"}>Thursday</MenuItem>
+                    <MenuItem value={"Friday"}>Friday</MenuItem>
+                    <MenuItem value={"Saturday"}>Saturday</MenuItem>
+                    <MenuItem value={"Sunday"}>Sunday</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  type="Number"
-                  onChange={onChangeHandler("groupNumber")}
-                  value={groupNumber}
-                  id="groupNumber"
-                  name="groupNumber"
-                  variant="outlined"
-                  label="Group Number"
-                  error={error.param === "groupNumber" ? true : false}
-                  helperText={error.param === "groupNumber" ? error.msg : ""}
-                  fullWidth
-                />
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardTimePicker
+                    margin="normal"
+                    inputVariant="outlined"
+                    id="time-picker"
+                    label="Time picker"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                    fullWidth
+                  ></KeyboardTimePicker>
+                </MuiPickersUtilsProvider>
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  type="number"
                   required
-                  type="Number"
-                  onChange={onChangeHandler("subGroupNumber")}
-                  value={subGroupNumber}
-                  id="subGroupNumber"
-                  name="subGroupNumber"
+                  onChange={onChangeHandler("duration")}
+                  value={duration}
+                  id="duration"
+                  name="duration"
                   variant="outlined"
-                  label="Sub Group Number"
-                  error={error.param === "subGroupNumber" ? true : false}
-                  helperText={error.param === "subGroupNumber" ? error.msg : ""}
+                  label="Duration (Hrs)"
                   fullWidth
                 />
               </Grid>
@@ -233,6 +285,7 @@ const AddStudent = () => {
                 variant="contained"
                 color="primary"
                 className={classes.button}
+                disabled={disableSubmitBtn}
               >
                 Submit
               </Button>
@@ -243,4 +296,4 @@ const AddStudent = () => {
     </React.Fragment>
   );
 };
-export default AddStudent;
+export default GroupNotAvailable;
