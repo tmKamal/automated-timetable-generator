@@ -80,12 +80,14 @@ const AddSession = () => {
   
 
   const [msg, setMsg] = useState();
+  const [groupToggler,setGroupToggler]=useState("");
+  const [groupData,setGroupData]=useState();
 
   const [values, setValues] = useState({
     lecturers: [],
     tag: "",
     studentGroup: "",
-    //subGroup:'',
+    subGroup:"",
     subject: "",
     studentCount: "",
     hours,minutes,
@@ -149,7 +151,24 @@ const AddSession = () => {
         console.log(error);
       }
     };
+    const fetchGroup = async () => {
+      try {
+        const response = await sendRequest(
+          "http://localhost:8000/api/studentGroup/"
+        );
+        if (error) {
+          console.log(error);
+        }
+        if (response) {
+          setGroupData(response);
+        }
+        console.log(response);
+      } catch (err) {
+        console.log(error);
+      }
+    };
     fetchStudent();
+    fetchGroup();
   }, []);
 
   const [lecturerData, setLecturerData] = useState();
@@ -177,6 +196,7 @@ const AddSession = () => {
     lecturers,
     tag,
     studentGroup,
+    subGroup,
     subject,
     studentCount,
     hours,minutes,
@@ -199,6 +219,15 @@ const AddSession = () => {
     setValues({...values,hours:h,minutes:m});
   };
 
+  const onChangeTagHandler=(e)=>{
+    setValues({...values,tag:e.target.value});
+    console.log(e.target.value);
+    const selectedTag=tagData.tags.filter((t)=>t.id==e.target.value);
+    setGroupToggler(selectedTag[0].tagType);
+    console.log(selectedTag);
+
+  }
+
   const submitHandler = (e) => {
     e.preventDefault();
     errorPopupCloser();
@@ -211,13 +240,12 @@ const AddSession = () => {
       tag,
       subjectCode,
       studentGroup,
+      subGroup,
       subject,
       studentCount,
-      hours,
-      minutes,
       duration,
     };
-    //subGroup,subjectCode
+    
     console.log(location);
     try {
       const responseData = sendRequest(
@@ -238,6 +266,7 @@ const AddSession = () => {
           subject: "",
           studentCount: "",
           duration: "",
+          subGroup:""
         });
         console.log(responseData);
         setMsg(responseData.msg);
@@ -314,7 +343,7 @@ const AddSession = () => {
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     value={tag}
-                    onChange={onChangeHandler("tag")}
+                    onChange={onChangeTagHandler}
                     label="Tag"
                   >
                     {!isLoading &&
@@ -330,14 +359,43 @@ const AddSession = () => {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12}>
+              {groupToggler=='Practical'?<Grid item xs={12}>
                 <FormControl
                   style={{ width: "552px" }}
                   variant="outlined"
                   className={classes.formControl}
                 >
                   <InputLabel id="demo-simple-select-outlined-label">
-                    Student Group
+                    Student Sub Group
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={subGroup}
+                    onChange={onChangeHandler("subGroup")}
+                    label="subGroup"
+                  >
+                    {!isLoading &&
+                      studentData &&
+                      studentData.students.map((s) => {
+                        return (
+                          <MenuItem key={s.id} value={s.id}>
+                            {s.academicYearSem+' ('+s.programme+') '+ s.groupNumber+'.'+s.subGroupNumber}
+                          </MenuItem>
+                        );
+                      })}
+                  </Select>
+                </FormControl>
+              </Grid>:null}
+
+              {groupToggler=='Lecture'?<Grid item xs={12}>
+                <FormControl
+                  style={{ width: "552px" }}
+                  variant="outlined"
+                  className={classes.formControl}
+                >
+                  <InputLabel id="demo-simple-select-outlined-label">
+                    Student Main Group
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-outlined-label"
@@ -347,17 +405,45 @@ const AddSession = () => {
                     label="studentGroup"
                   >
                     {!isLoading &&
-                      studentData &&
-                      studentData.students.map((s) => {
+                      groupData &&
+                      groupData.students.map((s) => {
                         return (
                           <MenuItem key={s.id} value={s.id}>
-                            {s.groupNumber}
+                            {s.academicYearSem+' ('+s.programme+') '+ s.groupNumber}
                           </MenuItem>
                         );
                       })}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid>:null}
+              {groupToggler=='Tutorial'?<Grid item xs={12}>
+                <FormControl
+                  style={{ width: "552px" }}
+                  variant="outlined"
+                  className={classes.formControl}
+                >
+                  <InputLabel id="demo-simple-select-outlined-label">
+                    Student Main Group
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={studentGroup}
+                    onChange={onChangeHandler("studentGroup")}
+                    label="studentGroup"
+                  >
+                    {!isLoading &&
+                      groupData &&
+                      groupData.students.map((s) => {
+                        return (
+                          <MenuItem key={s.id} value={s.id}>
+                            {s.academicYearSem+' ('+s.programme+') '+ s.groupNumber}
+                          </MenuItem>
+                        );
+                      })}
+                  </Select>
+                </FormControl>
+              </Grid>:null}
 
               <Grid item xs={12}>
                 <FormControl
@@ -412,7 +498,8 @@ const AddSession = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              {/* Time picker====================================
+               <Grid item xs={12}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardTimePicker
                     margin="normal"
@@ -427,7 +514,7 @@ const AddSession = () => {
                     fullWidth
                   ></KeyboardTimePicker>
                 </MuiPickersUtilsProvider>
-              </Grid>
+              </Grid>=========================================== */}
 
               <Grid item xs={12}>
                 <FormControl

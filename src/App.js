@@ -55,6 +55,8 @@ import RoomForLecturer from "./rooms/pages/RoomForLecturer";
 import RoomForSubject from "./rooms/pages/RoomForSubject";
 import RoomNotAvailable from "./rooms/pages/RoomNotAvailable";
 import ViewSessions from "./sessions/pages/ViewSessions";
+import RoomForSession from "./rooms/pages/RoomForSession";
+
 
 export default function App() {
   return (
@@ -190,6 +192,9 @@ export default function App() {
               </Route>
               <Route path="/unavailable-time-for-room" exact>
                 <RoomNotAvailable></RoomNotAvailable>
+              </Route>
+              <Route path="/room-for-session" exact>
+                <RoomForSession></RoomForSession>
               </Route>
 
               <Redirect to="/"></Redirect>
