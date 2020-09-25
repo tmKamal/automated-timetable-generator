@@ -202,6 +202,20 @@ const SideBarLinks = () => {
         <List component="div" disablePadding>
           <NavLink
             style={{ textDecoration: "none" }}
+            to="/room-for-session"
+            className="MuiTypography-colorInherit"
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StorageIcon />
+              </ListItemIcon>
+              <ListItemText primary="For Session" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
             to="/unavailable-time-for-room"
             className="MuiTypography-colorInherit "
           >
