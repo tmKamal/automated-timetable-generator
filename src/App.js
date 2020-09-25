@@ -54,6 +54,7 @@ import StudentStats from "./stats/pages/StudentStats";
 import RoomForLecturer from "./rooms/pages/RoomForLecturer";
 import RoomForSubject from "./rooms/pages/RoomForSubject";
 import RoomNotAvailable from "./rooms/pages/RoomNotAvailable";
+import ViewSessions from "./sessions/pages/ViewSessions";
 
 export default function App() {
   return (
@@ -133,6 +134,9 @@ export default function App() {
               </Route>
               <Route path="/add-session">
                 <AddSession></AddSession>
+              </Route>
+              <Route path="/view-sessions" exact>
+                <ViewSessions></ViewSessions>
               </Route>
               <Route path="/specific-table/:id" exact>
                 <SpecificTable></SpecificTable>
