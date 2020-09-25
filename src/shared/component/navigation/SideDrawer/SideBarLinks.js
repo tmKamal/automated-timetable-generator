@@ -500,7 +500,7 @@ const SideBarLinks = () => {
         <List component="div" disablePadding>
           <NavLink
             style={{ textDecoration: "none" }}
-            to="/view-session"
+            to="/view-sessions"
             className="MuiTypography-colorInherit "
           >
             <ListItem button className={classes.nested}>
