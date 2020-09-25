@@ -56,6 +56,7 @@ import RoomForSubject from "./rooms/pages/RoomForSubject";
 import RoomNotAvailable from "./rooms/pages/RoomNotAvailable";
 import ViewSessions from "./sessions/pages/ViewSessions";
 import RoomForSession from "./rooms/pages/RoomForSession";
+import RoomForGroup from "./rooms/pages/RoomForGroup";
 
 
 export default function App() {
@@ -195,6 +196,9 @@ export default function App() {
               </Route>
               <Route path="/room-for-session" exact>
                 <RoomForSession></RoomForSession>
+              </Route>
+              <Route path="/room-for-group" exact>
+                <RoomForGroup></RoomForGroup>
               </Route>
 
               <Redirect to="/"></Redirect>
