@@ -525,6 +525,20 @@ const SideBarLinks = () => {
             </ListItem>
           </NavLink>
         </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/consecutive-sessions"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Consecutive Sessions" />
+            </ListItem>
+          </NavLink>
+        </List>
       </Collapse>
       {/* ============== session End ===================== */}
       {/*============== Tag ===================== */}

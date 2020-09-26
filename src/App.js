@@ -57,6 +57,7 @@ import RoomNotAvailable from "./rooms/pages/RoomNotAvailable";
 import ViewSessions from "./sessions/pages/ViewSessions";
 import RoomForSession from "./rooms/pages/RoomForSession";
 import RoomForGroup from "./rooms/pages/RoomForGroup";
+import ConsecutiveSessions from "./sessions/pages/ConsecutiveSessions";
 
 
 export default function App() {
@@ -199,6 +200,9 @@ export default function App() {
               </Route>
               <Route path="/room-for-group" exact>
                 <RoomForGroup></RoomForGroup>
+              </Route>
+              <Route path="/consecutive-sessions" exact>
+                <ConsecutiveSessions></ConsecutiveSessions>
               </Route>
 
               <Redirect to="/"></Redirect>
