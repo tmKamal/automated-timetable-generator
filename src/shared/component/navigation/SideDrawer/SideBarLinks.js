@@ -539,6 +539,20 @@ const SideBarLinks = () => {
             </ListItem>
           </NavLink>
         </List>
+        <List component="div" disablePadding>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to="/parallel-sessions"
+            className="MuiTypography-colorInherit "
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Parallel Sessions" />
+            </ListItem>
+          </NavLink>
+        </List>
       </Collapse>
       {/* ============== session End ===================== */}
       {/*============== Tag ===================== */}
