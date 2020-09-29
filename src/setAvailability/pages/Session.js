@@ -101,7 +101,11 @@ const SessionNotAvailable = () => {
           console.log(error);
         }
         if (response) {
-          setSessionData(response.sessions);
+          //filter out dead sessions
+          const liveSessions = response.sessions.filter((s) => s.alive == true);
+          //filter in only the normal sessions
+          const normalSessions = liveSessions.filter((s) => s.type == "normal");
+          setSessionData(normalSessions);
         }
         console.log(response);
       } catch (err) {
