@@ -67,7 +67,7 @@ const UpdateLecturer = () => {
         department:'',
         center:'',
         building:'',
-        level:''
+        level:'',
   });
 
   const { lecturerName,empId,faculty,department,center,building,level } = values;
@@ -79,19 +79,21 @@ const UpdateLecturer = () => {
       );
       setLoadedLecturer(fetchedLecturer.lecturer);
     };
-    const loadedBuildingFunc = async() => {
-      const fetchdBuilding = await sendRequest(
+    const loadedBuildingsFunc = async () => {
+      const fetchedBuilding = await sendRequest(
         `http://localhost:8000/api/building`
       );
-      setLoadedBuilding(fetchBuilding);
+      setLoadedBuilding(fetchedBuilding);
     };
-    
-    loadedBuildingFunc();
+
     loadedLecturer();
+    loadedBuildingsFunc();
+    
   }, [sendRequest, reload]);
 
   useEffect(() => {
     if (loadedLecturer) {
+        console.log('lecturers'+loadedLecturer);
       setValues({
         ...values,
         lecturerName: loadedLecturer.lecturerName,
@@ -265,6 +267,37 @@ const UpdateLecturer = () => {
                 </Select>
               </FormControl>
               </Grid>
+
+              <Grid item xs={12}>
+                    <FormControl
+                      fullWidth
+                      variant="outlined"
+                      className={classes.formControl}
+                    >
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Building Name
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={building}
+                        onChange={onChangeHandler("building")}
+                        label="Building"
+                      >
+                        {!isLoading &&
+                          loadedBuilding &&
+                          loadedBuilding.buildings.map((b) => {
+                            return (
+                              <MenuItem key={b.id} value={b.id}>
+                                {b.buildingName}
+                              </MenuItem>
+                            );
+                          })}
+                      </Select>
+                    </FormControl>
+                  </Grid>        
+
+              
               <Grid item xs={12}>
               <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Level</InputLabel>

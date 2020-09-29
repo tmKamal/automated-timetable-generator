@@ -48,10 +48,15 @@ const ViewSessions = () => {
   const classes = useStyles();
   const [loadedSessions, setLoadedSessions] = useState();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
-  const [deleteId,setDeleteId]=useState();
-  const [openDialog,setOpenDialog]=useState(false);
-  const [deleteSuccMsg,setDeleteSuccMsg]=useState();
+  //const [deleteId,setDeleteId]=useState();
+  //const [openDialog,setOpenDialog]=useState(false);
+  //const [deleteSuccMsg,setDeleteSuccMsg]=useState();
   const [reload, setReload] = useState(); //use to fetch buildings again, after deleting a building.
+  //const [filter, setFilter] = useState("");
+
+  // const handleSearchChange = (e) => {
+  //   setFilter(e.target.value);
+  // };
 
 
   useEffect(() => {
@@ -80,7 +85,7 @@ const ViewSessions = () => {
               </Typography>
 
               <SearchBar
-                  onChange={() => console.log('onChange')}
+                  //onChange={() => handleSearchChange()}
                   onRequestSearch={() => console.log('onRequestSearch')}
                   style={{
                     margin: '0 auto',
@@ -95,66 +100,35 @@ const ViewSessions = () => {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Lecturers</TableCell>
 
+                <TableCell>Lecturers</TableCell>
+                
+                <TableCell align="center">Subject (Code)</TableCell>
                 <TableCell align="center">Tag</TableCell>
                 <TableCell align="center">Group</TableCell>
-                <TableCell align="center">Subject</TableCell>
-                <TableCell align="center">Subject Code</TableCell>
-                <TableCell align="center">Count</TableCell>
-                <TableCell align="center">Duration</TableCell>
-            
+                <TableCell align="center">Student Count (Duration)</TableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>
+
               {!isLoading &&
                 loadedSessions &&
                 loadedSessions.sessions.map((session) => (
                   <TableRow key={session.id}>
-                    <TableCell component="th" scope="row">
-                      {session.lecturers}
-                    </TableCell>
 
+                    <TableCell component="th" scope="row">{session.lecturers}</TableCell>
+
+                    <TableCell align="center">{session.subject} ({session.subjectCode})</TableCell>
                     <TableCell align="center">{session.tag}</TableCell>
                     <TableCell align="center">{session.studentGroup}</TableCell>
-                    <TableCell align="center">{session.subject}</TableCell>
-                    <TableCell align="center">{session.subjectCode}</TableCell>
-                    <TableCell align="center">{session.studentCount}</TableCell>
-                    <TableCell align="center">{session.duration}</TableCell>
-                    
+                    <TableCell align="center">{session.studentCount} ({session.duration})</TableCell>
+                            
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
         </TableContainer>
-        {!isLoading &&
-          loadedSessions &&
-          loadedSessions.sessions.length === 0 && (
-            <React.Fragment>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                paragraph
-                className={classes.marginT}
-              >
-                You haven’t created any sessions yet
-              </Typography>
-              <div>
-                <Grid container spacing={2} justify="center">
-                  <Grid item>
-                    <Button
-                      href="/admin/crud/lecturer-create"
-                      variant="outlined"
-                      color="primary"
-                    >
-                      Create One Now
-                    </Button>
-                  </Grid>
-                </Grid>
-              </div>
-            </React.Fragment>
-          )}
       </Grid>
       {/* PopUp Dialog for delete confirmation*/}
       
@@ -162,3 +136,11 @@ const ViewSessions = () => {
   );
 };
 export default ViewSessions;
+
+
+
+
+//error checking
+//defected lines
+
+// <TableCell align="center">{session.studentGroup.academicYearSem}</TableCell>
