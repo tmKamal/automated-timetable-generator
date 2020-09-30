@@ -235,6 +235,14 @@ const AddSession = () => {
     console.log("selcted sub");
     console.log(sub);
     const subjectCode=sub[0].subjectCode;
+    let groupId;
+    if(studentGroup){
+      const mainG=groupData.students.filter((s)=>s.id==studentGroup);
+      groupId=mainG[0].groupId;
+    }else{
+      const subG=studentData.students.filter((s)=>s.id==subGroup);
+      groupId=subG[0].groupId;
+    }
     const location = {
       lecturers,
       tag,
@@ -244,6 +252,7 @@ const AddSession = () => {
       subject,
       studentCount,
       duration,
+      groupId,
     };
     
     console.log(location);
