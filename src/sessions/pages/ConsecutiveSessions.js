@@ -60,6 +60,7 @@ const ConsecutiveSessions = () => {
   const [values, setValues] = useState({
     firstSessionId: "",
     secondSessionId: "",
+   
   });
 
   const [sessionData, setSessionData] = useState();
@@ -107,9 +108,14 @@ const ConsecutiveSessions = () => {
     e.preventDefault();
     errorPopupCloser();
     setDisableSubmitBtn(true);
+    const firstSes=sessionData.filter((s)=>s.id==firstSessionId);
+   
+    const secondSes=sessionData.filter((s)=>s.id==secondSessionId);
+    const duration=firstSes[0].duration+secondSes[0].duration;
     const consecutiveSess = {
       firstSessionId,
-      secondSessionId
+      secondSessionId,
+      duration
     };
     console.log(consecutiveSess);
     try {
