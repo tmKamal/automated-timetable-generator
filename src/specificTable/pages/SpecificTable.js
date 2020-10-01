@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
     withStyles,
@@ -13,8 +13,10 @@ import {
     Typography,
     Button
 } from '@material-ui/core';
-
+import { useHttpClient } from '../../shared/custom-hooks/http-hook';
 import SearchBar from '../../shared/component/searchbar/SearchBar';
+import { ja } from 'date-fns/locale';
+import { STATES } from 'mongoose';
 const { dialog } = require('electron').remote;
 const { Notification } = require('electron').remote;
 
@@ -36,21 +38,27 @@ const StyledTableRow = withStyles((theme) => ({
     }
 }))(TableRow);
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+function createData(
+    time,
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday
+) {
+    return {
+        time,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        sunday
+    };
 }
-
-const rows = [
-    createData('8.30', 'sample data', 'sample data', '-', 'sample data'),
-    createData('9.30 ', 'sample data', 'sample data', '-', 'sample data'),
-    createData('10.30', '-', 'sample data', 'sample data', '-'),
-    createData('11.30', '-', 'sample data', 'sample data', '-'),
-    createData('12.30', '-', '-', 'sample data', 'sample data'),
-    createData('01.30', '-', '-', 'sample data', 'sample data'),
-    createData('02.30', 'sample data', '-', 'sample data', 'sample data'),
-    createData('03.30', 'sample data', '-', 'sample data', 'sample data'),
-    createData('04.30', 'sample data', '-', 'sample data', 'sample data')
-];
 
 const useStyles = makeStyles({
     table: {
@@ -58,12 +66,48 @@ const useStyles = makeStyles({
     }
 });
 
-const SpecificTable = () => {
+const SpecificTable = ({ timetable, type }) => {
     const { id } = useParams();
     const classes = useStyles();
-    const [value, setValue] = React.useState();
+    const [value, setValue] = useState();
+    const [rows, setRows] = useState([]);
+    const [daysArray, setDaysArray] = useState([]);
+    const [isLoadingMat, setIsLoadingMat] = useState();
+    const [matrix, setMatrix] = useState(
+        Array.from({ length: 10 }, () => Array.from({ length: 10 }, () => null))
+    );
+    const [fetchedDays, setFetchedDays] = useState();
+    const [fetchedTime, setFetchedTime] = useState();
 
-    React.useEffect(() => {
+    const {
+        isLoading,
+        error1,
+        sendRequest,
+        errorPopupCloser
+    } = useHttpClient();
+    const [reload, setReload] = useState();
+
+    useEffect(() => {
+        const loadDays = async () => {
+            const fetchedDays = await sendRequest(
+                `http://localhost:8000/api/workdays/`
+            );
+            setFetchedDays(fetchedDays);
+            for (var i = 0; i < fetchedDays.countDays; i++) {
+                await setDaysArray((state) => [...state, i]);
+            }
+        };
+        const loadTime = async () => {
+            const fetchedTime = await sendRequest(
+                `http://localhost:8000/api/worktime/`
+            );
+            setFetchedTime(fetchedTime);
+        };
+        loadTime();
+        loadDays();
+    }, [sendRequest, reload]);
+
+    useEffect(() => {
         if (id == 'hall') {
             setValue(hallData);
         } else if (id == 'student-group') {
@@ -71,7 +115,44 @@ const SpecificTable = () => {
         } else {
             setValue(lectureData);
         }
-    }, [id]);
+
+        if (fetchedDays && fetchedTime) {
+            const setData = async () => {
+                var i = 0;
+
+                while (i < fetchedTime.time.hours) {
+                    for (var j = 0; j < 7; j++) {
+                        let copy = [...matrix];
+                        copy[i][j] = timetable.filter(function (el) {
+                            return (
+                                el.column == j &&
+                                el.stRow <= i &&
+                                el.endRow >= i
+                            );
+                        })[0];
+                        await setMatrix(copy);
+                    }
+
+                    await setRows((oldArray) => [
+                        ...oldArray,
+                        createData(
+                            `${i + 8}.30`,
+                            `-`,
+                            '-',
+                            '-',
+                            '-',
+                            '-',
+                            null,
+                            null
+                        )
+                    ]);
+
+                    i++;
+                }
+            };
+            setData();
+        }
+    }, [id, fetchedDays, fetchedTime]);
 
     const printTable = (e) => {
         dialog
@@ -111,78 +192,63 @@ const SpecificTable = () => {
         new Notification(notifi).show();
     };
     return (
-        <TableContainer component={Paper}>
-            <Typography
-                style={{ marginBottom: '30px' }}
-                component='h1'
-                variant='h4'
-                align='center'
-            >
-                {id == 'full' ? 'Timetable' : `Timetable for specific ${id}`}
-            </Typography>
-
-            {id === 'full' ? (
-                ''
-            ) : (
-                <Typography
-                    style={{ marginBottom: '30px', marginLeft: '30%' }}
-                    component='h1'
-                    variant='h4'
-                    align='center'
-                >
-                    <SearchBar opt={value} options={value}></SearchBar>
-                </Typography>
-            )}
-
+        <React.Fragment>
             <Table className={classes.table} aria-label='customized table'>
                 <TableHead>
                     <TableRow>
                         <StyledTableCell>Time table</StyledTableCell>
-                        <StyledTableCell align='left'>Monday</StyledTableCell>
-                        <StyledTableCell align='left'>Tuesday</StyledTableCell>
-                        <StyledTableCell align='left'>
-                            Wednesday
-                        </StyledTableCell>
-                        <StyledTableCell align='left'>Thursday</StyledTableCell>
-                        <StyledTableCell align='left'>Friday</StyledTableCell>
+                        {fetchedDays
+                            ? Object.keys(fetchedDays.days[0]).map((key, i) =>
+                                  fetchedDays.days[0][key] == true ? (
+                                      <StyledTableCell align='left'>
+                                          {key}
+                                      </StyledTableCell>
+                                  ) : (
+                                      ''
+                                  )
+                              )
+                            : ''}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <StyledTableRow key={row.name}>
-                            <StyledTableCell>{row.name}</StyledTableCell>
-                            <StyledTableCell align='left'>
-                                {row.calories}
-                            </StyledTableCell>
-                            <StyledTableCell align='left'>
-                                {row.fat}
-                            </StyledTableCell>
-                            <StyledTableCell align='left'>
-                                {row.carbs}
-                            </StyledTableCell>
-                            <StyledTableCell align='left'>
-                                {row.protein}
-                            </StyledTableCell>
-                            <StyledTableCell align='left'>
-                                {row.protein}
-                            </StyledTableCell>
-                        </StyledTableRow>
-                    ))}
+                    {rows.map((row, i) => {
+                        return (
+                            <StyledTableRow key={row.time}>
+                                <StyledTableCell>{row.time}</StyledTableCell>
+                                {daysArray.map((j) => {
+                                    return (
+                                        <StyledTableCell align='left'>
+                                            {matrix[i][j] != null ? (
+                                                <p align='center'>
+                                                    {matrix[i][j].sesion.name}
+                                                    <br />
+                                                    {type != 'lecturer'
+                                                        ? matrix[i][j].sesion
+                                                              .lecturer
+                                                        : ''}
+                                                    <br />
+                                                    {type != 'student'
+                                                        ? matrix[i][j].sesion
+                                                              .studentGroup
+                                                        : ''}
+                                                    <br />
+                                                    {type != 'room'
+                                                        ? matrix[i][j].sesion
+                                                              .room
+                                                        : ''}
+                                                </p>
+                                            ) : (
+                                                '-'
+                                            )}
+                                        </StyledTableCell>
+                                    );
+                                })}
+                            </StyledTableRow>
+                        );
+                    })}
                 </TableBody>
             </Table>
-
-            <Button
-                type='submit'
-                variant='contained'
-                color='primary'
-                className={classes.button}
-                align='right'
-                style={{ margin: '20px', float: 'right' }}
-                onClick={printTable}
-            >
-                Print Time table
-            </Button>
-        </TableContainer>
+        </React.Fragment>
     );
 };
 const hallData = [
@@ -214,4 +280,5 @@ const studentData = [
     { title: 'Y03S02', year: 1993 },
     { title: 'Y014S01', year: 1994 }
 ];
+
 export default SpecificTable;

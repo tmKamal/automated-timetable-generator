@@ -100,29 +100,27 @@ const TableGenerate = () => {
                     style={{ marginBottom: '30px' }}
                 >
                     <Button
-                        onClick={() => history.push('/specific-table/full')}
+                        onClick={() => history.push('/full-table')}
                         className={classes.generateButton}
                     >
                         View Timetable
                     </Button>
                     <Button
                         className={classes.generateButton}
-                        onClick={() => history.push('/specific-table/lecturer')}
+                        onClick={() => history.push('/lecturer-timetable')}
                     >
                         lecturer's timetable
                     </Button>
                     <Button
                         className={classes.generateButton}
-                        onClick={() =>
-                            history.push('/specific-table/student-group')
-                        }
+                        onClick={() => history.push('/student-timetable')}
                     >
                         Student group's timetable
                     </Button>
 
                     <Button
                         className={classes.generateButton}
-                        onClick={() => history.push('/specific-table/hall')}
+                        onClick={() => history.push('/room-timetable')}
                     >
                         lecture hall's timetable
                     </Button>
