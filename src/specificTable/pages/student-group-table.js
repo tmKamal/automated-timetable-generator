@@ -33,7 +33,7 @@ const StudentGroupTable = () => {
             stRow: 0,
             endRow: 2,
             sesion: {
-                name: 'Foll',
+                name: 'IT2050',
                 lecturer: 'DR nuwan',
                 room: 'B4O4',
                 studentGroup: 'Y2S1 (SE) 1'
@@ -45,7 +45,7 @@ const StudentGroupTable = () => {
             endRow: 4,
             sesion: {
                 name: 'IT2040',
-                lecturer: 'DR bfdbd',
+                lecturer: 'Mr Anuradha',
                 room: 'AO4',
                 studentGroup: 'Y1S1 (IT) 1'
             }
@@ -56,7 +56,7 @@ const StudentGroupTable = () => {
             endRow: 4,
             sesion: {
                 name: 'IT3050',
-                lecturer: 'DR DASUN',
+                lecturer: 'Ms Lushaka',
                 room: 'N3D',
                 studentGroup: 'Y3S1 (cyber) 1'
             }
@@ -67,7 +67,7 @@ const StudentGroupTable = () => {
             endRow: 5,
             sesion: {
                 name: 'IT4020',
-                lecturer: 'DR bnuwabbfn',
+                lecturer: 'DR Bhathiya',
                 room: 'B401',
                 studentGroup: 'Y3S2 (SE) 3'
             }
@@ -218,72 +218,4 @@ const StudentGroupTable = () => {
         </TableContainer>
     );
 };
-const hallData = [
-    { title: 'A401', year: 1994 },
-    { title: 'A402r', year: 1972 },
-    { title: 'B401', year: 1974 },
-    { title: 'A611', year: 2008 },
-    { title: 'N3D', year: 1957 },
-    { title: 'N3C', year: 1993 },
-    { title: 'N3E', year: 1994 }
-];
-
-const lectureData = [
-    { title: 'Dr Nimal perera', year: 1994 },
-    { title: 'Mr Kamal bandara', year: 1972 },
-    { title: 'Mr aruna sirisena', year: 1974 },
-    { title: 'Mr saman ', year: 2008 },
-    { title: 'amal', year: 1957 },
-    { title: 'nihal', year: 1993 },
-    { title: 'sumith', year: 1994 }
-];
-
-const studentData = [
-    { title: 'Y01S01', year: 1994 },
-    { title: 'Y01S02', year: 1972 },
-    { title: 'Y02S01', year: 1974 },
-    { title: 'Y02S02', year: 2008 },
-    { title: 'Y03S01', year: 1957 },
-    { title: 'Y03S02', year: 1993 },
-    { title: 'Y014S01', year: 1994 }
-];
-
-const timetable = [
-    {
-        column: 0,
-        stRow: 0,
-        endRow: 2,
-        sesion: {
-            name: 'IT2020',
-            lecturer: 'DR nuwan'
-        }
-    },
-    {
-        column: 0,
-        stRow: 3,
-        endRow: 4,
-        sesion: {
-            name: 'IT2040',
-            lecturer: 'DR bfdbd'
-        }
-    },
-    {
-        column: 1,
-        stRow: 2,
-        endRow: 4,
-        sesion: {
-            name: 'IT3050',
-            lecturer: 'DR fffuwan'
-        }
-    },
-    {
-        column: 3,
-        stRow: 4,
-        endRow: 5,
-        sesion: {
-            name: 'IT4020',
-            lecturer: 'DR bnuwabbfn'
-        }
-    }
-];
 export default StudentGroupTable;
