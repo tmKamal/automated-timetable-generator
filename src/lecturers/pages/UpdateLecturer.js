@@ -128,7 +128,7 @@ const UpdateLecturer = () => {
             faculty,
             department,
             center,
-            building: buildingName,
+            buildingId: building,
             level
         };
         console.log(location);

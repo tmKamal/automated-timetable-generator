@@ -237,39 +237,32 @@ const AddLecturer = () => {
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12}>
-                                <FormControl
-                                    style={{ width: '552px' }}
-                                    variant='outlined'
-                                    className={classes.formControl}
-                                >
-                                    <InputLabel id='demo-simple-select-outlined-label'>
-                                        Department
-                                    </InputLabel>
-                                    <Select
-                                        labelId='demo-simple-select-outlined-label'
-                                        id='demo-simple-select-outlined'
-                                        value={department}
-                                        onChange={onChangeHandler('department')}
-                                        label='department'
-                                    >
-                                        <MenuItem value=''>
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem
-                                            value={'Software Engineering'}
-                                        >
-                                            Software Engineering
-                                        </MenuItem>
-                                        <MenuItem value={'Data Science'}>
-                                            Data Science
-                                        </MenuItem>
-                                        <MenuItem value={'Networking'}>
-                                            Networking
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
+
+              <Grid item xs={12}>
+              <FormControl style={{width:'552px'}} variant="outlined" className={classes.formControl}>
+                <InputLabel id="demo-simple-select-outlined-label">Department</InputLabel>
+                <Select
+                  
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value={department}
+                  onChange={onChangeHandler("department")}
+                  label="department"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={'Software Engineering'}>Software Engineering</MenuItem>
+                  <MenuItem value={'Data Science'}>Data Science</MenuItem>
+                  <MenuItem value={'Networking'}>Networking</MenuItem>
+                  <MenuItem value={'Civil Engineering'}>Civil Engineering</MenuItem>
+                  <MenuItem value={'Electronics'}>Electronics</MenuItem>
+                  <MenuItem value={'Business Administration'}>Business Administration</MenuItem>
+                  <MenuItem value={'Digital Marketing'}>Digital Marketing</MenuItem>
+                </Select>
+              </FormControl>
+              </Grid>
+
 
                             <Grid item xs={12}>
                                 <FormControl
