@@ -88,7 +88,7 @@ const UpdateWorkTime = () => {
         console.log(body);
         try {
             const responseData = await sendRequest(
-                `http://localhost:8000/api/worktime/time`,
+                `https://timetable-generator-api.herokuapp.com/api/worktime/time`,
                 'PATCH',
                 JSON.stringify(body),
                 { 'Content-Type': 'application/json' }
@@ -109,7 +109,7 @@ const UpdateWorkTime = () => {
     useEffect(() => {
         const lTime = async () => {
             const fetchedTime = await sendRequest(
-                `http://localhost:8000/api/worktime/`
+                `https://timetable-generator-api.herokuapp.com/api/worktime/`
             );
             setLoadedData(fetchedTime);
         };

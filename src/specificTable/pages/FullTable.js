@@ -81,7 +81,7 @@ const FullTable = () => {
         const fetchGroup = async () => {
             try {
                 const response = await sendRequest(
-                    'http://localhost:8000/api/studentGroup/'
+                    'https://timetable-generator-api.herokuapp.com/api/studentGroup/'
                 );
                 if (error) {
                     console.log(error);

@@ -83,7 +83,7 @@ const LecturerTable = () => {
         const fetchLecturer = async () => {
             try {
                 const response = await sendRequest(
-                    'http://localhost:8000/api/lecturer/'
+                    'https://timetable-generator-api.herokuapp.com/api/lecturer/'
                 );
                 if (error) {
                     console.log(error);
