@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
+
   Grid,
   TableContainer,
   Table,
@@ -27,25 +28,27 @@ import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 import SearchBar from "material-ui-search-bar";
 import { session } from "electron";
 
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
+    root: {
+        display: 'flex'
+    },
 
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  table: {
-    minWidth: 650,
-  },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4)
+    },
+    table: {
+        minWidth: 650
+    },
 
-  marginT: {
-    marginTop: "2rem",
-  },
+    marginT: {
+        marginTop: '2rem'
+    }
 }));
 
 const ViewSessions = () => {
+
   const classes = useStyles();
   const [loadedSessions, setLoadedSessions] = useState();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
@@ -56,34 +59,38 @@ const ViewSessions = () => {
   //const [search, setSearch] = useState(" ");
   //const [filteredSessions, setFilteredSessions] = useState([]);
 
-  useEffect(() => {
-    const fetchingSessions = async () => {
-      console.log("im in");
-      try {
-        const response = await sendRequest(
-          "http://localhost:8000/api/session/"
-        );
-        if (error) {
-          console.log(error);
-        }
-        if (response) {
-          console.log(response);
-          //filter out dead sessions
-          const liveSessions = response.sessions.filter((s) => s.alive == true);
-          console.log(liveSessions);
-          //filter in only the normal sessions
-          const normalSessions = liveSessions.filter((s) => s.type == "normal");
-          console.log("hey there" + normalSessions);
-          setLoadedSessions(normalSessions);
-        }
-        console.log(response);
-      } catch (err) {
-        console.log(error);
-      }
-    };
-    fetchingSessions();
-  }, []);
 
+    useEffect(() => {
+        const fetchingSessions = async () => {
+            console.log('im in');
+            try {
+                const response = await sendRequest(
+                    'https://timetable-generator-api.herokuapp.com/api/session/'
+                );
+                if (error) {
+                    console.log(error);
+                }
+                if (response) {
+                    console.log(response);
+                    //filter out dead sessions
+                    const liveSessions = response.sessions.filter(
+                        (s) => s.alive == true
+                    );
+                    console.log(liveSessions);
+                    //filter in only the normal sessions
+                    const normalSessions = liveSessions.filter(
+                        (s) => s.type == 'normal'
+                    );
+                    console.log('hey there' + normalSessions);
+                    setLoadedSessions(normalSessions);
+                }
+                console.log(response);
+            } catch (err) {
+                console.log(error);
+            }
+        };
+        fetchingSessions();
+    }, []);
   // useEffect(() => {
   //   setFilteredSessions(
   //     loadedSessions.filter((session) =>
@@ -187,6 +194,7 @@ const ViewSessions = () => {
       {/* PopUp Dialog for delete confirmation*/}
     </Grid>
   );
+
 };
 export default ViewSessions;
 

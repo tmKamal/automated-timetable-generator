@@ -87,7 +87,7 @@ const AddWorkTime = () => {
         const body = { time, slot };
         try {
             const responseData = await sendRequest(
-                'http://localhost:8000/api/worktime/',
+                'https://timetable-generator-api.herokuapp.com/api/worktime/',
                 'POST',
                 JSON.stringify(body),
                 { 'Content-Type': 'application/json' }
