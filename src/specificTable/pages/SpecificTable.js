@@ -219,7 +219,7 @@ const SpecificTable = ({ timetable, type }) => {
                                     return (
                                         <StyledTableCell align='left'>
                                             {matrix[i][j] != null ? (
-                                                <p align='center'>
+                                                <p align='left'>
                                                     {matrix[i][j].sesion.name}
                                                     <br />
                                                     {type != 'lecturer'
