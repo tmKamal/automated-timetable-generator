@@ -25,6 +25,7 @@ import { green, red } from "@material-ui/core/colors";
 import { Link } from "react-router-dom";
 import { useHttpClient } from "../../shared/custom-hooks/http-hook";
 import SearchBar from "material-ui-search-bar";
+import { session } from "electron";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,11 +53,8 @@ const ViewSessions = () => {
   //const [openDialog,setOpenDialog]=useState(false);
   //const [deleteSuccMsg,setDeleteSuccMsg]=useState();
   const [reload, setReload] = useState(); //use to fetch buildings again, after deleting a building.
-  //const [filter, setFilter] = useState("");
-
-  // const handleSearchChange = (e) => {
-  //   setFilter(e.target.value);
-  // };
+  //const [search, setSearch] = useState(" ");
+  //const [filteredSessions, setFilteredSessions] = useState([]);
 
   useEffect(() => {
     const fetchingSessions = async () => {
@@ -86,6 +84,14 @@ const ViewSessions = () => {
     fetchingSessions();
   }, []);
 
+  // useEffect(() => {
+  //   setFilteredSessions(
+  //     loadedSessions.filter((session) =>
+  //       session.subjectCode.toLowerCase().includes(search.toLowerCase())
+  //     )
+  //   );
+  // }, [search, loadedSessions]);
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -100,8 +106,7 @@ const ViewSessions = () => {
         </Typography>
 
         <SearchBar
-          //onChange={() => handleSearchChange()}
-          onRequestSearch={() => console.log("onRequestSearch")}
+          //onChange={(e) => setSearch(e.target.value)}
           style={{
             margin: "0 auto",
             maxWidth: 800,
@@ -118,7 +123,7 @@ const ViewSessions = () => {
                 <TableCell align="center">Subject (Code)</TableCell>
                 <TableCell align="center">Tag</TableCell>
                 <TableCell align="center">Group</TableCell>
-                <TableCell align="center">Student Count (Duration)</TableCell>
+                <TableCell align="center">Student Count | Duration</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -147,7 +152,7 @@ const ViewSessions = () => {
                           session.subGroup.subGroupNumber}
                       </TableCell>
                       <TableCell align="center">
-                        {session.studentCount}
+                        {session.studentCount} | {session.duration}
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -159,7 +164,7 @@ const ViewSessions = () => {
                       </TableCell>
 
                       <TableCell align="center">
-                        {session.subjectCode}
+                       {session.subjectCode}
                       </TableCell>
                       <TableCell align="center">
                         {session.tag.tagType}
@@ -170,7 +175,7 @@ const ViewSessions = () => {
                           session.studentGroup.groupNumber}
                       </TableCell>
                       <TableCell align="center">
-                        {session.studentCount}
+                        {session.studentCount} | {session.duration}
                       </TableCell>
                     </TableRow>
                   )

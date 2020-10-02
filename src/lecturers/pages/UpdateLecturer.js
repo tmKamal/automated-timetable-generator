@@ -71,13 +71,14 @@ const UpdateLecturer = () => {
   });
 
   const { lecturerName,empId,faculty,department,center,building,level } = values;
-  /* fetching building details */
+  /* fetching lecturer details */
   useEffect(() => {
     const loadedLecturer = async () => {
       const fetchedLecturer = await sendRequest(
         `http://localhost:8000/api/lecturer/${lecturerId}`
       );
       setLoadedLecturer(fetchedLecturer.lecturer);
+      console.log(fetchedLecturer);
     };
     const loadedBuildingsFunc = async () => {
       const fetchedBuilding = await sendRequest(
@@ -121,7 +122,7 @@ const UpdateLecturer = () => {
         faculty,
         department,
         center,
-        building: buildingName,
+        buildingId: building,
         level,
     };
     console.log(location);
@@ -289,7 +290,7 @@ const UpdateLecturer = () => {
                           loadedBuilding.buildings.map((b) => {
                             return (
                               <MenuItem key={b.id} value={b.id}>
-                                {b.buildingName}
+                                {b.building}
                               </MenuItem>
                             );
                           })}
