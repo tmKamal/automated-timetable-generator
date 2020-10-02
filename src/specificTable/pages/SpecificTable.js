@@ -90,7 +90,7 @@ const SpecificTable = ({ timetable, type }) => {
     useEffect(() => {
         const loadDays = async () => {
             const fetchedDays = await sendRequest(
-                `http://localhost:8000/api/workdays/`
+                `https://timetable-generator-api.herokuapp.com/api/workdays/`
             );
             setFetchedDays(fetchedDays);
             for (var i = 0; i < fetchedDays.countDays; i++) {
@@ -99,7 +99,7 @@ const SpecificTable = ({ timetable, type }) => {
         };
         const loadTime = async () => {
             const fetchedTime = await sendRequest(
-                `http://localhost:8000/api/worktime/`
+                `https://timetable-generator-api.herokuapp.com/api/worktime/`
             );
             setFetchedTime(fetchedTime);
         };

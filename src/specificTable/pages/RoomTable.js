@@ -83,7 +83,7 @@ const RoomTable = () => {
     useEffect(() => {
         const loadedRoom = async () => {
             const fetchedRooms = await sendRequest(
-                `http://localhost:8000/api/room`
+                `https://timetable-generator-api.herokuapp.com/api/room`
             );
             setRoomData(fetchedRooms);
             console.log(fetchedRooms);
