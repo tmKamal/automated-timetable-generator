@@ -198,6 +198,10 @@ const AddLecturer = () => {
                   <MenuItem value={'Software Engineering'}>Software Engineering</MenuItem>
                   <MenuItem value={'Data Science'}>Data Science</MenuItem>
                   <MenuItem value={'Networking'}>Networking</MenuItem>
+                  <MenuItem value={'Civil Engineering'}>Civil Engineering</MenuItem>
+                  <MenuItem value={'Electronics'}>Electronics</MenuItem>
+                  <MenuItem value={'Business Administration'}>Business Administration</MenuItem>
+                  <MenuItem value={'Digital Marketing'}>Digital Marketing</MenuItem>
                 </Select>
               </FormControl>
               </Grid>
