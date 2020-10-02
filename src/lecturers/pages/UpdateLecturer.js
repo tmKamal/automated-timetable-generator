@@ -91,6 +91,7 @@ const UpdateLecturer = () => {
             const fetchedBuilding = await sendRequest(
                 `https://timetable-generator-api.herokuapp.com/api/building`
             );
+
             setLoadedBuilding(fetchedBuilding);
         };
 
@@ -108,7 +109,9 @@ const UpdateLecturer = () => {
                 faculty: loadedLecturer.faculty,
                 department: loadedLecturer.department,
                 center: loadedLecturer.center,
-                building: loadedLecturer.buildingId.id,
+
+                building: loadedLecturer.building,
+
                 level: loadedLecturer.level
             });
         }
@@ -128,7 +131,7 @@ const UpdateLecturer = () => {
             faculty,
             department,
             center,
-            buildingId: building,
+            building,
             level
         };
         console.log(location);
