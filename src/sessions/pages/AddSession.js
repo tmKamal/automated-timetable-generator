@@ -207,7 +207,8 @@ const AddSession = () => {
     //subGroup
     const onChangeHandler = (inputFieldName) => (e) => {
         setValues({ ...values, [inputFieldName]: e.target.value });
-        setMsg(null), errorPopupCloser();
+        setMsg(null);
+        errorPopupCloser();
     };
 
     const handleDateChange = (date) => {
