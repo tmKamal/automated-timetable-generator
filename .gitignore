@@ -54,3 +54,8 @@ ehthumbs.db
 # Windows shortcuts #
 #####################
 *.lnk
+
+
+# static analysis(SonarQube) #
+#####################
+.scannerwork
