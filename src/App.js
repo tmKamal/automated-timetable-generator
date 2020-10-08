@@ -3,13 +3,12 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
     Redirect
 } from 'react-router-dom';
 import MiniDrawer from './shared/component/navigation';
 import AddBuilding from './buildings/pages/AddBuilding';
 import AddRoom from './rooms/pages/AddRoom';
-import ViewRoom from './rooms/pages/ViewRoom';
+import ViewRoom from './rooms/pages/ViewRooms';
 import AddWorkDays from './workdays/pages/AddWorkDays';
 import UpdateWorkDays from './workdays/pages/UpdateWorkDays';
 import AddWorkTime from './worktime/pages/AddWorkTime';
@@ -18,7 +17,7 @@ import TableGenerate from './tablegenerate/pages/TableGenerate';
 import SpecificTable from './specificTable/pages/SpecificTable';
 import HomePage from './shared/pages/HomePage';
 import { Helmet } from 'react-helmet';
-import regeneratorRuntime from 'regenerator-runtime';
+
 
 import AddLecturer from './lecturers/pages/AddLecturer';
 import UpdateLecturer from './lecturers/pages/UpdateLecturer';
@@ -64,6 +63,7 @@ import StudentGroupTable from './specificTable/pages/student-group-table';
 import LecturerTable from './specificTable/pages/LecturerTable';
 import RoomTable from './specificTable/pages/RoomTable';
 import FullTable from './specificTable/pages/FullTable';
+import regeneratorRuntime from 'regenerator-runtime';
 export default function App() {
     return (
         <React.Fragment>

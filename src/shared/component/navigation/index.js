@@ -1,10 +1,7 @@
 import React from "react";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-
 import TopBar from "./TopBar";
 import { NavContext } from "../../context/NavContext";
 import { SideDrawer, SideBarLinks } from "./SideDrawer";
@@ -29,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MiniDrawer(props) {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {

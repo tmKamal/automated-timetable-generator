@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const ViewBuildings = () => {
     const classes = useStyles();
     const [loadedBuildings, setLoadedBuildings] = useState();
-    const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+    const { isLoading,  sendRequest} = useHttpClient();
     const [deleteId, setDeleteId] = useState();
     const [openDialog, setOpenDialog] = useState(false);
     const [deleteSuccMsg, setDeleteSuccMsg] = useState();
@@ -88,7 +88,7 @@ const ViewBuildings = () => {
                     setDeleteSuccMsg(true);
                     setReload(!reload);
                 }
-            } catch (error) {
+            } catch (err) {
                 deleteDialogCloser();
             }
         };

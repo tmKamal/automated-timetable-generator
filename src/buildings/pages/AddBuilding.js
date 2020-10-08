@@ -5,10 +5,6 @@ import {
     Typography,
     Grid,
     TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     Button,
     makeStyles
 } from '@material-ui/core';
@@ -51,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddBuilding = () => {
     const classes = useStyles();
-    const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+    const { error, sendRequest, errorPopupCloser } = useHttpClient();
     const [msg, setMsg] = useState();
     const [values, setValues] = useState({
         buildingName: '',

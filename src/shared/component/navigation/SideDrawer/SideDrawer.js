@@ -3,20 +3,14 @@ import {
   Drawer,
   IconButton,
   Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   makeStyles,
   useTheme,
 } from "@material-ui/core";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import clsx from "clsx";
 import { NavContext } from "../../../context/NavContext";
-import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({

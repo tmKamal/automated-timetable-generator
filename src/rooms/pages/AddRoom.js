@@ -89,7 +89,7 @@ const AddRoom = () => {
                 );
                 console.log(responseTags);
                 setLoadedTags(responseTags);
-            } catch (error) {}
+            } catch (err) {}
         };
 
         fetchTags();
