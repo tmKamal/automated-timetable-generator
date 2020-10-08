@@ -6,17 +6,11 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
     TableHead,
-    TableRow,
-    Paper,
-    Typography,
-    Button
+    TableRow
 } from '@material-ui/core';
 import { useHttpClient } from '../../shared/custom-hooks/http-hook';
-import SearchBar from '../../shared/component/searchbar/SearchBar';
-import { ja } from 'date-fns/locale';
-import { STATES } from 'mongoose';
+
 const { dialog } = require('electron').remote;
 const { Notification } = require('electron').remote;
 
@@ -220,22 +214,56 @@ const SpecificTable = ({ timetable, type }) => {
                                         <StyledTableCell align='left'>
                                             {matrix[i][j] != null ? (
                                                 <p align='left'>
-                                                    {matrix[i][j].sesion.name}
+                                                    {
+                                                        matrix[i][j].session1
+                                                            .subjectCode
+                                                    }{' '}
+                                                    {
+                                                        matrix[i][j].session1
+                                                            .subject.subjectName
+                                                    }
                                                     <br />
-                                                    {type != 'lecturer'
-                                                        ? matrix[i][j].sesion
-                                                              .lecturer
-                                                        : ''}
-                                                    <br />
-                                                    {type != 'student'
-                                                        ? matrix[i][j].sesion
-                                                              .studentGroup
-                                                        : ''}
-                                                    <br />
-                                                    {type != 'room'
-                                                        ? matrix[i][j].sesion
-                                                              .room
-                                                        : ''}
+                                                    {
+                                                        matrix[i][j].session1
+                                                            .tag.tagType
+                                                    }
+                                                    {type != 'lecturer' ? (
+                                                        <React.Fragment>
+                                                            <br />
+                                                            {
+                                                                matrix[i][j]
+                                                                    .session1
+                                                                    .selectedLecturer
+                                                                    .lecturerName
+                                                            }
+                                                        </React.Fragment>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                    {type != 'student' ? (
+                                                        <React.Fragment>
+                                                            <br />
+                                                            {
+                                                                matrix[i][j]
+                                                                    .session1
+                                                                    .studentGroup
+                                                            }
+                                                        </React.Fragment>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                    {type != 'room' ? (
+                                                        <React.Fragment>
+                                                            <br />
+                                                            {
+                                                                matrix[i][j]
+                                                                    .session1
+                                                                    .groupId
+                                                            }
+                                                        </React.Fragment>
+                                                    ) : (
+                                                        ''
+                                                    )}
                                                 </p>
                                             ) : (
                                                 '-'

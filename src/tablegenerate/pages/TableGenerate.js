@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles, Paper, Typography } from '@material-ui/core';
+import { useHttpClient } from '../../shared/custom-hooks/http-hook';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,6 +70,20 @@ const TableGenerate = () => {
                 }
             });
     };
+    const conflict = () => {
+        dialog.showMessageBox({
+            type: 'warning',
+            buttons: ['ok'],
+            defaultId: 0,
+            title: 'Conflicts found',
+            message: 'While generating timetable we found some conflicts',
+            detail:
+                'Please check Lecturers, sessions and student groups, make sure there are no overlaping sessions',
+            checkboxLabel: 'Remember my answer',
+            checkboxChecked: false
+        });
+    };
+
     const notify = (data) => {
         console.log(Notification.isSupported());
         let iconAd =
@@ -81,6 +96,26 @@ const TableGenerate = () => {
         };
 
         new Notification(notifi).show();
+    };
+    const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+    const handleOnclick = async () => {
+        try {
+            let res = await sendRequest(
+                'https://timetable-generator-api.herokuapp.com/api/studentGroup/timetable/create'
+            );
+            console.log(res.status);
+            if (res.status == 200) {
+                let data = {};
+                data.title = 'Timetable Generated';
+                data.body = 'Timetable has been generated successfully';
+
+                notify(data);
+            } else {
+                conflict();
+            }
+        } catch (e) {
+            console.log(e);
+        }
     };
     return (
         <div className={classes.root}>
@@ -99,6 +134,12 @@ const TableGenerate = () => {
                     aria-label='contained primary button group'
                     style={{ marginBottom: '30px' }}
                 >
+                    <Button
+                        onClick={handleOnclick}
+                        className={classes.generateButton}
+                    >
+                        Generate Timetable
+                    </Button>
                     <Button
                         onClick={() => history.push('/full-table')}
                         className={classes.generateButton}
