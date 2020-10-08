@@ -5,7 +5,6 @@ import {
   IconButton,
   Typography,
   makeStyles,
-  useTheme,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";
