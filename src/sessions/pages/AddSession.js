@@ -4,7 +4,6 @@ import {
     Paper,
     Typography,
     Grid,
-    TextField,
     FormControl,
     InputLabel,
     Select,
@@ -15,17 +14,9 @@ import {
     Checkbox,
     ListItemText
 } from '@material-ui/core';
-import { set } from 'mongoose';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import { useHttpClient } from '../../shared/custom-hooks/http-hook';
-import { Subject } from '@material-ui/icons';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import moment from 'moment';
+//import moment from 'moment';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -73,9 +64,9 @@ const MenuProps = {
 const AddSession = () => {
     const classes = useStyles();
     const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
-    const [selectedDate, setSelectedDate] = React.useState(
-        new Date('2020-09-23T08:00:00')
-    );
+    // const [selectedDate, setSelectedDate] = React.useState(
+    //     new Date('2020-09-23T08:00:00')
+    // );
 
     const [msg, setMsg] = useState();
     const [groupToggler, setGroupToggler] = useState('');
@@ -210,15 +201,15 @@ const AddSession = () => {
         setMsg(null), errorPopupCloser();
     };
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-        /* Extracting hour and minutes from the data obj using moment.js */
-        console.log(moment(date).format('H'));
-        console.log(moment(date).format('mm'));
-        const h = Number(moment(date).format('H'));
-        const m = Number(moment(date).format('mm'));
-        setValues({ ...values, hours: h, minutes: m });
-    };
+    // const handleDateChange = (date) => {
+    //     setSelectedDate(date);
+    //     /* Extracting hour and minutes from the data obj using moment.js */
+    //     console.log(moment(date).format('H'));
+    //     console.log(moment(date).format('mm'));
+    //     const h = Number(moment(date).format('H'));
+    //     const m = Number(moment(date).format('mm'));
+    //     setValues({ ...values, hours: h, minutes: m });
+    // };
 
     const onChangeTagHandler = (e) => {
         setValues({ ...values, tag: e.target.value });
@@ -280,6 +271,7 @@ const AddSession = () => {
                     subGroup: ''
                 });
                 console.log(responseData);
+
                 setMsg(responseData.msg);
             }
         } catch (err) {
@@ -570,22 +562,22 @@ const AddSession = () => {
                                 </FormControl>
                             </Grid>
                             {/* Time picker====================================
-               <Grid item xs={12}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardTimePicker
-                    margin="normal"
-                    inputVariant="outlined"
-                    id="time-picker"
-                    label="Time picker"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                      "aria-label": "change time",
-                    }}
-                    fullWidth
-                  ></KeyboardTimePicker>
-                </MuiPickersUtilsProvider>
-              </Grid>=========================================== */}
+                                <Grid item xs={12}>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <KeyboardTimePicker
+                                        margin="normal"
+                                        inputVariant="outlined"
+                                        id="time-picker"
+                                        label="Time picker"
+                                        value={selectedDate}
+                                        onChange={handleDateChange}
+                                        KeyboardButtonProps={{
+                                        "aria-label": "change time",
+                                        }}
+                                        fullWidth
+                                    ></KeyboardTimePicker>
+                                    </MuiPickersUtilsProvider>
+                                </Grid>=========================================== */}
 
                             <Grid item xs={12}>
                                 <FormControl
@@ -612,6 +604,26 @@ const AddSession = () => {
                                 </FormControl>
                             </Grid>
                         </Grid>
+                        {error && (
+                            <Grid item xs={12}>
+                                <Alert severity='error'>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>
+                                        {error.backendMsg
+                                            ? error.backendMsg
+                                            : 'Please Resolve the above error & try again'}{' '}
+                                    </strong>
+                                </Alert>
+                            </Grid>
+                        )}
+                        {msg && (
+                            <Grid item xs={12}>
+                                <Alert severity='success'>
+                                    <AlertTitle>Success !!</AlertTitle>
+                                    {msg}
+                                </Alert>
+                            </Grid>
+                        )}
 
                         <div className={classes.buttons}>
                             <Button

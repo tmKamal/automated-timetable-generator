@@ -12,8 +12,8 @@ import {
     Button,
     makeStyles
 } from '@material-ui/core';
-import { set } from 'mongoose';
 import { useHttpClient } from '../../shared/custom-hooks/http-hook';
+
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddSubject = () => {
     const classes = useStyles();
-    const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+    const { error, sendRequest } = useHttpClient();
     const [values, setValues] = useState({
         subjectName: '',
         subjectCode: '',
