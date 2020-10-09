@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const ViewLecturers = () => {
     const classes = useStyles();
     const [loadedLecturers, setLoadedLecturers] = useState();
-    const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
     const [deleteId, setDeleteId] = useState();
     const [openDialog, setOpenDialog] = useState(false);
     const [deleteSuccMsg, setDeleteSuccMsg] = useState();
