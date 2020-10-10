@@ -105,6 +105,7 @@ const RoomTable = () => {
         setSelectedRoom(e.target.value);
         var t = roomData.rooms.filter((f) => f.id == e.target.value)[0];
         var tempTitle = `${t.roomName}`;
+        setTimeTable(t.timetable);
         setTitle(tempTitle);
     }
 

@@ -102,13 +102,13 @@ const SpecificTable = ({ timetable, type }) => {
     }, [sendRequest, reload]);
 
     useEffect(() => {
-        if (id == 'hall') {
-            setValue(hallData);
-        } else if (id == 'student-group') {
-            setValue(studentData);
-        } else {
-            setValue(lectureData);
-        }
+        // if (id == 'hall') {
+        //     setValue(hallData);
+        // } else if (id == 'student-group') {
+        //     setValue(studentData);
+        // } else {
+        //     setValue(lectureData);
+        // }
 
         if (fetchedDays && fetchedTime) {
             const setData = async () => {
@@ -246,7 +246,7 @@ const SpecificTable = ({ timetable, type }) => {
                                                             {
                                                                 matrix[i][j]
                                                                     .session1
-                                                                    .studentGroup
+                                                                    .groupId
                                                             }
                                                         </React.Fragment>
                                                     ) : (
@@ -255,15 +255,29 @@ const SpecificTable = ({ timetable, type }) => {
                                                     {type != 'room' ? (
                                                         <React.Fragment>
                                                             <br />
-                                                            {
-                                                                matrix[i][j]
-                                                                    .session1
-                                                                    .groupId
-                                                            }
+                                                            {matrix[i][j]
+                                                                .session1
+                                                                .favRoom
+                                                                ? matrix[i][j]
+                                                                      .session1
+                                                                      .favRoom
+                                                                      .roomName
+                                                                : '--'}
                                                         </React.Fragment>
                                                     ) : (
                                                         ''
                                                     )}
+                                                    <br />
+                                                    {
+                                                        matrix[i][j].session1
+                                                            .duration
+                                                    }{' '}
+                                                    hours,{' '}
+                                                    {
+                                                        matrix[i][j].session1
+                                                            .studentCount
+                                                    }{' '}
+                                                    students
                                                 </p>
                                             ) : (
                                                 '-'
@@ -279,34 +293,5 @@ const SpecificTable = ({ timetable, type }) => {
         </React.Fragment>
     );
 };
-const hallData = [
-    { title: 'A401', year: 1994 },
-    { title: 'A402r', year: 1972 },
-    { title: 'B401', year: 1974 },
-    { title: 'A611', year: 2008 },
-    { title: 'N3D', year: 1957 },
-    { title: 'N3C', year: 1993 },
-    { title: 'N3E', year: 1994 }
-];
-
-const lectureData = [
-    { title: 'Dr Nimal perera', year: 1994 },
-    { title: 'Mr Kamal bandara', year: 1972 },
-    { title: 'Mr aruna sirisena', year: 1974 },
-    { title: 'Mr saman ', year: 2008 },
-    { title: 'amal', year: 1957 },
-    { title: 'nihal', year: 1993 },
-    { title: 'sumith', year: 1994 }
-];
-
-const studentData = [
-    { title: 'Y01S01', year: 1994 },
-    { title: 'Y01S02', year: 1972 },
-    { title: 'Y02S01', year: 1974 },
-    { title: 'Y02S02', year: 2008 },
-    { title: 'Y03S01', year: 1957 },
-    { title: 'Y03S02', year: 1993 },
-    { title: 'Y014S01', year: 1994 }
-];
 
 export default SpecificTable;
