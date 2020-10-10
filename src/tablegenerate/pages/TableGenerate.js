@@ -20,10 +20,8 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3),
-        padding: '10px',
         width: '-webkit-fill-available',
         fontSize: '13px',
-
         border: 0,
         borderRadius: 3,
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',

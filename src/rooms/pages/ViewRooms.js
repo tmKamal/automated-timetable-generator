@@ -43,26 +43,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewTags = () => {
+const ViewRooms = () => {
   const classes = useStyles();
-  const [loadedTags, setLoadedTags] = useState();
+  const [loadedRooms, setLoadedRooms] = useState();
   const { isLoading, sendRequest } = useHttpClient();
   const [deleteId, setDeleteId] = useState();
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteSuccMsg, setDeleteSuccMsg] = useState();
-  const [reload, setReload] = useState(); //use to fetch tags again, after deleting a tag.
+  const [reload, setReload] = useState(); //use to fetch rooms again, after deleting a room.
 
   useEffect(() => {
-    const fetchingTags = async () => {
+    const fetchingRooms = async () => {
       try {
-        setLoadedTags(
+        setLoadedRooms(
           await sendRequest(
-            "https://timetable-generator-api.herokuapp.com/api/tag"
+            "https://timetable-generator-api.herokuapp.com/api/room"
           )
         );
       } catch (err) {}
     };
-    fetchingTags();
+    fetchingRooms();
   }, [sendRequest, reload]);
 
   const deleteDialogOpener = (id) => {
@@ -73,11 +73,11 @@ const ViewTags = () => {
     setOpenDialog(false);
     setDeleteId(null);
   };
-  const tagDeleteHandler = () => {
-    const deleteTag = async () => {
+  const roomDeleteHandler = () => {
+    const deleteRoom = async () => {
       try {
         const delMsg = await sendRequest(
-          `https://timetable-generator-api.herokuapp.com/api/tag/${deleteId}`,
+          `https://timetable-generator-api.herokuapp.com/api/room/${deleteId}`,
           "DELETE",
           null,
           {}
@@ -88,11 +88,11 @@ const ViewTags = () => {
           setDeleteSuccMsg(true);
           setReload(!reload);
         }
-      } catch (error) {
+      } catch (err) {
         deleteDialogCloser();
       }
     };
-    deleteTag();
+    deleteRoom();
   };
 
   return (
@@ -105,7 +105,7 @@ const ViewTags = () => {
           paragraph
           className={classes.marginT}
         >
-          Tags
+          Rooms
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -115,7 +115,7 @@ const ViewTags = () => {
               setDeleteSuccMsg(false);
             }}
           >
-            Tag has been successfully deleted.
+            Room has been successfully deleted.
           </Alert>
         )}
 
@@ -123,22 +123,35 @@ const ViewTags = () => {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left">Tag types</TableCell>
+                <TableCell>Room Name</TableCell>
+
+                <TableCell align="center">Type</TableCell>
+                <TableCell align="center">Capacity</TableCell>
+                <TableCell align="center">Building</TableCell>
                 <TableCell align="center">Edit</TableCell>
                 <TableCell align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {!isLoading &&
-                loadedTags &&
-                loadedTags.tags.map((tag) => (
-                  <TableRow key={tag.id}>
+                loadedRooms &&
+                loadedRooms.rooms.map((room) => (
+                  <TableRow key={room.id}>
                     <TableCell component="th" scope="row">
-                      {tag.tagType}
+                      {room.roomName}
+                    </TableCell>
+
+                    <TableCell align="center">{room.roomType}</TableCell>
+                    <TableCell align="center">{room.roomCapacity}</TableCell>
+                    <TableCell align="center">
+                      {room.buildingId.buildingName}
                     </TableCell>
                     <TableCell align="center">
-                      <Link to={`/update/tag/${tag.id}`}>
-                        <IconButton color="secondary" aria-label="Edit the tag">
+                      <Link to={`/update/room/${room.id}`}>
+                        <IconButton
+                          color="secondary"
+                          aria-label="edit the room"
+                        >
                           <CreateIcon
                             style={{
                               color: green[500],
@@ -149,7 +162,7 @@ const ViewTags = () => {
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
-                        onClick={() => deleteDialogOpener(tag.id)}
+                        onClick={() => deleteDialogOpener(room.id)}
                         color="secondary"
                         aria-label="add an alarm"
                       >
@@ -161,7 +174,7 @@ const ViewTags = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {!isLoading && loadedTags && loadedTags.tags.length === 0 && (
+        {!isLoading && loadedRooms && loadedRooms.rooms.length === 0 && (
           <React.Fragment>
             <Typography
               variant="h5"
@@ -170,13 +183,13 @@ const ViewTags = () => {
               paragraph
               className={classes.marginT}
             >
-              You haven’t Created Any Tags yet
+              You haven’t created any rooms yet
             </Typography>
             <div>
               <Grid container spacing={2} justify="center">
                 <Grid item>
                   <Button
-                    href="/admin/crud/tag-create"
+                    href="/admin/crud/room-create"
                     variant="outlined"
                     color="primary"
                   >
@@ -200,11 +213,11 @@ const ViewTags = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you really wanted to delete this Tag?
+            Are you realy wanted to delete this room?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={tagDeleteHandler} color="primary">
+          <Button onClick={roomDeleteHandler} color="primary">
             Yes
           </Button>
           <Button onClick={deleteDialogCloser} color="primary" autoFocus>
@@ -215,4 +228,4 @@ const ViewTags = () => {
     </Grid>
   );
 };
-export default ViewTags;
+export default ViewRooms;

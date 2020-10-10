@@ -5,10 +5,6 @@ import {
     Typography,
     Grid,
     TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     Button,
     makeStyles
 } from '@material-ui/core';
@@ -69,13 +65,13 @@ const UpdateBuilding = () => {
     const { buildingName, lecHallCapacity, labCapacity, description } = values;
     /* fetching building details */
     useEffect(() => {
-        const loadedBuilding = async () => {
+        const fetchBuilding = async () => {
             const fetchedBuilding = await sendRequest(
                 `https://timetable-generator-api.herokuapp.com/api/building/${buildingId}`
             );
             setLoadedBuilding(fetchedBuilding.building);
         };
-        loadedBuilding();
+        fetchBuilding();
     }, [sendRequest, reload]);
 
     useEffect(() => {

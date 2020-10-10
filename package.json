@@ -19,7 +19,6 @@
         "start": "cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js --mode development",
         "build": "cross-env NODE_ENV=production webpack --config webpack.build.config.js --mode production",
         "package": "npm run build",
-        "postpackage": "electron-packager ./ --platform win32 --out=./release-builds",
         "dist": "electron-builder"
     },
     "dependencies": {
@@ -52,7 +51,6 @@
         "electron": "^9.0.0",
         "electron-builder": "^22.8.0",
         "electron-devtools-installer": "^3.1.1",
-        "electron-packager": "^14.2.1",
         "file-loader": "^6.0.0",
         "html-webpack-plugin": "^4.3.0",
         "mini-css-extract-plugin": "^0.9.0",

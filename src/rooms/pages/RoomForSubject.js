@@ -4,16 +4,12 @@ import {
     Paper,
     Typography,
     Grid,
-    TextField,
     FormControl,
     InputLabel,
     Select,
     MenuItem,
     Button,
     makeStyles,
-    FormGroup,
-    FormControlLabel,
-    Checkbox
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 

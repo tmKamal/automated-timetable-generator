@@ -11,9 +11,6 @@ import {
     MenuItem,
     Button,
     makeStyles,
-    FormGroup,
-    FormControlLabel,
-    Checkbox
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
@@ -21,7 +18,6 @@ import { useHttpClient } from '../../shared/custom-hooks/http-hook';
 import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
-    KeyboardDatePicker
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import moment from 'moment';

@@ -18,3 +18,11 @@ npm install
 npm run start
 ```
 
+#### Packaging for Production
+
+```
+npm run package
+```
+```
+npm run dist
+```

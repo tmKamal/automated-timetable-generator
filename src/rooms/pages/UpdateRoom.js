@@ -70,7 +70,7 @@ const UpdateRoom = () => {
     const { roomName, roomCapacity, roomType, buildingName } = values;
     /* fetching building details */
     useEffect(() => {
-        const loadedRoom = async () => {
+        const fetchRoom = async () => {
             const fetchedRooms = await sendRequest(
                 `https://timetable-generator-api.herokuapp.com/api/room/${roomId}`
             );
@@ -83,7 +83,7 @@ const UpdateRoom = () => {
             );
             setLoadedBuildings(fetchedBuilding);
         };
-        loadedRoom();
+        fetchRoom();
         loadedBuildingsFunc();
     }, [sendRequest, reload]);
 

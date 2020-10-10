@@ -12,7 +12,6 @@ import {
     Button,
     makeStyles
 } from '@material-ui/core';
-import { set } from 'mongoose';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { useHttpClient } from '../../shared/custom-hooks/http-hook';
 
@@ -382,6 +381,26 @@ const AddLecturer = () => {
                                 </FormControl>
                             </Grid>
                         </Grid>
+                        {error && (
+                            <Grid item xs={12}>
+                                <Alert severity='error'>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>
+                                        {error.backendMsg
+                                            ? error.backendMsg
+                                            : 'Please Resolve the above error & try again'}{' '}
+                                    </strong>
+                                </Alert>
+                            </Grid>
+                        )}
+                        {msg && (
+                            <Grid item xs={12}>
+                                <Alert severity='success'>
+                                    <AlertTitle>Success !!</AlertTitle>
+                                    {msg}
+                                </Alert>
+                            </Grid>
+                        )}
 
                         <div className={classes.buttons}>
                             <Button
