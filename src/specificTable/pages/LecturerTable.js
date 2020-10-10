@@ -29,48 +29,58 @@ const LecturerTable = () => {
     const [rows, setRows] = useState([]);
     const [timetable, setTimeTable] = useState([
         {
+            _id: '5f7d24f8ca92e03eb49f55d5',
             column: 0,
             stRow: 0,
-            endRow: 2,
-            sesion: {
-                name: 'IT2050',
-                lecturer: 'DR nuwan',
-                room: 'B4O4',
-                studentGroup: 'Y2S1 (SE) 1'
-            }
+            endRow: 1,
+            session1: {
+                parallel: {
+                    sessions: []
+                },
+                lecturers: ['5f68d4559df6152c98f795f3'],
+                favRoom: [],
+                alive: false,
+                type: 'normal',
+                _id: '5f7740608abcf8001755e8fb',
+                tag: '5f6864438035a20684da5b34',
+                studentGroup: '5f76f3d1329c6b61682de4a4',
+                subject: '5f7564d07fe8824e482e620a',
+                subjectCode: 'IT1010',
+                studentCount: 120,
+                groupId: 'Y1.S1.IT.1',
+                duration: 2,
+                notAvailable: [],
+                __v: 0,
+                id: '5f7740608abcf8001755e8fb'
+            },
+            id: '5f7d24f8ca92e03eb49f55d5'
         },
         {
+            _id: '5f7d24f8ca92e03eb49f55d4',
             column: 0,
-            stRow: 3,
-            endRow: 4,
-            sesion: {
-                name: 'IT2040',
-                lecturer: 'Mr Anuradha',
-                room: 'AO4',
-                studentGroup: 'Y1S1 (IT) 1'
-            }
-        },
-        {
-            column: 1,
             stRow: 2,
-            endRow: 4,
-            sesion: {
-                name: 'IT3050',
-                lecturer: 'Ms Lushaka',
-                room: 'N3D',
-                studentGroup: 'Y3S1 (cyber) 1'
-            }
-        },
-        {
-            column: 3,
-            stRow: 4,
-            endRow: 5,
-            sesion: {
-                name: 'IT4020',
-                lecturer: 'DR Bhathiya',
-                room: 'B401',
-                studentGroup: 'Y3S2 (SE) 3'
-            }
+            endRow: 2,
+            session1: {
+                parallel: {
+                    sessions: []
+                },
+                lecturers: ['5f68d4559df6152c98f795f3'],
+                favRoom: [],
+                alive: false,
+                type: 'normal',
+                _id: '5f7d1dabec7c460017fa89d3',
+                tag: '5f6864508035a20684da5b35',
+                studentGroup: '5f76f3d1329c6b61682de4a4',
+                subject: '5f7564d07fe8824e482e620a',
+                subjectCode: 'IT1010',
+                studentCount: 120,
+                groupId: 'Y1.S1.IT.1',
+                duration: 1,
+                notAvailable: [],
+                __v: 0,
+                id: '5f7d1dabec7c460017fa89d3'
+            },
+            id: '5f7d24f8ca92e03eb49f55d4'
         }
     ]);
 
@@ -106,6 +116,7 @@ const LecturerTable = () => {
         var t = lecturerData.lecturers.filter((f) => f.id == e.target.value)[0];
         var tempTitle = `${t.lecturerName}`;
         setTitle(tempTitle);
+        setTimeTable(t.timetable);
         console.log(e.target.value);
     }
 
