@@ -53,9 +53,6 @@ const LecturerStats = () => {
     computing: 0,
     engineering: 0,
     business: 0,
-    humanities: 0,
-    curtin: 0,
-    angliss: 0,
   };
 
   useEffect(() => {
@@ -152,15 +149,7 @@ const LecturerStats = () => {
           case "Business":
             lecFaculty.business++;
             break;
-          case "Humanities":
-            lecFaculty.humanities++;
-            break;
-          case "Curtin":
-            lecFaculty.curtin++;
-            break;
-          case "Angliss":
-            lecFaculty.angliss++;
-            break;
+          
         }
       }
       doughnutData = {
@@ -168,9 +157,6 @@ const LecturerStats = () => {
           "Computing",
           "Engineering",
           "Business",
-          "Humanities & Sciences",
-          "Curtin",
-          "Angliss",
         ],
         datasets: [
           {
@@ -178,25 +164,20 @@ const LecturerStats = () => {
               lecFaculty.computing,
               lecFaculty.engineering,
               lecFaculty.business,
-              lecFaculty.humanities,
-              lecFaculty.curtin,
-              lecFaculty.angliss,
             ],
             backgroundColor: [
-              "#FF6384",
+             
               "#36A2EB",
               "#FFCE56",
               "#00FF7F",
-              "#800080",
-              "#CCCCCC",
+            
             ],
             hoverBackgroundColor: [
-              "#FF6384",
+              
               "#36A2EB",
               "#FFCE56",
               "#00FF7F",
-              "#800080",
-              "#CCCCCC",
+             
             ],
           },
         ],
